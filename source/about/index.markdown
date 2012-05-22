@@ -11,4 +11,6 @@ An alumnus of the [MIT Media Lab](http://www.media.mit.edu/research/groups/chang
 
 Her day job is Principal Staff Software Engineer at the Motorola Solutions Chief Technology Office, where she invents, designs, and develops software applications for the next generation of police officers, firemen (and women!), and city workers. 
 
-Statements and opinions on this site are her own, and do not necessarily represent positions, strategies, or opinions of her employer.
+Statements and opinions on this site are her own, and do not necessarily represent positions, strategies, or opinions of her present or past employers.
+
+![Where I'm From](images/custom/where-i-am-from.png)
