@@ -5,7 +5,7 @@ date: 2012-05-22 15:22
 comments: true
 categories: 
 ---
-These are slides from my [JS.Chi() talk](http://www.meetup.com/js-chi/events/59833642) on Meteor. I will follow up with posts expanding on all of the slides in this presentation. This post, however, is for the benefit of all those who are feeling like they might be missing a step with frameworks like Backbone, Ember, (and now Meteor), et. al. Read on for recommendations on what to read up on to understand more about the problems they're solving.
+These are slides from my [JS.Chi() talk on May 22](http://www.meetup.com/js-chi/events/59833642) on Meteor. I will follow up with posts expanding on most of the slides in this presentation. This post, however, is for the benefit of all those who are feeling like they might be missing a step with frameworks like Backbone, Ember, (and now Meteor), et. al. It is an overview of the types of problems they're solving and includes recommendations for further reading.
  
 <script async class="speakerdeck-embed" data-id="4fbbc61f15a68f001f027e5a" data-ratio="1.2945638432364097" src="//speakerdeck.com/assets/embed.js"></script>
 
@@ -15,7 +15,7 @@ These are slides from my [JS.Chi() talk](http://www.meetup.com/js-chi/events/598
 
 <h4>First a brief note about MVC</h4> 
 
-The Model-View-Controller application architecture (MVC) is used in most modern applications to separate an application’s data from its business rules and user interface. Briefly, Models represent an application’s data and functions to access it. Views represent information presented to the user. Controllers represent intermediary resources required to generate Views. The MVC pattern isn't new (it can be traced back to Smalltalk), but it was popularized, along with the REST style of client-server API design by server-side web frameworks such as Rails and Django.
+The Model-View-Controller application architecture (MVC) is used in most modern applications to separate an application’s data from its business rules and user interface. Briefly, Models represent an application’s data and functions to access it. Views represent information presented to the user. Controllers represent intermediary resources required to generate Views. The MVC pattern isn't new (it can be traced back to Smalltalk), but it was popularized, along with the REST style of client-server API design, by server-side web frameworks such as Rails and Django.
 
 <h4>So what's all the fuss about JavaScript MVC frameworks (Backbone, Ember, et. al.)?</h4>
 
@@ -31,17 +31,15 @@ This is where the likes of Backbone, Ember, etc. come in. They are a re-imaginat
 
 I also wholeheartedly recommend his [recent talks on providing structure to JavaScript apps](http://addyosmani.com/scalable-javascript-videos/).
 
-And this is a useful [comparison of various front-end frameworks](http://codebrief.com/2012/01/the-top-10-javascript-mvc-frameworks-reviewed/), although the conclusions should be taken with a grain of salt (it's one persons's perspective, and things are not quite as quantifiable as the article suggests):
-
+And this is a useful [comparison of various front-end frameworks](http://codebrief.com/2012/01/the-top-10-javascript-mvc-frameworks-reviewed/), although the conclusions should be taken with a grain of salt (it's one persons's perspective, and things are not quite as quantifiable as the article suggests).
 
 So, all of these are client side frameworks, which solve the problems of a) separating client side code into MVC, and b) optionally, allowing views to "observe" client side models, so that views get updated automatically as the data in the models is updated or as new data arrives from the server.
 
-This gets you pretty far, but all of these applications have something else in common which the previously mentioned MVC frameworks don't address: They need to send data back to the server and check in if data has changed on the server. In other words, they need to synchronize client side models with the server side models.
+This gets you pretty far, but all of these applications have something else in common which the previously mentioned MVC frameworks don't address: They need to send data back to the server and know if data has changed on the server. In other words, they need to synchronize client side models with the server side models.
 
 <h4>Enter Meteor.</h4> 
 
-[Meteor](http://meteor.com) is a full stack framework for end-to-end JavaScript applications. The beauty of coding it all in JavaScript is that you can easily implement the observer pattern (views watching for changes to the models) all the way to the server side. Meteor
-apps can subscribe to models (or subsets of models) on the server, and meteor takes care of all of the plumbing. This really is the bleeding edge of JS today.
+[Meteor](http://meteor.com) is a full stack framework for end-to-end JavaScript applications. The beauty of coding it all in JavaScript is that you can easily implement the observer pattern (views watching for changes to the models) all the way to the server side. Meteor apps can subscribe to models (or subsets of models) on the server, and meteor takes care of all of the plumbing. This really is the bleeding edge of JS today.
 
 For more on the problems Meteor solves, read the [meteor docs](http://docs.meteor.com/) from the intro section through to as many of the detailed concepts you're interested in. Or come to [my talk at JS.Chi()](http://www.meetup.com/js-chi/events/59833642) and we will work through it together.
 
