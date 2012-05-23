@@ -9,7 +9,7 @@
   <meta name="author" content="Pallavi Anderson">
 
   
-  <meta name="description" content="These are slides from my JS.Chi() talk on Meteor. I will follow up with posts expanding on all of the slides in this presentation. This post, however &hellip;">
+  <meta name="description" content="These are slides from my JS.Chi() talk on May 22 on Meteor. I will follow up with posts expanding on most of the slides in this presentation. This &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://pkaushik.github.com">
+  <link rel="canonical" href="http://asynchrotron.com">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -49,7 +49,7 @@
   
 <form action="http://google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:pkaushik.github.com" />
+    <input type="hidden" name="q" value="site:asynchrotron.com" />
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -94,7 +94,7 @@
   </header>
 
 
-  <div class="entry-content"><p>These are slides from my <a href="http://www.meetup.com/js-chi/events/59833642">JS.Chi() talk</a> on Meteor. I will follow up with posts expanding on all of the slides in this presentation. This post, however, is for the benefit of all those who are feeling like they might be missing a step with frameworks like Backbone, Ember, (and now Meteor), et. al. Read on for recommendations on what to read up on to understand more about the problems they&#8217;re solving.</p>
+  <div class="entry-content"><p>These are slides from my <a href="http://www.meetup.com/js-chi/events/59833642">JS.Chi() talk on May 22</a> on Meteor. I will follow up with posts expanding on most of the slides in this presentation. This post, however, is for the benefit of all those who are feeling like they might be missing a step with frameworks like Backbone, Ember, (and now Meteor), et. al. It is an overview of the types of problems they&#8217;re solving and includes recommendations for further reading.</p>
 
 <script async class="speakerdeck-embed" data-id="4fbbc61f15a68f001f027e5a" data-ratio="1.2945638432364097" src="//speakerdeck.com/assets/embed.js"></script>
 
@@ -117,7 +117,7 @@
 
 <p></p>
 
-<p>The Model-View-Controller application architecture (MVC) is used in most modern applications to separate an application’s data from its business rules and user interface. Briefly, Models represent an application’s data and functions to access it. Views represent information presented to the user. Controllers represent intermediary resources required to generate Views. The MVC pattern isn&#8217;t new (it can be traced back to Smalltalk), but it was popularized, along with the REST style of client-server API design by server-side web frameworks such as Rails and Django.</p>
+<p>The Model-View-Controller application architecture (MVC) is used in most modern applications to separate an application’s data from its business rules and user interface. Briefly, Models represent an application’s data and functions to access it. Views represent information presented to the user. Controllers represent intermediary resources required to generate Views. The MVC pattern isn&#8217;t new (it can be traced back to Smalltalk), but it was popularized, along with the REST style of client-server API design, by server-side web frameworks such as Rails and Django.</p>
 
 <h4>So what&#8217;s all the fuss about JavaScript MVC frameworks (Backbone, Ember, et. al.)?</h4>
 
@@ -134,19 +134,18 @@
 
 <p>I also wholeheartedly recommend his <a href="http://addyosmani.com/scalable-javascript-videos/">recent talks on providing structure to JavaScript apps</a>.</p>
 
-<p>And this is a useful <a href="http://codebrief.com/2012/01/the-top-10-javascript-mvc-frameworks-reviewed/">comparison of various front-end frameworks</a>, although the conclusions should be taken with a grain of salt (it&#8217;s one persons&#8217;s perspective, and things are not quite as quantifiable as the article suggests):</p>
+<p>And this is a useful <a href="http://codebrief.com/2012/01/the-top-10-javascript-mvc-frameworks-reviewed/">comparison of various front-end frameworks</a>, although the conclusions should be taken with a grain of salt (it&#8217;s one persons&#8217;s perspective, and things are not quite as quantifiable as the article suggests).</p>
 
 <p>So, all of these are client side frameworks, which solve the problems of a) separating client side code into MVC, and b) optionally, allowing views to &#8220;observe&#8221; client side models, so that views get updated automatically as the data in the models is updated or as new data arrives from the server.</p>
 
-<p>This gets you pretty far, but all of these applications have something else in common which the previously mentioned MVC frameworks don&#8217;t address: They need to send data back to the server and check in if data has changed on the server. In other words, they need to synchronize client side models with the server side models.</p>
+<p>This gets you pretty far, but all of these applications have something else in common which the previously mentioned MVC frameworks don&#8217;t address: They need to send data back to the server and know if data has changed on the server. In other words, they need to synchronize client side models with the server side models.</p>
 
 <h4>Enter Meteor.</h4>
 
 
 <p></p>
 
-<p><a href="http://meteor.com">Meteor</a> is a full stack framework for end-to-end JavaScript applications. The beauty of coding it all in JavaScript is that you can easily implement the observer pattern (views watching for changes to the models) all the way to the server side. Meteor
-apps can subscribe to models (or subsets of models) on the server, and meteor takes care of all of the plumbing. This really is the bleeding edge of JS today.</p>
+<p><a href="http://meteor.com">Meteor</a> is a full stack framework for end-to-end JavaScript applications. The beauty of coding it all in JavaScript is that you can easily implement the observer pattern (views watching for changes to the models) all the way to the server side. Meteor apps can subscribe to models (or subsets of models) on the server, and meteor takes care of all of the plumbing. This really is the bleeding edge of JS today.</p>
 
 <p>For more on the problems Meteor solves, read the <a href="http://docs.meteor.com/">meteor docs</a> from the intro section through to as many of the detailed concepts you&#8217;re interested in. Or come to <a href="http://www.meetup.com/js-chi/events/59833642">my talk at JS.Chi()</a> and we will work through it together.</p>
 
