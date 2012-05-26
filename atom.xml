@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Pallavi Anderson]]></title>
-  <link href="http://pkaushik.github.com/atom.xml" rel="self"/>
-  <link href="http://pkaushik.github.com/"/>
-  <updated>2012-05-26T08:20:28-05:00</updated>
-  <id>http://pkaushik.github.com/</id>
+  <link href="http://asynchrotron.com/atom.xml" rel="self"/>
+  <link href="http://asynchrotron.com/"/>
+  <updated>2012-05-26T08:32:14-05:00</updated>
+  <id>http://asynchrotron.com/</id>
   <author>
     <name><![CDATA[Pallavi Anderson]]></name>
     
@@ -15,12 +15,12 @@
   
   <entry>
     <title type="html"><![CDATA[Hello Meteor!]]></title>
-    <link href="http://pkaushik.github.com/blog/2012/05/22/hello-meteor/"/>
+    <link href="http://asynchrotron.com/blog/2012/05/22/hello-meteor/"/>
     <updated>2012-05-22T15:22:00-05:00</updated>
-    <id>http://pkaushik.github.com/blog/2012/05/22/hello-meteor</id>
-    <content type="html"><![CDATA[<p>These are slides from my <a href="http://www.meetup.com/js-chi/events/59833642">JS.Chi() talk on May 22</a> on Meteor. I will follow up with posts expanding on most of the slides in this presentation. This post, however, is for the benefit of all those who are feeling like they might be missing a step with frameworks like Backbone, Ember, (and now Meteor), et. al. It is an overview of the types of problems they&#8217;re solving and includes recommendations for further reading.</p>
+    <id>http://asynchrotron.com/blog/2012/05/22/hello-meteor</id>
+    <content type="html"><![CDATA[<p>Here are the <a href="https://speakerdeck.com/u/pkaushik/p/meteor">slides</a> from my <a href="http://www.meetup.com/js-chi/events/59833642">JS.Chi() talk on Meteor</a>. I will follow up with posts expanding on most of the slides in the presentation. This post, however, is for the benefit of all those who are feeling like they might be missing a step with frameworks like Backbone, Ember, (and now Meteor), et. al. <!--more--> It is an overview of the types of problems they&#8217;re solving and includes recommendations for further reading.</p>
 
-<script async class="speakerdeck-embed" data-id="4fbbc61f15a68f001f027e5a" data-ratio="1.2945638432364097" src="http://pkaushik.github.com//speakerdeck.com/assets/embed.js"></script>
+<script async class="speakerdeck-embed" data-id="4fbbc61f15a68f001f027e5a" data-ratio="1.2945638432364097" src="http://asynchrotron.com//speakerdeck.com/assets/embed.js"></script>
 
 
 
@@ -41,7 +41,7 @@
 
 <p></p>
 
-<p>The Model-View-Controller application architecture (MVC) is used in most modern applications to separate an application’s data from its business rules and user interface. Briefly, Models represent an application’s data and functions to access it. Views represent information presented to the user. Controllers represent intermediary resources required to generate Views. The MVC pattern isn&#8217;t new (it can be traced back to Smalltalk), but it was popularized, along with the REST style of client-server API design, by server-side web frameworks such as Rails and Django.</p>
+<p>The Model-View-Controller application architecture (MVC) is used in most modern applications to separate an application’s data from its business rules and user interface. Briefly, Models represent an application’s data and functions to access it. Views represent information presented to the user. Controllers represent intermediary resources required to generate Views. The MVC pattern isn&#8217;t new (it can be traced back to Smalltalk), but it was popularized , along with the REST style of client-server API design, by server-side web frameworks such as Rails and Django.</p>
 
 <h4>So what&#8217;s all the fuss about JavaScript MVC frameworks (Backbone, Ember, et. al.)?</h4>
 

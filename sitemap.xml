@@ -1,19 +1,19 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
-        <loc>http://pkaushik.github.com/blog/2012/05/22/hello-meteor/</loc>
-        <lastmod>2012-05-26T08:20:27-05:00</lastmod>
+        <loc>http://asynchrotron.com/blog/2012/05/22/hello-meteor/</loc>
+        <lastmod>2012-05-26T08:32:14-05:00</lastmod>
     </url>
     <url>
-        <loc>http://pkaushik.github.com/about/</loc>
+        <loc>http://asynchrotron.com/about/</loc>
         <lastmod>2012-05-22T16:07:10-05:00</lastmod>
     </url>
     <url>
-        <loc>http://pkaushik.github.com/blog/archives/</loc>
-        <lastmod>2012-05-26T08:20:27-05:00</lastmod>
+        <loc>http://asynchrotron.com/blog/archives/</loc>
+        <lastmod>2012-05-26T08:32:14-05:00</lastmod>
     </url>
     <url>
-        <loc>http://pkaushik.github.com/</loc>
-        <lastmod>2012-05-26T08:20:27-05:00</lastmod>
+        <loc>http://asynchrotron.com/</loc>
+        <lastmod>2012-05-26T08:32:14-05:00</lastmod>
     </url>
 </urlset>
