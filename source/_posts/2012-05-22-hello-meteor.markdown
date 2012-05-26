@@ -3,9 +3,9 @@ layout: post
 title: "Hello Meteor!"
 date: 2012-05-22 15:22
 comments: true
-categories: 
+categories: [meteor, webapps]
 ---
-These are slides from my [JS.Chi() talk on May 22](http://www.meetup.com/js-chi/events/59833642) on Meteor. I will follow up with posts expanding on most of the slides in this presentation. This post, however, is for the benefit of all those who are feeling like they might be missing a step with frameworks like Backbone, Ember, (and now Meteor), et. al. It is an overview of the types of problems they're solving and includes recommendations for further reading.
+Here are the [slides](https://speakerdeck.com/u/pkaushik/p/meteor) from my [JS.Chi() talk on Meteor](http://www.meetup.com/js-chi/events/59833642). I will follow up with posts expanding on most of the slides in the presentation. This post, however, is for the benefit of all those who are feeling like they might be missing a step with frameworks like Backbone, Ember, (and now Meteor), et. al. <!--more--> It is an overview of the types of problems they're solving and includes recommendations for further reading.
  
 <script async class="speakerdeck-embed" data-id="4fbbc61f15a68f001f027e5a" data-ratio="1.2945638432364097" src="//speakerdeck.com/assets/embed.js"></script>
 
@@ -15,7 +15,7 @@ These are slides from my [JS.Chi() talk on May 22](http://www.meetup.com/js-chi/
 
 <h4>First a brief note about MVC</h4> 
 
-The Model-View-Controller application architecture (MVC) is used in most modern applications to separate an application’s data from its business rules and user interface. Briefly, Models represent an application’s data and functions to access it. Views represent information presented to the user. Controllers represent intermediary resources required to generate Views. The MVC pattern isn't new (it can be traced back to Smalltalk), but it was popularized, along with the REST style of client-server API design, by server-side web frameworks such as Rails and Django.
+The Model-View-Controller application architecture (MVC) is used in most modern applications to separate an application’s data from its business rules and user interface. Briefly, Models represent an application’s data and functions to access it. Views represent information presented to the user. Controllers represent intermediary resources required to generate Views. The MVC pattern isn't new (it can be traced back to Smalltalk), but it was popularized , along with the REST style of client-server API design, by server-side web frameworks such as Rails and Django.
 
 <h4>So what's all the fuss about JavaScript MVC frameworks (Backbone, Ember, et. al.)?</h4>
 
