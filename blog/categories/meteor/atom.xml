@@ -4,7 +4,7 @@
   <title><![CDATA[Category: meteor | Pallavi Anderson]]></title>
   <link href="http://asynchrotron.com/blog/categories/meteor/atom.xml" rel="self"/>
   <link href="http://asynchrotron.com/"/>
-  <updated>2012-05-27T22:26:50-05:00</updated>
+  <updated>2012-05-29T21:13:03-05:00</updated>
   <id>http://asynchrotron.com/</id>
   <author>
     <name><![CDATA[Pallavi Anderson]]></name>
@@ -18,7 +18,7 @@
     <link href="http://asynchrotron.com/blog/2012/05/22/hello-meteor/"/>
     <updated>2012-05-22T15:22:00-05:00</updated>
     <id>http://asynchrotron.com/blog/2012/05/22/hello-meteor</id>
-    <content type="html"><![CDATA[<p>Here are the <a href="https://speakerdeck.com/u/pkaushik/p/meteor">slides</a> from my <a href="http://www.meetup.com/js-chi/events/59833642">JS.Chi() talk on Meteor</a>. I will follow up with posts expanding on most of the slides in the presentation. This post, however, is for the benefit of all those who are feeling like they might be missing a step with frameworks like Backbone, Ember, (and now Meteor), et. al. <!--more--> It is an overview of the types of problems they're solving and includes recommendations for further reading.</p>
+    <content type="html"><![CDATA[<p>Here are the <a href="https://speakerdeck.com/u/pkaushik/p/meteor">slides</a> from my <a href="http://www.meetup.com/js-chi/events/59833642">JS.Chi() talk on Meteor</a>. I will follow up with posts expanding on most of the slides in the presentation. This post, however, is for the benefit of all those who are feeling like they might be missing a step with frameworks like Backbone, Ember, (and now Meteor), et. al. It is an overview of the types of problems they're solving and includes recommendations for further reading.</p>
 
 <script async class="speakerdeck-embed" data-id="4fbbc61f15a68f001f027e5a" data-ratio="1.2945638432364097" src="http://asynchrotron.com//speakerdeck.com/assets/embed.js"></script>
 

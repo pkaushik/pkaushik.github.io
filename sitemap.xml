@@ -2,7 +2,7 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>http://asynchrotron.com/blog/2012/05/22/hello-meteor/</loc>
-        <lastmod>2012-05-26T08:32:14-05:00</lastmod>
+        <lastmod>2012-05-29T21:12:33-05:00</lastmod>
     </url>
     <url>
         <loc>http://asynchrotron.com/about/</loc>
@@ -10,10 +10,10 @@
     </url>
     <url>
         <loc>http://asynchrotron.com/blog/archives/</loc>
-        <lastmod>2012-05-26T08:32:14-05:00</lastmod>
+        <lastmod>2012-05-29T21:12:33-05:00</lastmod>
     </url>
     <url>
         <loc>http://asynchrotron.com/</loc>
-        <lastmod>2012-05-26T08:32:14-05:00</lastmod>
+        <lastmod>2012-05-29T21:12:33-05:00</lastmod>
     </url>
 </urlset>
