@@ -5,7 +5,7 @@ date: 2012-05-22 15:22
 comments: true
 categories: [meteor, webapps]
 ---
-Here are the [slides](https://speakerdeck.com/u/pkaushik/p/meteor) from my [JS.Chi() talk on Meteor](http://www.meetup.com/js-chi/events/59833642). I will follow up with posts expanding on most of the slides in the presentation. This post, however, is for the benefit of all those who are feeling like they might be missing a step with frameworks like Backbone, Ember, (and now Meteor), et. al. <!--more--> It is an overview of the types of problems they're solving and includes recommendations for further reading.
+Here are the [slides](https://speakerdeck.com/u/pkaushik/p/meteor) from my [JS.Chi() talk on Meteor](http://www.meetup.com/js-chi/events/59833642). I will follow up with posts expanding on most of the slides in the presentation. This post, however, is for the benefit of all those who are feeling like they might be missing a step with frameworks like Backbone, Ember, (and now Meteor), et. al. It is an overview of the types of problems they're solving and includes recommendations for further reading.
  
 <script async class="speakerdeck-embed" data-id="4fbbc61f15a68f001f027e5a" data-ratio="1.2945638432364097" src="//speakerdeck.com/assets/embed.js"></script>
 
