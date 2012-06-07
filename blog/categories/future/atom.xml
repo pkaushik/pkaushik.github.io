@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: future | Pallavi Anderson]]></title>
+  <link href="http://asynchrotron.com/blog/categories/future/atom.xml" rel="self"/>
+  <link href="http://asynchrotron.com/"/>
+  <updated>2012-06-07T09:23:49-05:00</updated>
+  <id>http://asynchrotron.com/</id>
+  <author>
+    <name><![CDATA[Pallavi Anderson]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[The connection between Google Glasses and self-driving humanoids]]></title>
+    <link href="http://asynchrotron.com/blog/2012/06/07/the-connection-between-google-glasses-and-self-driving-humanoids/"/>
+    <updated>2012-06-07T09:17:00-05:00</updated>
+    <id>http://asynchrotron.com/blog/2012/06/07/the-connection-between-google-glasses-and-self-driving-humanoids</id>
+    <content type="html"><![CDATA[<p><a href="http://www.holovaty.com/">Adrian Holovaty</a> recently wrote about <a href="http://www.holovaty.com/writing/streetview/">the connection between Google Street View and driverless cars</a>. Towards the end, he wondered whether the decision to record all sensor / locational metadata along with pictures came before the idea of using it to train machine learning algorithms (or vice versa). I'd apply <a href="http://en.wikipedia.org/wiki/Occam's_razor">Occam's razor</a> here -- i.e., I'm pretty certain the idea of capturing the data came first.</p>
+
+<p>But what's more interesting is that it presents a whole new angle on what <a href="https://plus.google.com/111626127367496192147">Project Glass</a> enables: Widespread lifelogging by humans (and not just cars) to cloud-based storage. Add offline speech to text, face recognition, OCR, etc. and you have prosthetic memory.</p>
+
+<p>A tiny step towards "self-driving" humanoids.</p>
+]]></content>
+  </entry>
+  
+</feed>
