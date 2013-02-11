@@ -7,14 +7,9 @@ require "stringex"
 ssh_user       = "user@domain.com"
 ssh_port       = "22"
 document_root  = "~/website.com/"
-<<<<<<< HEAD
-rsync_delete   = true
-deploy_default = "push"
-=======
 rsync_delete   = false
 rsync_args     = ""  # Any extra arguments to pass to rsync
 deploy_default = "rsync"
->>>>>>> f109abe9f6b3bd48ab8b24c85c5808dda67ef934
 
 # This will be configured for you when you run config_deploy
 deploy_branch  = "master"
