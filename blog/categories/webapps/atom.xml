@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Webapps | Pallavi Anderson]]></title>
   <link href="http://asynchrotron.com/blog/categories/webapps/atom.xml" rel="self"/>
   <link href="http://asynchrotron.com/"/>
-  <updated>2013-12-27T11:19:38-06:00</updated>
+  <updated>2013-12-27T11:28:04-06:00</updated>
   <id>http://asynchrotron.com/</id>
   <author>
     <name><![CDATA[Pallavi Anderson]]></name>
@@ -25,25 +25,14 @@
 
 
 
-<br/>
-
-
-<hr/>
-
-
-<br/>
-
-
-
-
-<h4>First a brief note about MVC</h4>
+<h3>First a brief note about MVC</h3>
 
 
 <p></p>
 
 <p>The Model-View-Controller application architecture (MVC) is used in most modern applications to separate an application’s data from its business rules and user interface. Briefly, Models represent an application’s data and functions to access it. Views represent information presented to the user. Controllers represent intermediary resources required to generate Views. The MVC pattern isn&rsquo;t new (it can be traced back to Smalltalk), but it was popularized , along with the REST style of client-server API design, by server-side web frameworks such as Rails and Django.</p>
 
-<h4>So what's all the fuss about JavaScript MVC frameworks (Backbone, Ember, et. al.)?</h4>
+<h3>So what's all the fuss about JavaScript MVC frameworks (Backbone, Ember, et. al.)?</h3>
 
 
 <p>If you think of the screens &ndash; or pages &ndash; in your application as different &ldquo;states&rdquo; in your application, server-side frameworks require a round trip back to the server when the user goes from one application state to another. This is fine for content-heavy apps or websites. Or if you&rsquo;re accessing the pages via an ethernet cable or 802.11. But when you move to high latency connections and along the continuum &mdash; and I believe it really is a continuum &mdash; from a web site to a web app, you can deliver a much better user experience if you avoid the server round trip for each state change, and instead switch from state to state on the client, within a single browser page load cycle.</p>
@@ -64,7 +53,7 @@
 
 <p>This gets you pretty far, but all of these applications have something else in common which the previously mentioned MVC frameworks don&rsquo;t address: They need to send data back to the server and know if data has changed on the server. In other words, they need to synchronize client side models with the server side models.</p>
 
-<h4>Enter Meteor.</h4>
+<h3>Enter Meteor.</h3>
 
 
 <p></p>
