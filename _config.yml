@@ -70,6 +70,7 @@ github_skip_forks: true
 
 # Twitter
 twitter_user: pkaushik
+twitter_tweet_button: true
 
 # Google +1
 google_plus_one: false

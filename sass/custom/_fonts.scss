@@ -23,11 +23,23 @@
   font-style: normal;
 }
 
-//$sans: "Ostrich", sans-serif;
-//$serif: "Baskerville", serif;
+//$sans: "Menlo", sans-serif;
+$serif: "PT Sans" "Helvetica Neue", Arial, sans-serif !important;
 //$mono: "Courier", monospace;
 $heading-font-family: "OstrichBold";
 $header-title-font-family: "OstrichBlack";
 $header-subtitle-font-family: "OstrichBlack";
+
+.main-navigation a {
+  font-family: 'OstrichBlack' !important;
+}
+
+.sidebar h1 {
+  font-family: 'OstrichBlack' !important;
+}
+
+.meta {
+  font-family: 'OstrichBlack' !important;
+}
 
 
