@@ -41,3 +41,12 @@
 //$pre-bg: $base03;
 //$pre-border: darken($base02, 5);
 //$pre-color: $base1;
+
+$main-bg-img: image-url('bodybg.gif', false, false) !important;
+$link-color: lighten(#FF0066, 3);
+$link-color-hover: adjust-color($link-color, $saturation: 25) !default;
+$link-color-visited: adjust-color($link-color, $lightness: -20) !default;
+
+html {
+  background-image: $main-bg-img;
+}
