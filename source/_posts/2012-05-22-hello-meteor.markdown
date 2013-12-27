@@ -9,15 +9,12 @@ Here are the [slides](https://speakerdeck.com/u/pkaushik/p/meteor) from my [JS.C
  
 <script async class="speakerdeck-embed" data-id="4fbbc61f15a68f001f027e5a" data-ratio="1.2945638432364097" src="//speakerdeck.com/assets/embed.js"></script>
 
-<br/>
-<hr/>
-<br/>
 
-<h4>First a brief note about MVC</h4> 
+<h3>First a brief note about MVC</h3> 
 
 The Model-View-Controller application architecture (MVC) is used in most modern applications to separate an application’s data from its business rules and user interface. Briefly, Models represent an application’s data and functions to access it. Views represent information presented to the user. Controllers represent intermediary resources required to generate Views. The MVC pattern isn't new (it can be traced back to Smalltalk), but it was popularized , along with the REST style of client-server API design, by server-side web frameworks such as Rails and Django.
 
-<h4>So what's all the fuss about JavaScript MVC frameworks (Backbone, Ember, et. al.)?</h4>
+<h3>So what's all the fuss about JavaScript MVC frameworks (Backbone, Ember, et. al.)?</h3>
 
 If you think of the screens - or pages - in your application as different "states" in your application, server-side frameworks require a round trip back to the server when the user goes from one application state to another. This is fine for content-heavy apps or websites. Or if you're accessing the pages via an ethernet cable or 802.11. But when you move to high latency connections and along the continuum -- and I believe it really is a continuum -- from a web site to a web app, you can deliver a much better user experience if you avoid the server round trip for each state change, and instead switch from state to state on the client, within a single browser page load cycle.
 
@@ -37,7 +34,7 @@ So, all of these are client side frameworks, which solve the problems of a) sepa
 
 This gets you pretty far, but all of these applications have something else in common which the previously mentioned MVC frameworks don't address: They need to send data back to the server and know if data has changed on the server. In other words, they need to synchronize client side models with the server side models.
 
-<h4>Enter Meteor.</h4> 
+<h3>Enter Meteor.</h3> 
 
 [Meteor](http://meteor.com) is a full stack framework for end-to-end JavaScript applications. The beauty of coding it all in JavaScript is that you can easily implement the observer pattern (views watching for changes to the models) all the way to the server side. Meteor apps can subscribe to models (or subsets of models) on the server, and meteor takes care of all of the plumbing. This really is the bleeding edge of JS today.
 
