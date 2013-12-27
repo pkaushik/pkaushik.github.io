@@ -9,6 +9,8 @@ Here are the [slides](https://speakerdeck.com/u/pkaushik/p/meteor) from my [JS.C
  
 <script async class="speakerdeck-embed" data-id="4fbbc61f15a68f001f027e5a" data-ratio="1.2945638432364097" src="//speakerdeck.com/assets/embed.js"></script>
 
+<br/>
+<br/>
 
 <h3>First a brief note about MVC</h3> 
 
