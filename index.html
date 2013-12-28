@@ -9,7 +9,7 @@
   <meta name="author" content="Pallavi Anderson">
 
   
-  <meta name="description" content="Adrian Holovaty recently wrote about the connection between Google Street View and driverless cars. Towards the end, he wondered whether the decision &hellip;">
+  <meta name="description" content="The Meteor Parties example is a compelling demonstration of Meteor&rsquo;s capabilities. Out of the box, it uses a static jpeg image of SOMA as a &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -66,6 +66,230 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/12/27/realtime-maps-with-meteor-and-leaflet/">Realtime Maps With Meteor and Leaflet</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-27T20:51:10-06:00" pubdate data-updated="true">Dec 27<span>th</span>, 2013</time>
+        
+           | <a href="/blog/2013/12/27/realtime-maps-with-meteor-and-leaflet/#disqus_thread"
+             data-disqus-identifier="http://asynchrotron.com/blog/2013/12/27/realtime-maps-with-meteor-and-leaflet/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The <a href="https://www.meteor.com/examples/parties">Meteor Parties example</a> is a compelling demonstration of Meteor&rsquo;s capabilities. Out of the box, it uses a static <a href="https://github.com/meteor/meteor/blob/devel/examples/parties/public/soma.png">jpeg image of SOMA</a> as a faux base map layer and <a href="http://d3js.org/">D3</a> to draw circles representing parties with labels showing the number of RSVPs. A neat D3 animation effect indicates which party is currently selected, but since the &ldquo;map&rdquo; is just a static image, parties are located at fixed points within the 500x500 pixel image, and you cannot pan or zoom the map.</p>
+
+<p>I decided to refactor the example to use <a href="http://leafletjs.com/">Leaflet</a> to make a truly interactive realtime map that looked and felt as close to the original parties demo as possible.</p>
+
+<p>TLDR; Here is the <a href="http://chicago-parties.meteor.com">end result</a> with code for the complete application in this  <a href="https://github.com/pkaushik/parties">github repo</a>. You need a github account to sign in to the app and post or be invited to parties. The rest of this post describes how I got it all to work, and assumes you have a working understanding of the original Parties example. Please comment below if you want a more detailed explanation.</p>
+
+<h3>Base Map</h3>
+
+
+<p>First off, Stamen&rsquo;s <a href="http://maps.stamen.com/toner/#12/37.7706/-122.3782">toner themed map tiles</a> are an obvious replacement for the black &amp; white SOMA image. I set <code>opacity</code> to <code>.5</code> to improve the visibility of the markers and initialized the map with <code>doubleClickZoom</code> and <code>touchZoom</code> set to <code>false</code> since those actions are used to create a new party. All of this Leaflet initialization goes into the <code>rendered()</code> callback of the map template.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">map</span> <span class="o">=</span> <span class="nx">L</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#map_canvas&#39;</span><span class="p">),</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">doubleClickZoom</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">touchZoom</span><span class="o">:</span> <span class="kc">false</span>
+</span><span class='line'><span class="p">}).</span><span class="nx">setView</span><span class="p">(</span><span class="k">new</span> <span class="nx">L</span><span class="p">.</span><span class="nx">LatLng</span><span class="p">(</span><span class="mf">41.8781136</span><span class="p">,</span> <span class="o">-</span><span class="mf">87.66677956445312</span><span class="p">),</span> <span class="mi">13</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">L</span><span class="p">.</span><span class="nx">tileLayer</span><span class="p">(</span><span class="s1">&#39;http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">opacity</span><span class="o">:</span> <span class="p">.</span><span class="mi">5</span><span class="p">}).</span><span class="nx">addTo</span><span class="p">(</span><span class="nx">map</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In addition, the following boilerplate adjusts the map&rsquo;s size when the window is resized.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">resize</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">h</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">height</span><span class="p">(),</span> <span class="nx">offsetTop</span> <span class="o">=</span> <span class="mi">90</span><span class="p">;</span> <span class="c1">// Calculate the top offset</span>
+</span><span class='line'>  <span class="nx">$mc</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#map_canvas&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">$mc</span><span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;height&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">h</span> <span class="o">-</span> <span class="nx">offsetTop</span><span class="p">));</span>
+</span><span class='line'><span class="p">}).</span><span class="nx">resize</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, the map template event handler from the example (which triggers when the image is clicked) is replaced with Leaflet&rsquo;s <code>dblclick</code> event handler (which conveniently returns a Leaflet <code>LatLng</code> as argument to the callback). I save the <code>LatLng</code> as a reactive <code>Session</code> variable and set a flag to render the <code>createDialog</code> template.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">map</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;dblclick&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="o">!</span> <span class="nx">Meteor</span><span class="p">.</span><span class="nx">userId</span><span class="p">())</span> <span class="c1">// must be logged in to create parties</span>
+</span><span class='line'>    <span class="k">return</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">Session</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;createCoords&quot;</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">latlng</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">Session</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;showCreateDialog&quot;</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<h3>Creating a Party</h3>
+
+
+<p>The code associated with the <code>createDialog</code> template is virtually the same as in the Parties example; except that my new <code>createParty</code> takes <code>LatLng</code> as an argument instead of the x and y coordinates in the example.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">Meteor</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="s1">&#39;createParty&#39;</span><span class="p">,</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">title</span><span class="o">:</span> <span class="nx">title</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">description</span><span class="o">:</span> <span class="nx">description</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">latlng</span><span class="o">:</span> <span class="nx">latlng</span><span class="p">,</span>
+</span><span class='line'>  <span class="kr">public</span><span class="o">:</span> <span class="kr">public</span>
+</span><span class='line'><span class="p">},</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">partyId</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="o">!</span> <span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">Session</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;selected&quot;</span><span class="p">,</span> <span class="nx">partyId</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="o">!</span> <span class="kr">public</span> <span class="o">&amp;&amp;</span> <span class="nx">Meteor</span><span class="p">.</span><span class="nx">users</span><span class="p">.</span><span class="nx">find</span><span class="p">().</span><span class="nx">count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>      <span class="nx">Session</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;showInviteDialog&quot;</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If <code>createParty</code> executes without error, I save the newly created Party&rsquo;s <code>_id</code> to a reactive <code>Session</code> variable and set a flag to render the <code>inviteDialog</code> template.</p>
+
+<h3>Observing the Parties Collection</h3>
+
+
+<p>The original example&rsquo;s D3 code contained in a <code>Meteor.autorun</code> which runs when a Party is created or updated with the following code in the map template&rsquo;s <code>created()</code> callback.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">Template</span><span class="p">.</span><span class="nx">map</span><span class="p">.</span><span class="nx">created</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">Parties</span><span class="p">.</span><span class="nx">find</span><span class="p">({}).</span><span class="nx">observe</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">added</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">party</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">marker</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">L</span><span class="p">.</span><span class="nx">Marker</span><span class="p">(</span><span class="nx">party</span><span class="p">.</span><span class="nx">latlng</span><span class="p">,</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">_id</span><span class="o">:</span> <span class="nx">party</span><span class="p">.</span><span class="nx">_id</span><span class="p">,</span>
+</span><span class='line'>        <span class="nx">icon</span><span class="o">:</span> <span class="nx">createIcon</span><span class="p">(</span><span class="nx">party</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">}).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">Session</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;selected&quot;</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">_id</span><span class="p">);</span>
+</span><span class='line'>      <span class="p">});</span>
+</span><span class='line'>      <span class="nx">addMarker</span><span class="p">(</span><span class="nx">marker</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nx">changed</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">party</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">marker</span> <span class="o">=</span> <span class="nx">markers</span><span class="p">[</span><span class="nx">party</span><span class="p">.</span><span class="nx">_id</span><span class="p">];</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="nx">marker</span><span class="p">)</span> <span class="nx">marker</span><span class="p">.</span><span class="nx">setIcon</span><span class="p">(</span><span class="nx">createIcon</span><span class="p">(</span><span class="nx">party</span><span class="p">));</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nx">removed</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">party</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">removeMarker</span><span class="p">(</span><span class="nx">party</span><span class="p">.</span><span class="nx">_id</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>addMarker</code> and <code>removeMarker</code> methods update a hash of Markers keyed by the Party&rsquo;s <code>_id</code>. This is useful since we need to efficiently access Markers by <code>Party._id</code> to update RSVP count in the Marker&rsquo;s laber or delete the Marker if the Party is deleted.</p>
+
+<p>The <code>createIcon</code> helper function takes a Party document as argument, and returns a pure CSS circular <code>DivIcon</code> created using <code>border-radius</code> to generte a circle.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">createIcon</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">party</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;leaflet-div-icon &#39;</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">className</span> <span class="o">+=</span> <span class="nx">party</span><span class="p">.</span><span class="kr">public</span> <span class="o">?</span> <span class="s1">&#39;public&#39;</span> <span class="o">:</span> <span class="s1">&#39;private&#39;</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">L</span><span class="p">.</span><span class="nx">divIcon</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">iconSize</span><span class="o">:</span> <span class="p">[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span>
+</span><span class='line'>    <span class="nx">html</span><span class="o">:</span> <span class="s1">&#39;&lt;b&gt;&#39;</span> <span class="o">+</span> <span class="nx">attending</span><span class="p">(</span><span class="nx">party</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&lt;/b&gt;&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">className</span><span class="o">:</span> <span class="nx">className</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>attending</code> helper function is under the <code>/collections</code> directory since it&rsquo;s used on both the client and server side of the application.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">attending</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">party</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">groupBy</span><span class="p">(</span><span class="nx">party</span><span class="p">.</span><span class="nx">rsvps</span><span class="p">,</span> <span class="s1">&#39;rsvp&#39;</span><span class="p">).</span><span class="nx">yes</span> <span class="o">||</span> <span class="p">[]).</span><span class="nx">length</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<h5>Next: Drawing circle markers and animating which one&#8217;s selected&#8230;</h5>
+
+
+<p></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -212,6 +436,10 @@
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/12/27/realtime-maps-with-meteor-and-leaflet/">Realtime Maps With Meteor and Leaflet</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2012/06/07/the-connection-between-google-glasses-and-self-driving-humanoids/">The Connection Between Google Glasses and Self-driving Humanoids</a>
