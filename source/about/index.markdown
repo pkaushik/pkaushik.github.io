@@ -13,4 +13,4 @@ Her day job is Principal Staff Software Engineer at the Motorola Solutions Chief
 
 Statements and opinions on this site are her own, and do not necessarily represent positions, strategies, or opinions of her present or past employers.
 
-![Where I'm From]({{ root_url }}/images/custom/where-i-am-from.png)
+{% imgcap /images/custom/where-i-am-from.png Where I'm From %}
