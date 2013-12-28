@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Webapps | Pallavi Anderson]]></title>
   <link href="http://asynchrotron.com/blog/categories/webapps/atom.xml" rel="self"/>
   <link href="http://asynchrotron.com/"/>
-  <updated>2013-12-28T17:30:04-06:00</updated>
+  <updated>2013-12-28T17:49:25-06:00</updated>
   <id>http://asynchrotron.com/</id>
   <author>
     <name><![CDATA[Pallavi Anderson]]></name>
@@ -18,17 +18,17 @@
     <link href="http://asynchrotron.com/blog/2013/12/27/realtime-maps-with-meteor-and-leaflet/"/>
     <updated>2013-12-27T20:51:10-06:00</updated>
     <id>http://asynchrotron.com/blog/2013/12/27/realtime-maps-with-meteor-and-leaflet</id>
-    <content type="html"><![CDATA[<p><span class='caption-wrapper'><img class='caption' src='https://raw.github.com/meteor/meteor/devel/examples/parties/public/soma.png">https://raw.github.com/meteor/meteor/devel/examples/parties/public/soma.png</a>' width='350' height='350' title='the map is actually a static image'><span class='caption-text'>the map is actually a static image</span></span>
-The <a href="https://www.meteor.com/examples/parties">Parties example</a> bundled with <a href="http://www.meteor.com">Meteor</a> is a nifty demonstration of the framework&rsquo;s core principles. It also shows how we might implement fine-grained data access control to limit who can see and edit specific items in a collection &ndash; in this case which users are allowed to RSVP to parties. But the application isn&rsquo;t nearly as useful as it could be because it displays a <a href="https://github.com/meteor/meteor/blob/devel/examples/parties/public/soma.png">500 x 500 pixel image of downtown San Francisco</a> as the faux map. This means that we cannot pan or zoom the &ldquo;map,&rdquo; nor can we initialize it to any other location or zoom level, and when we double click the image to create a party, D3 draws a circle to mark the position of the click in relation to the <em>image element in the browser window</em>, and not at geospatial coordinates.</p>
+    <content type="html"><![CDATA[<p><span class='caption-wrapper'><img class='caption' src='https://raw.github.com/meteor/meteor/devel/examples/parties/public/soma.png">https://raw.github.com/meteor/meteor/devel/examples/parties/public/soma.png</a>' width='350' height='350' title='this &lsquo;map&rsquo; is actually a static image'><span class='caption-text'>this &lsquo;map&rsquo; is actually a static image</span></span>
+The <a href="https://www.meteor.com/examples/parties">Parties example</a> bundled with <a href="http://www.meteor.com">Meteor</a> is a nifty demonstration of the framework&rsquo;s core principles. But the application isn&rsquo;t nearly as useful as it could be because it uses a <a href="https://github.com/meteor/meteor/blob/devel/examples/parties/public/soma.png">500 x 500 pixel image of downtown San Francisco</a> as a faux map. This means that we cannot pan or zoom the &ldquo;map,&rdquo; nor can we initialize it to any other location or zoom level. When we double click the image to create a party, D3 draws a circle to mark the position of the click in relation to the <em>image element in the browser window</em>, and not at geospatial coordinates.</p>
 
-<p>I decided to refactor the example to use <a href="http://leafletjs.com/">Leaflet.js</a> to make a real map that looks and feels as close to the original as possible. The color-coded circle markers (pink for private, blue for public parties) labeled with the number of RSVPs are nice and lightweight, and I like how the larger animated circle is used to indicate which party is currently selected, with details about the party shown in the sidebar. It&rsquo;s a useful pattern for showing details about an individual map marker without using the standard popup approach which occludes part of the map.</p>
+<p>I decided to refactor the example to use <a href="http://leafletjs.com/">Leaflet.js</a> to make a real map that looks and feels as close to the original as possible. The color-coded circle markers (pink for private, blue for public parties) labeled with the number of RSVPs are nice and lightweight, and I like how the larger animated circle is used to indicate which party is currently selected, with details about the party shown in the sidebar. It&rsquo;s a useful pattern for displaying individual marker details without using a popup which occludes part of the map.</p>
 
-<p>TLDR; End result: <a href="http://chicago-parties.meteor.com">http://chicago-parties.meteor.com</a> and <a href="https://github.com/pkaushik/parties">source code for the complete application</a>. You need a github account to log in, to create or RSVP to parties.</p>
+<p>TLDR; End result: <a href="http://chicago-parties.meteor.com">http://chicago-parties.meteor.com</a> and <a href="https://github.com/pkaushik/parties">source code for the complete application</a>. You need a github account to log in to create or RSVP to parties.</p>
 
 <h3>Setting the Stage</h3>
 
 
-<p>First off, since we&rsquo;ll no longer be calculating relative x and y coordinates to position circles on a jpeg image, the map does not need to be of a fixed size. We modify the page template to use Bootstrap&rsquo;s fluid classes to generate a responsive layout, and include the following boilerplate to adjust the map&rsquo;s size as the window is resized. This pattern is standard practice when creating responsive Leaflet maps; not specific to Meteor.</p>
+<p>First off, since we&rsquo;ll no longer be calculating relative x and y coordinates to position circles on a jpeg image, the map no longer needs to be of a fixed size. We update the page template to use Bootstrap&rsquo;s fluid classes to generate a responsive layout and add code to adjust the map&rsquo;s size as the window is resized. This pattern is standard practice when creating responsive Leaflet maps; not specific to Meteor.</p>
 
 <p>``` html
 <div class="container-fluid">
@@ -62,7 +62,7 @@ $(window).resize(function () {
 <h3>Map Initialization</h3>
 
 
-<p>Map initialization code goes into the template&rsquo;s <code>rendered()</code> callback. Stamen&rsquo;s <a href="http://maps.stamen.com/toner/#12/37.7706/-122.3782">toner themed map tiles</a> are a nice replacement for the black &amp; white map image. Disabling click and touch zoom lets us reserve those actions for creating a new party, and adjusting the base map&rsquo;s opacity improves the visibility of markers against the very dark toner theme.</p>
+<p>Map initialization code goes into the template&rsquo;s <code>rendered()</code> callback. Stamen&rsquo;s <a href="http://maps.stamen.com/toner/#12/37.7706/-122.3782">toner themed map tiles</a> are a nice replacement for the black &amp; white map image. Disabling click and touch zoom lets us reserve those actions for users to create a new party, and adjusting the base map&rsquo;s opacity improves the visibility of markers against the very dark toner theme.</p>
 
 <p>``` js
 map = L.map($(&lsquo;#map_canvas&rsquo;), {
@@ -91,7 +91,7 @@ map.on(&ldquo;dblclick&rdquo;, function(e) {
 <h3>Creating and Saving a Party to the Database</h3>
 
 
-<p>The code to create a new party using a <code>Meteor.methods()</code> call is virtually the same as in the original example except that the method now takes the <code>LatLng</code> that we saved as <code>Session.createCoords</code>. When the new party has been created and successfully saved in a server-side mongo collection, we get a successful callback and save the new party&rsquo;s <code>_id</code> to the <code>Session.selected</code> variable. This ensures that the most recently created party is always selected.</p>
+<p>The code to create and persist a new party uses a <code>Meteor.methods()</code> call and is virtually the same as in the original example except that the method now takes the <code>LatLng</code> that we saved as <code>Session.createCoords</code>. When the new party has been added to a server-side mongo collection called Parties, we get a successful callback, and save the new party&rsquo;s <code>_id</code> to the <code>Session.selected</code> variable.</p>
 
 <p>``` js
 var title = template.find(&ldquo;.title&rdquo;).value;
@@ -119,7 +119,7 @@ var latlng = Session.get(&ldquo;createCoords&rdquo;);</p>
 <h3>Adding, Removing, and Updating Markers on the Map in Realtime</h3>
 
 
-<p>So far, we&rsquo;ve saved a newly created party into the server-side Parties mongo collection and behind the scenes, Meteor has transmitted it back to the client-side monomongo collection with the same name. We can verify this by typing <code>Parties.findOne()</code> into the JavaScript console.</p>
+<p>So far, we&rsquo;ve saved a newly created party into the server-side Parties mongo collection and Meteor (behind the scenes) has transmitted it back to the client-side monomongo collection with the same name. We can verify this by typing <code>Parties.findOne()</code> into the JavaScript console.</p>
 
 <p>Let&rsquo;s now observe changes to the client&rsquo;s monomongo collection and automatically draw a map marker every time a new party is added to the collection. Since this only needs to be set up once, we can put the following code in the map template&rsquo;s <code>created()</code> callback. This replaces the D3 circle drawing code from the original example.</p>
 
@@ -174,23 +174,24 @@ className: className
 }
 <code>
 </code> css
-.leaflet-div-icon {</p>
+.leaflet-div-icon {
+  border-radius: 50%;
+  border: none;
+  line-height: 30px;
+  font-family: verdana;
+  text-align: center;
+  color: white;
+  opacity: .8;
+  vertical-align: middle;
+}</p>
 
-<pre><code>border-radius: 50%;
-border: none;
-line-height: 30px; 
-font-family: verdana;
-text-align: center;
-color: white;
-opacity: .8;
-vertical-align: middle;
-</code></pre>
+<p>.leaflet-div-icon.public {
+  background: #49AFCD;
+}</p>
 
-<p>}</p>
-
-<p>.leaflet-div-icon.public { background: #49AFCD; }</p>
-
-<p>.leaflet-div-icon.private { background: #DA4F49; }
+<p>.leaflet-div-icon.private {
+  background: #DA4F49;
+}
 ```</p>
 
 <p><em>Next: Updating and deleting parties, and animating the selected party indicator&hellip;</em></p>
