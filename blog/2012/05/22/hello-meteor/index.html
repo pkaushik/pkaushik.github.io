@@ -260,6 +260,17 @@
   <a class="twitter-timeline" href="https://twitter.com/pkaushik" data-widget-id="416085902973095936" data-chrome="noborders noheader nofooter noscrollbar transparent" data-tweet-limit="5">Tweets by @pkaushik</a>
   
    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+   
+   <script type="text/javascript">
+   window.setTimeout(function(){
+     $(".twitter-timeline").contents()
+            .find(".e-entry-title")
+            .css("font-family","'PT Sans', 'Helvetica Neue', Arial, sans-serif");
+     $(".twitter-timeline").contents()
+           .find(".tweet")
+           .css("font-family","'PT Sans', 'Helvetica Neue', Arial, sans-serif");
+   }, 1000);
+   </script>
    <br/><br/>
   
    
