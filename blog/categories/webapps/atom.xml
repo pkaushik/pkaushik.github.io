@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Webapps | Pallavi Anderson]]></title>
   <link href="http://asynchrotron.com/blog/categories/webapps/atom.xml" rel="self"/>
   <link href="http://asynchrotron.com/"/>
-  <updated>2013-12-29T00:01:50-06:00</updated>
+  <updated>2013-12-29T12:06:22-06:00</updated>
   <id>http://asynchrotron.com/</id>
   <author>
     <name><![CDATA[Pallavi Anderson]]></name>
@@ -133,7 +133,7 @@ L.divIcon({
     <updated>2013-12-27T20:51:10-06:00</updated>
     <id>http://asynchrotron.com/blog/2013/12/27/realtime-maps-with-meteor-and-leaflet</id>
     <content type="html"><![CDATA[<p><span class='caption-wrapper'><img class='caption' src='https://raw.github.com/meteor/meteor/devel/examples/parties/public/soma.png">https://raw.github.com/meteor/meteor/devel/examples/parties/public/soma.png</a>' width='350' height='350' title='this &lsquo;map&rsquo; is actually a static image'><span class='caption-text'>this &lsquo;map&rsquo; is actually a static image</span></span>
-The <a href="https://www.meteor.com/examples/parties">Parties example</a> bundled with <a href="http://www.meteor.com">Meteor</a> is a nifty demonstration of the framework&rsquo;s core principles, but the application isn&rsquo;t nearly as useful as it could be because it uses a <a href="https://github.com/meteor/meteor/blob/devel/examples/parties/public/soma.png">500 x 500 pixel image of downtown San Francisco</a> as a faux map. This means that we cannot pan or zoom the &ldquo;map,&rdquo; nor can we initialize it to any other location or zoom level; when we double-click the image to create new parties, <a href="http://d3js.com">D3.js</a> is used to draw circles marking the position of the new parties in relation to the <em>image element in the browser window</em>, and not at geospatial coordinates.</p>
+The <a href="https://www.meteor.com/examples/parties">Parties example</a> bundled with <a href="http://www.meteor.com">Meteor</a> is a nifty demonstration of the framework&rsquo;s core principles, but the application isn&rsquo;t nearly as useful as it could be because it uses a <a href="https://github.com/meteor/meteor/blob/devel/examples/parties/public/soma.png">500 x 500 pixel image of downtown San Francisco</a> as a faux map. This means that we cannot pan or zoom the &ldquo;map,&rdquo; nor can we initialize it to any other location or zoom level; when we double-click the image to create new parties, <a href="http://d3js.org/">D3.js</a> is used to draw circles marking the position of the new parties in relation to the <em>image element in the browser window</em>, and not at geospatial coordinates.</p>
 
 <p><span class='caption-wrapper left'><img class='caption' src='/images/custom/old-parties.png' width='350' height='350' title='a static image with circles drawn on it'><span class='caption-text'>a static image with circles drawn on it</span></span></p>
 
