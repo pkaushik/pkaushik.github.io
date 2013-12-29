@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Meteor | Pallavi Anderson]]></title>
   <link href="http://asynchrotron.com/blog/categories/meteor/atom.xml" rel="self"/>
   <link href="http://asynchrotron.com/"/>
-  <updated>2013-12-29T12:06:22-06:00</updated>
+  <updated>2013-12-29T13:05:09-06:00</updated>
   <id>http://asynchrotron.com/</id>
   <author>
     <name><![CDATA[Pallavi Anderson]]></name>
@@ -123,7 +123,9 @@ L.divIcon({
 
 <p>We need to make a minor tweak to the plugin&rsquo;s source code to support our needs: The original AnimatedMarker does not allow setting of the animation polyline after the marker is initialized. As a result, it requires the complete animation path to be known before creating the marker. But we want to create the AnimatedMarker once and to then set the animation polyline dynamically as soon as a user selects a different marker. The next animation polyline would be a single segment from the AnimatedMarker&rsquo;s current location to the center of the next marker selected. To accomplish this, I&rsquo;ve had to reset the internal index (<code>this._i</code>) to 1 when a <code>polyline</code> is passed to the setLine method, making the method repeatedly reusable, rather than something that&rsquo;s called just once upon the marker&rsquo;s initialization. Until my pull request is merged, this modification is available at my fork on github.</p>
 
-<p><a href="http://chicago-parties.meteor.com">Ta-da!</a></p>
+<p>Ta-da!</p>
+
+<p>End result: <a href="http://chicago-parties.meteor.com">http://chicago-parties.meteor.com</a> and <a href="https://github.com/pkaushik/parties">source code for the complete application</a>. You need to log in with a github account to create or RSVP to parties.</p>
 ]]></content>
   </entry>
   
@@ -133,22 +135,31 @@ L.divIcon({
     <updated>2013-12-27T20:51:10-06:00</updated>
     <id>http://asynchrotron.com/blog/2013/12/27/realtime-maps-with-meteor-and-leaflet</id>
     <content type="html"><![CDATA[<p><span class='caption-wrapper'><img class='caption' src='https://raw.github.com/meteor/meteor/devel/examples/parties/public/soma.png">https://raw.github.com/meteor/meteor/devel/examples/parties/public/soma.png</a>' width='350' height='350' title='this &lsquo;map&rsquo; is actually a static image'><span class='caption-text'>this &lsquo;map&rsquo; is actually a static image</span></span>
-The <a href="https://www.meteor.com/examples/parties">Parties example</a> bundled with <a href="http://www.meteor.com">Meteor</a> is a nifty demonstration of the framework&rsquo;s core principles, but the application isn&rsquo;t nearly as useful as it could be because it uses a <a href="https://github.com/meteor/meteor/blob/devel/examples/parties/public/soma.png">500 x 500 pixel image of downtown San Francisco</a> as a faux map. This means that we cannot pan or zoom the &ldquo;map,&rdquo; nor can we initialize it to any other location or zoom level; when we double-click the image to create new parties, <a href="http://d3js.org/">D3.js</a> is used to draw circles marking the position of the new parties in relation to the <em>image element in the browser window</em>, and not at geospatial coordinates.</p>
+The <a href="https://www.meteor.com/examples/parties">parties example</a> bundled with <a href="http://www.meteor.com">Meteor</a> is a nifty demonstration of the framework&rsquo;s core principles, but it uses a <a href="https://github.com/meteor/meteor/blob/devel/examples/parties/public/soma.png">500 x 500 pixel image of downtown San Francisco</a> as a faux map. This means that we cannot pan or zoom the &ldquo;map&rdquo; and when we double-click the image to create new parties, the circle markers are drawn at the position of the clicks in relation to the <em>image element in the browser window</em>, and not at geospatial coordinates.</p>
 
-<p><span class='caption-wrapper left'><img class='caption' src='/images/custom/old-parties.png' width='350' height='350' title='a static image with circles drawn on it'><span class='caption-text'>a static image with circles drawn on it</span></span></p>
+<p><span class='caption-wrapper left'><img class='caption' src='/images/custom/old-parties.png' width='350' height='350' title='circles drawn over the static image'><span class='caption-text'>circles drawn over the static image</span></span></p>
 
-<p>I decided to update the example to use <a href="http://leafletjs.com/">Leaflet.js</a> to make a real map that looks and feels as close to the original example as possible. In particular, I wanted to preserve the color-coded circles -red for private, blue for public parties- labeled with the number of RSVPs, and the larger animated circle indicating which party is currently selected (with details about the selected party displayed in the sidebar). This is a useful pattern for displaying individual marker details without using a popup that occludes part of the map.</p>
+<p>I decided to update the example to use <a href="http://leafletjs.com/">Leaflet.js</a> to make a real map that looks and feels as close to the original example as possible. In particular, I wanted to preserve the color-coded circles (red for private, blue for public parties) labeled with the number of RSVPs, and the larger animated circle indicating which party is currently selected, with its details displayed in the sidebar. This is a useful pattern for displaying individual marker details without using a popup that occludes part of the map. Here&rsquo;s the <a href="http://chicago-parties.meteor.com">end result</a> with <a href="https://github.com/pkaushik/parties">source code</a>.</p>
 
-<p>TLDR; End result: <a href="http://chicago-parties.meteor.com">http://chicago-parties.meteor.com</a> and <a href="https://github.com/pkaushik/parties">source code for the complete application</a>. You need to log in with a github account to create or RSVP to parties.</p>
+<p>Over the next two posts, I&rsquo;ll go over the changes I made to the original parties example. I won&rsquo;t explain how Meteor works, and it would help if you&rsquo;ve run the original example and have a rough sense of what&rsquo;s going on.</p>
 
 <h3>Setting the Stage</h3>
 
 
-<p>First off, we add the leaflet package to our project from the command line. Conveniently, leaflet is an officially supported Meteor package.
-<code>
-$ meteor add leaflet
-leaflet: Leaflet.js, mobile-friendly interactive maps....
-</code></p>
+<p>First off, we create the original example and add leaflet to the project using the <a href="http://oortcloud.github.io/meteorite/">meteorite</a> command line. Meteorite is Meteor&rsquo;s unofficial package management system.
+```
+$ meteor create &mdash;example parties
+parties: created.</p>
+
+<p>To run your new app:
+   cd parties
+   meteor</p>
+
+<p>$ cd parties</p>
+
+<p>$ mrt add leaflet
+leaflet: Leaflet.js, mobile-friendly interactive maps&hellip;.
+```</p>
 
 <p>Since we&rsquo;ll no longer be calculating relative coordinates to draw circles on a jpeg image, the base map does not need to be a fixed size. We can use Bootstrap&rsquo;s fluid classes to generate a <a href="http://getbootstrap.com/2.3.2/scaffolding.html#responsive">responsive page layout</a> and adjust the map&rsquo;s size as the browser is resized. This pattern is frequently used when creating responsive Leaflet maps, and not specific to Meteor.</p>
 

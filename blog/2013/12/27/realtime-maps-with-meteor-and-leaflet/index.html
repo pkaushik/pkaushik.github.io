@@ -10,7 +10,7 @@
 
   
   <meta name="description" content="this &lsquo;map&rsquo; is actually a static image
-The Parties example bundled with Meteor is a nifty demonstration of the framework&rsquo;s core &hellip;">
+The parties example bundled with Meteor is a nifty demonstration of the framework&rsquo;s core &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -97,22 +97,40 @@ The Parties example bundled with Meteor is a nifty demonstration of the framewor
 
 
 <div class="entry-content"><p><span class='caption-wrapper left'><img class='caption' src='https://raw.github.com/meteor/meteor/devel/examples/parties/public/soma.png' width='350' height='350' title='this 'map' is actually a static image'><span class='caption-text'>this &lsquo;map&rsquo; is actually a static image</span></span>
-The <a href="https://www.meteor.com/examples/parties">Parties example</a> bundled with <a href="http://www.meteor.com">Meteor</a> is a nifty demonstration of the framework&rsquo;s core principles, but the application isn&rsquo;t nearly as useful as it could be because it uses a <a href="https://github.com/meteor/meteor/blob/devel/examples/parties/public/soma.png">500 x 500 pixel image of downtown San Francisco</a> as a faux map. This means that we cannot pan or zoom the &ldquo;map,&rdquo; nor can we initialize it to any other location or zoom level; when we double-click the image to create new parties, <a href="http://d3js.org/">D3.js</a> is used to draw circles marking the position of the new parties in relation to the <em>image element in the browser window</em>, and not at geospatial coordinates.</p>
+The <a href="https://www.meteor.com/examples/parties">parties example</a> bundled with <a href="http://www.meteor.com">Meteor</a> is a nifty demonstration of the framework&rsquo;s core principles, but it uses a <a href="https://github.com/meteor/meteor/blob/devel/examples/parties/public/soma.png">500 x 500 pixel image of downtown San Francisco</a> as a faux map. This means that we cannot pan or zoom the &ldquo;map&rdquo; and when we double-click the image to create new parties, the circle markers are drawn at the position of the clicks in relation to the <em>image element in the browser window</em>, and not at geospatial coordinates.</p>
 
-<p><span class='caption-wrapper left'><img class='caption' src='/images/custom/old-parties.png' width='350' height='350' title='a static image with circles drawn on it'><span class='caption-text'>a static image with circles drawn on it</span></span></p>
+<p><span class='caption-wrapper left'><img class='caption' src='/images/custom/old-parties.png' width='350' height='350' title='circles drawn over the static image'><span class='caption-text'>circles drawn over the static image</span></span></p>
 
-<p>I decided to update the example to use <a href="http://leafletjs.com/">Leaflet.js</a> to make a real map that looks and feels as close to the original example as possible. In particular, I wanted to preserve the color-coded circles -red for private, blue for public parties- labeled with the number of RSVPs, and the larger animated circle indicating which party is currently selected (with details about the selected party displayed in the sidebar). This is a useful pattern for displaying individual marker details without using a popup that occludes part of the map.</p>
+<p>I decided to update the example to use <a href="http://leafletjs.com/">Leaflet.js</a> to make a real map that looks and feels as close to the original example as possible. In particular, I wanted to preserve the color-coded circles (red for private, blue for public parties) labeled with the number of RSVPs, and the larger animated circle indicating which party is currently selected, with its details displayed in the sidebar. This is a useful pattern for displaying individual marker details without using a popup that occludes part of the map. Here&rsquo;s the <a href="http://chicago-parties.meteor.com">end result</a> with <a href="https://github.com/pkaushik/parties">source code</a>.</p>
 
-<p>TLDR; End result: <a href="http://chicago-parties.meteor.com">http://chicago-parties.meteor.com</a> and <a href="https://github.com/pkaushik/parties">source code for the complete application</a>. You need to log in with a github account to create or RSVP to parties.</p>
+<p>Over the next two posts, I&rsquo;ll go over the changes I made to the original parties example. I won&rsquo;t explain how Meteor works, and it would help if you&rsquo;ve run the original example and have a rough sense of what&rsquo;s going on.</p>
 
 <h3>Setting the Stage</h3>
 
 
-<p>First off, we add the leaflet package to our project from the command line. Conveniently, leaflet is an officially supported Meteor package.</p>
+<p>First off, we create the original example and add leaflet to the project using the <a href="http://oortcloud.github.io/meteorite/">meteorite</a> command line. Meteorite is Meteor&rsquo;s unofficial package management system.</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ meteor add leaflet
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ meteor create --example parties
+</span><span class='line'>parties: created.
+</span><span class='line'>
+</span><span class='line'>To run your new app:
+</span><span class='line'>   cd parties
+</span><span class='line'>   meteor
+</span><span class='line'>
+</span><span class='line'>$ cd parties
+</span><span class='line'>
+</span><span class='line'>$ mrt add leaflet
 </span><span class='line'>leaflet: Leaflet.js, mobile-friendly interactive maps....</span></code></pre></td></tr></table></div></figure>
 
 
