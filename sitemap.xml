@@ -12,7 +12,13 @@
     </url>
     <url>
         <loc>http://asynchrotron.com/blog/2013/12/27/realtime-maps-with-meteor-and-leaflet/</loc>
-        <lastmod>2013-12-28T17:49:24-06:00</lastmod>
+        <lastmod>2013-12-28T23:56:37-06:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://asynchrotron.com/blog/2013/12/28/realtime-maps-with-meteor-and-leaflet-part-2/
+        </loc>
+        <lastmod>2013-12-29T00:01:06-06:00</lastmod>
     </url>
     <url>
         <loc>http://asynchrotron.com/about/</loc>
@@ -20,11 +26,11 @@
     </url>
     <url>
         <loc>http://asynchrotron.com/blog/archives/</loc>
-        <lastmod>2013-12-28T17:49:24-06:00</lastmod>
+        <lastmod>2013-12-29T00:01:06-06:00</lastmod>
     </url>
     <url>
         <loc>http://asynchrotron.com/</loc>
-        <lastmod>2013-12-28T17:49:24-06:00</lastmod>
+        <lastmod>2013-12-29T00:01:06-06:00</lastmod>
     </url>
     <url>
         <loc>http://asynchrotron.com/robots.txt</loc>

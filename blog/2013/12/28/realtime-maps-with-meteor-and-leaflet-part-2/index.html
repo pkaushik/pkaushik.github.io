@@ -1,0 +1,440 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Realtime Maps With Meteor and Leaflet - Part Two - Pallavi Anderson</title>
+  <meta name="author" content="Pallavi Anderson">
+
+  
+  <meta name="description" content="this is a Leaflet map with DivIcon markers Recap In the last post, we initialized a Leaflet map to work with Stamen Design&rsquo;s toner themed map &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://asynchrotron.com/blog/2013/12/28/realtime-maps-with-meteor-and-leaflet-part-2">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Pallavi Anderson" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Pallavi Anderson</a></h1>
+  
+    <h2>data-driven and context-aware</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:asynchrotron.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Realtime Maps With Meteor and Leaflet - Part Two</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-28T17:53:06-06:00" pubdate data-updated="true">Dec 28<span>th</span>, 2013</time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://asynchrotron.com">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><span class='caption-wrapper left'><img class='caption' src='/images/custom/updated-parties.png' width='' height='' title='this is a Leaflet map with DivIcon markers'><span class='caption-text'>this is a Leaflet map with DivIcon markers</span></span></p>
+
+<h3>Recap</h3>
+
+
+<p>In the <a href="/blog/2013/12/27/realtime-maps-with-meteor-and-leaflet/">last post</a>, we initialized a Leaflet map to work with <a href="http://stamen.com/">Stamen Design</a>&rsquo;s <a href="http://maps.stamen.com/toner/#12/37.7706/-122.3782">toner themed map tiles</a> and <a href="http://getbootstrap.com/2.3.2/scaffolding.html#responsive">Bootstrap&rsquo;s responsive layout</a>. We then set up a double-click event handler to gather additional details about the proposed new party, and we hooked up the dialog&rsquo;s save button to pass those details to a <code>Meteor.methods()</code> call to save the party into a server-side mongo collection. Finally, we hooked up a <code>cursor.observe()</code> <code>added()</code> callback to a query on the client-side minimongo collection and set up the callback to automatically add a circular <code>DivIcon</code> marker at the specified coordinates.</p>
+
+<h3>Updating Party Details in the Database</h3>
+
+
+<p>A party document saved to mongo looks something like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="nx">_id</span><span class="o">:</span> <span class="s2">&quot;22dQwpajD64LCv4QW&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">title</span><span class="o">:</span> <span class="s2">&quot;1871&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">description</span><span class="o">:</span> <span class="s2">&quot;Party like it&#39;s 1871!&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">latlng</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">lat</span><span class="o">:</span> <span class="mf">41.88298161317542</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">lng</span><span class="o">:</span>  <span class="o">-</span><span class="mf">87.63811111450194</span>
+</span><span class='line'>  <span class="p">},</span>
+</span><span class='line'>  <span class="kr">public</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">owner</span><span class="o">:</span> <span class="s2">&quot;52xdsNjprquesL2tQ&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">invited</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;52xdsNjprquesL2tQ&quot;</span><span class="p">,</span> <span class="s2">&quot;ci7bzkJCpH9R7HCZK&quot;</span><span class="p">,</span> <span class="s2">&quot;5qhRdKFcsmPnxZKBr&quot;</span><span class="p">]</span>
+</span><span class='line'>  <span class="nx">rsvps</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>      <span class="nx">rsvp</span><span class="o">:</span> <span class="s2">&quot;yes&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">user</span><span class="o">:</span> <span class="s2">&quot;52xdsNjprquesL2tQ&quot;</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>      <span class="nx">rsvp</span><span class="o">:</span> <span class="s2">&quot;maybe&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">user</span><span class="o">:</span> <span class="s2">&quot;ci7bzkJCpH9R7HCZK&quot;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">]</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Each party contains an array of RSVP objects, which must be updated when any user updates their RSVP to the party. In addition, private parties contain a set of invited userIds. So <code>rsvps</code> and <code>invited</code> are the two mutable attributes of a party; the owner, title, description, coordinates or public/private setting cannot be updated as per the original example.</p>
+
+<p>In addition, a party&rsquo;s owner can delete the party if no user is RSVPd as Yes (Maybes don&rsquo;t count).</p>
+
+<p>The code to update and delete parties in the server-side mongo collection is virtually unchanged from the original. The <code>invite()</code> and <code>rsvp()</code> template event handlers are hooked to <code>Meteor.methods()</code> calls that perform the necessary checks before updating the mongo collection on the server. As usual, Meteor, behind the scenes, updates the client-side minimongo collection as soon as the server collection is updated.</p>
+
+<h3>Updating and Removing Map Markers in Realtime</h3>
+
+
+<p>Now it&rsquo;s time to add in the <code>cursor.observe()</code> <code>changed()</code> callback to update the party&rsquo;s icon, and <code>removed()</code>  callback to delete the marker from the map and from the local <code>markers</code> hash.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">map</span><span class="p">,</span> <span class="nx">markers</span> <span class="o">=</span> <span class="p">{};</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">Template</span><span class="p">.</span><span class="nx">map</span><span class="p">.</span><span class="nx">created</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">Parties</span><span class="p">.</span><span class="nx">find</span><span class="p">({}).</span><span class="nx">observe</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">added</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">party</span><span class="p">)</span> <span class="p">{</span><span class="cm">/* see previous post */</span><span class="p">},</span>
+</span><span class='line'>    <span class="nx">changed</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">party</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">marker</span> <span class="o">=</span> <span class="nx">markers</span><span class="p">[</span><span class="nx">party</span><span class="p">.</span><span class="nx">_id</span><span class="p">];</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="nx">marker</span><span class="p">)</span> <span class="nx">marker</span><span class="p">.</span><span class="nx">setIcon</span><span class="p">(</span><span class="nx">createIcon</span><span class="p">(</span><span class="nx">party</span><span class="p">));</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nx">removed</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">party</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">marker</span> <span class="o">=</span> <span class="nx">markers</span><span class="p">[</span><span class="nx">party</span><span class="p">.</span><span class="nx">_id</span><span class="p">];</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="nx">map</span><span class="p">.</span><span class="nx">hasLayer</span><span class="p">(</span><span class="nx">marker</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">map</span><span class="p">.</span><span class="nx">removeLayer</span><span class="p">(</span><span class="nx">marker</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">delete</span> <span class="nx">markers</span><span class="p">[</span><span class="nx">party</span><span class="p">.</span><span class="nx">_id</span><span class="p">];</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Using a Halo Marker to Indicate Which Party Is Selected</h3>
+
+
+<p><span class='caption-wrapper right'><img class='caption' src='/images/custom/selected-party.png' width='' height='' title='a selected party'><span class='caption-text'>a selected party</span></span></p>
+
+<p>Up to this point, there&rsquo;s been no visual indication <em>on the map</em> as to which party is currently selected. Just like in the original Parties example, we solve this by creating a 50px x 50px transparent grey circular marker and making it concentric with the currently selected party&rsquo;s marker such that it forms a light halo around the selected party. The halo marker is purely a UI artefact that does not need to be saved on the server.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">L</span><span class="p">.</span><span class="nx">divIcon</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">iconSize</span><span class="o">:</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span> <span class="c1">// set to 50px x 50px</span>
+</span><span class='line'>  <span class="nx">className</span><span class="o">:</span> <span class="s1">&#39;leaflet-animated-div-icon&#39;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nc">.leaflet-animated-div-icon</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">border</span><span class="o">-</span><span class="n">radius</span><span class="o">:</span> <span class="m">50</span><span class="o">%</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">border</span><span class="o">:</span> <span class="k">none</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">opacity</span><span class="o">:</span> <span class="o">.</span><span class="m">2</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">background</span><span class="o">:</span> <span class="nb">black</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<h3>Animating the Halo Marker</h3>
+
+
+<p>For a final flourish, we use the AnimatedMarker Leaflet plugin created by <a href=""></a> from OpenPlans to animate the marker as it moves about when a user selects different parties (rather than simply making it reappear at a different location). AnimatedMarker takes a Leaflet <code>polyline</code> object as the first argument to its  initialize function, and draws the marker at the beginning of the polyline. It then animates the marker along the polyline at a speed (in meters/ms) that&rsquo;s configurable via a second options argument.</p>
+
+<p>We need to make a minor tweak to the plugin&rsquo;s source code to support our needs: The original AnimatedMarker does not allow setting of the animation polyline after the marker is initialized. As a result, it requires the complete animation path to be known before creating the marker. But we want to create the AnimatedMarker once and to then set the animation polyline dynamically as soon as a user selects a different marker. The next animation polyline would be a single segment from the AnimatedMarker&rsquo;s current location to the center of the next marker selected. To accomplish this, I&rsquo;ve had to reset the internal index (<code>this._i</code>) to 1 when a <code>polyline</code> is passed to the setLine method, making the method repeatedly reusable, rather than something that&rsquo;s called just once upon the marker&rsquo;s initialization. Until my pull request is merged, this modification is available at my fork on github.</p>
+
+<p><a href="http://chicago-parties.meteor.com">Ta-da!</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Pallavi Anderson</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-28T17:53:06-06:00" pubdate data-updated="true">Dec 28<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/leaflet/'>leaflet</a>, <a class='category' href='/blog/categories/meteor/'>meteor</a>, <a class='category' href='/blog/categories/webapps/'>webapps</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://asynchrotron.com/blog/2013/12/28/realtime-maps-with-meteor-and-leaflet-part-2/" data-via="pkaushik" data-counturl="http://asynchrotron.com/blog/2013/12/28/realtime-maps-with-meteor-and-leaflet-part-2/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/12/27/realtime-maps-with-meteor-and-leaflet/" title="Previous Post: Realtime Maps with Meteor and Leaflet - Part One">&laquo; Realtime Maps with Meteor and Leaflet - Part One</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/12/28/realtime-maps-with-meteor-and-leaflet-part-2/">Realtime Maps With Meteor and Leaflet - Part Two</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/12/27/realtime-maps-with-meteor-and-leaflet/">Realtime Maps With Meteor and Leaflet - Part One</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/07/the-connection-between-google-glasses-and-self-driving-humanoids/">The Connection Between Google Glasses and Self-driving Humanoids</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/05/22/hello-meteor/">Hello Meteor!</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/pkaushik">@pkaushik</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'pkaushik',
+            count: 4,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <a class="twitter-timeline" href="https://twitter.com/pkaushik" data-widget-id="416085902973095936" data-chrome="noborders noheader nofooter noscrollbar transparent" data-tweet-limit="5">Tweets by @pkaushik</a>
+  
+   <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+   
+   <script type="text/javascript">
+   window.setTimeout(function(){
+     $(".twitter-timeline").contents()
+            .find(".e-entry-title")
+            .css("font-family","'PT Sans', 'Helvetica Neue', Arial, sans-serif");
+     $(".twitter-timeline").contents()
+           .find(".tweet")
+           .css("font-family","'PT Sans', 'Helvetica Neue', Arial, sans-serif");
+   }, 1000);
+   </script>
+   <br/><br/>
+  
+   
+     <p>Follow <a href="http://twitter.com/pkaushik">@pkaushik</a></p>
+   
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Pallavi Anderson -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a> and <a href="http://github.com">Github</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'asynchrotron';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://asynchrotron.com/blog/2013/12/28/realtime-maps-with-meteor-and-leaflet-part-2/';
+        var disqus_url = 'http://asynchrotron.com/blog/2013/12/28/realtime-maps-with-meteor-and-leaflet-part-2/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
