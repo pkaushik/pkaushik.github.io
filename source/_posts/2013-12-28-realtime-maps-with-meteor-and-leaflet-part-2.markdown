@@ -89,4 +89,6 @@ For a final flourish, we use the AnimatedMarker Leaflet plugin created by []() f
 
 We need to make a minor tweak to the plugin's source code to support our needs: The original AnimatedMarker does not allow setting of the animation polyline after the marker is initialized. As a result, it requires the complete animation path to be known before creating the marker. But we want to create the AnimatedMarker once and to then set the animation polyline dynamically as soon as a user selects a different marker. The next animation polyline would be a single segment from the AnimatedMarker's current location to the center of the next marker selected. To accomplish this, I've had to reset the internal index (```this._i```) to 1 when a ```polyline``` is passed to the setLine method, making the method repeatedly reusable, rather than something that's called just once upon the marker's initialization. Until my pull request is merged, this modification is available at my fork on github.
 
-[Ta-da!](http://chicago-parties.meteor.com)
+Ta-da! 
+
+End result: [http://chicago-parties.meteor.com](http://chicago-parties.meteor.com) and [source code for the complete application](https://github.com/pkaushik/parties). You need to log in with a github account to create or RSVP to parties.

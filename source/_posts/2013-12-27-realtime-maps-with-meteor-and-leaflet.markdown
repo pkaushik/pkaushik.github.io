@@ -7,18 +7,27 @@ categories: [meteor, webapps, leaflet]
 ---
 
 {% imgcap left https://raw.github.com/meteor/meteor/devel/examples/parties/public/soma.png 350 350 this 'map' is actually a static image %} 
-The [Parties example](https://www.meteor.com/examples/parties) bundled with [Meteor](http://www.meteor.com) is a nifty demonstration of the framework's core principles, but the application isn't nearly as useful as it could be because it uses a [500 x 500 pixel image of downtown San Francisco](https://github.com/meteor/meteor/blob/devel/examples/parties/public/soma.png) as a faux map. This means that we cannot pan or zoom the "map," nor can we initialize it to any other location or zoom level; when we double-click the image to create new parties, [D3.js](http://d3js.com) is used to draw circles marking the position of the new parties in relation to the _image element in the browser window_, and not at geospatial coordinates. 
+The [parties example](https://www.meteor.com/examples/parties) bundled with [Meteor](http://www.meteor.com) is a nifty demonstration of the framework's core principles, but it uses a [500 x 500 pixel image of downtown San Francisco](https://github.com/meteor/meteor/blob/devel/examples/parties/public/soma.png) as a faux map. This means that we cannot pan or zoom the "map" and when we double-click the image to create new parties, the circle markers are drawn at the position of the clicks in relation to the _image element in the browser window_, and not at geospatial coordinates. 
 
-{% imgcap left /images/custom/old-parties.png 350 350 a static image with circles drawn on it %} 
+{% imgcap left /images/custom/old-parties.png 350 350 circles drawn over the static image %} 
 
-I decided to update the example to use [Leaflet.js](http://leafletjs.com/) to make a real map that looks and feels as close to the original example as possible. In particular, I wanted to preserve the color-coded circles -red for private, blue for public parties- labeled with the number of RSVPs, and the larger animated circle indicating which party is currently selected (with details about the selected party displayed in the sidebar). This is a useful pattern for displaying individual marker details without using a popup that occludes part of the map.
+I decided to update the example to use [Leaflet.js](http://leafletjs.com/) to make a real map that looks and feels as close to the original example as possible. In particular, I wanted to preserve the color-coded circles (red for private, blue for public parties) labeled with the number of RSVPs, and the larger animated circle indicating which party is currently selected, with its details displayed in the sidebar. This is a useful pattern for displaying individual marker details without using a popup that occludes part of the map. Here's the [end result](http://chicago-parties.meteor.com) with [source code](https://github.com/pkaushik/parties).
 
-TLDR; End result: [http://chicago-parties.meteor.com](http://chicago-parties.meteor.com) and [source code for the complete application](https://github.com/pkaushik/parties). You need to log in with a github account to create or RSVP to parties.
+Over the next two posts, I'll go over the changes I made to the original parties example. I won't explain how Meteor works, and it would help if you've run the original example and have a rough sense of what's going on.
 
 <h3>Setting the Stage</h3>
-First off, we add the leaflet package to our project from the command line. Conveniently, leaflet is an officially supported Meteor package.
+First off, we create the original example and add leaflet to the project using the [meteorite](http://oortcloud.github.io/meteorite/) command line. Meteorite is Meteor's unofficial package management system. 
 ```
-$ meteor add leaflet
+$ meteor create --example parties
+parties: created.
+
+To run your new app:
+   cd parties
+   meteor
+
+$ cd parties
+
+$ mrt add leaflet
 leaflet: Leaflet.js, mobile-friendly interactive maps....
 ```
 
