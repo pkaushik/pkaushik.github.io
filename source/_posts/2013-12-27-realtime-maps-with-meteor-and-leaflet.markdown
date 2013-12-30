@@ -5,33 +5,27 @@ date: 2013-12-27 20:51:10 -0600
 comments: true
 categories: [meteor, webapps, leaflet]
 ---
-
 {% imgcap left https://raw.github.com/meteor/meteor/devel/examples/parties/public/soma.png 350 350 this 'map' is actually a static image %} 
-The [parties example](https://www.meteor.com/examples/parties) bundled with [Meteor](http://www.meteor.com) is a nifty demonstration of the framework's core principles, but it uses a [500 x 500 pixel image of downtown San Francisco](https://github.com/meteor/meteor/blob/devel/examples/parties/public/soma.png) as a faux map. This means that we cannot pan or zoom the "map" and when we double-click the image to create new parties, the circle markers are drawn at the position of the clicks in relation to the _image element in the browser window_, and not at geospatial coordinates. 
 
+The [parties example](https://www.meteor.com/examples/parties) bundled with [Meteor](http://www.meteor.com) is a nifty demonstration of the framework's core principles, but it uses a [500 x 500 pixel image of downtown San Francisco](https://github.com/meteor/meteor/blob/devel/examples/parties/public/soma.png) as a faux map. This means that we cannot pan or zoom the "map," and when we double-click the image to create new parties, the circle markers are drawn at the position of the clicks in relation to the _image element in the browser window_, and not at geospatial coordinates. 
+<!--more-->
 {% imgcap left /images/custom/old-parties.png 350 350 circles drawn over the static image %} 
 
-I decided to update the example to use [Leaflet.js](http://leafletjs.com/) to make a real map that looks and feels as close to the original example as possible. In particular, I wanted to preserve the color-coded circles (red for private, blue for public parties) labeled with the number of RSVPs, and the larger animated circle indicating which party is currently selected, with its details displayed in the sidebar. This is a useful pattern for displaying individual marker details without using a popup that occludes part of the map. Here's the [end result](http://chicago-parties.meteor.com) with [source code](https://github.com/pkaushik/parties).
+I decided to update the example to use [Leaflet.js](http://leafletjs.com/) to make a real map that looked and felt as close to the original example as possible. In particular, I wanted to preserve the color-coded circles (red for private, blue for public parties) labeled with the number of RSVPs, and the larger animated circle indicating which party is currently selected, with its details displayed outside the map, to the side. This is a useful pattern for displaying individual marker details without using a popup that occludes part of the map. 
 
-Over the next two posts, I'll go over the changes I made to the original parties example. I won't explain how Meteor works, and it would help if you've run the original example and have a rough sense of what's going on.
+Here is the [end result](http://chicago-parties.meteor.com) with [source code](https://github.com/pkaushik/parties). In the next two posts, I will go over the changes I made to the original example. I won't be covering how Meteor works, and will assume you have some understanding of how the parties example works as well.
 
 <h3>Setting the Stage</h3>
-First off, we create the original example and add leaflet to the project using the [meteorite](http://oortcloud.github.io/meteorite/) command line. Meteorite is Meteor's unofficial package management system. 
+First off, I created the example and added leaflet to the project using [Meteorite](http://oortcloud.github.io/meteorite/). 
 ```
 $ meteor create --example parties
-parties: created.
-
-To run your new app:
-   cd parties
-   meteor
 
 $ cd parties
 
 $ mrt add leaflet
 leaflet: Leaflet.js, mobile-friendly interactive maps....
 ```
-
-Since we'll no longer be calculating relative coordinates to draw circles on a jpeg image, the base map does not need to be a fixed size. We can use Bootstrap's fluid classes to generate a [responsive page layout](http://getbootstrap.com/2.3.2/scaffolding.html#responsive) and adjust the map's size as the browser is resized. This pattern is frequently used when creating responsive Leaflet maps, and not specific to Meteor. 
+I then edited the `page` template to use Bootstrap's fluid classes to generate a [responsive page layout](http://getbootstrap.com/2.3.2/scaffolding.html#responsive) and added a `window.resize()` handler to adjust the map's size as the browser is resized. I use this pattern when creating responsive Leaflet maps, and it's not specific to Meteor. 
 
 ``` html
 {% raw %}<div class="container-fluid">
@@ -50,7 +44,6 @@ Since we'll no longer be calculating relative coordinates to draw circles on a j
   </div>
 </div>{% endraw %}
 ```
-
 ``` js
 $(window).resize(function () {
   var h = $(window).height(), offsetTop = 90; // Calculate the top offset
@@ -60,7 +53,7 @@ $(window).resize(function () {
 ```
 
 <h3>Map Initialization</h3>
-Leaflet initialization code goes into the map template's ```rendered()``` callback. [Stamen Design](http://stamen.com/)'s [toner themed map tiles](http://maps.stamen.com/toner/#12/37.7706/-122.3782) are a nice replacement for the black & white map image in the original example. Disabling click and touch zoom onthe map lets us reserve those actions for users to create a new party, and increasing the map tiles' opacity improves the visibility of markers against the very dark toner theme. 
+Leaflet initialization code goes into the `map` template's `rendered()` callback. [Stamen Design](http://stamen.com/)'s [toner themed map tiles](http://maps.stamen.com/toner/#12/37.7706/-122.3782) make a nice replacement for the black & white map image in the example. I disabled double-click and touch zoom when initializing the map since those actions are how users create new parties, and increased tile opacity to lighten the overall background and improve the visibility of markers on the map. 
 
 ``` js
 map = L.map($('#map_canvas'), {
@@ -70,8 +63,7 @@ map = L.map($('#map_canvas'), {
 
 L.tileLayer('http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png', {opacity: .5}).addTo(map);
 ```
-
-Next we replace the map template's event handler from the original example with Leaflet's ```"dblclick"``` event handler which conveniently returns a Leaflet ```LatLng``` with its callback, which we promptly save as the Meteor Session variable ```Session.createCoords```. Because Meteor Session variables are reactive, setting ```Session.showCreateDialog``` triggers the display of a dialog allowing the user to enter additional details about the new party. This mechanism is unchanged from the original example.
+The next significant change was to replace the `map` template's event handler from the original example with Leaflet's `"dblclick"` event handler to manage the creation of new parties. The Leaflet version conveniently returns a `LatLng` which I saved to a Session variable before triggering `createDialog`. The mechanism to trigger dialogs by setting the associated Session variables - `Session.showCreateDialog` and `Session.showInviteDialog` - is unchanged from the original example. It works because Meteor Session variables are [reactive](http://docs.meteor.com/#reactivity).
 
 ``` js
 map.on("dblclick", function(e) {
@@ -91,10 +83,8 @@ map.on("dblclick", function(e) {
   ...
 </template>{% endraw %}
 ```
-
 <h3>Creating and Saving a Party to the Database</h3>
-Clicking the create dialog's 'Save' button makes a ```Meteor.methods()``` call that is virtually the same as in the original example except that the method now takes the ```LatLng``` that we just saved as ```Session.createCoords```. When the new party has been successfully added to a server-side mongo collection called Parties, we can save the new party's ```_id``` to the ```Session.selected``` variable. 
-
+This part of the application is more or less unchanged from the original example except that I pass the party's `LatLng` (instead of click coordinates) along with other details from the `createDialog` template to the `Meteor.methods()` call to `createParty`. If the callback is successful, the new party's `_id` is saved to another reactive Session variable `selected`, which drives the `details` template on the left.
 ``` js
 var title = template.find(".title").value;
 var description = template.find(".description").value;
@@ -110,16 +100,13 @@ Meteor.call('createParty', {
   if (! error) { //party was successfully added to the server's mongo collection
     Session.set("selected", partyId);
     ...
-    ...
   }
 });
 ```
-
 <h3>Adding Markers to the Map in Realtime</h3>
-So far, we've saved a newly created party into a server-side mongo collection and Meteor, behind the scenes, has transmitted it back to a client-side minimongo collection with the same name (Parties). We can verify this by typing ```Parties.findOne()``` into the JavaScript console. 
+As soon as a new party is added to the Parties mongo collection on the server, behind the scenes, Meteor transmits it back to a client-side minimongo collection with the same name. This can be verified by typing `Parties.findOne()` into the JavaScript console. This is well and good, but the next task is to replace the code to draw D3 circles from the original example with code to add Leaflet markers to the map. 
 
-Let's now observe changes to a client-side query of the minimongo collection, and automatically draw a map marker whenever a new party is added. Since this only needs to be set up once, we can put the ```cursor.observe()``` code in the map template's ```created()``` callback. This replaces the D3 svg circle drawing code from the original example.
-
+To do that, I hooked up a `cursor.observe()` `added()` callback to create the map marker and add a click handler to update the `Session.selected` variable with the party `_id`. As users click on different parties, this reactively triggers the context for the `details` template on the left. I also saved a reference to the marker in a local `markers` hash, to efficiently access the marker for future changes. Since we only need to set this up once, I put this code `cursor-observe()` into the `map` template's `created()` callback.
 ``` js
 var map, markers = {};
 
@@ -140,10 +127,7 @@ Template.map.created = function() {
   });
 }
 ```
-In the ```added()``` callback, we create a new marker, add it to the map, and set up a click handler to store the associated party's ```_id``` in another Meteor Session variable, ```Session.selected```. We also store a reference to the marker in a locally scoped hash keyed by the associated party's ```_id``` to efficiently update / delete markers when party details change. 
-
-The ```createIcon``` function returns a lightweight [```DivIcon```](http://leafletjs.com/reference.html#divicon) that uses a simple ```div``` element instead of an image, and CSS ```border-radius``` to style the div as a circle of the appropriate color. The ```attending()``` helper method from the original example returns the number of Yes RSVPs. CSS ```vertical-align``` and ```line-height``` set to the height of the ```div``` when used in combination ensure the HTML text is vertically centered.
-
+I wrote the `createIcon` helper function to create a lightweight `DivIcon` ([ref](http://leafletjs.com/reference.html#divicon)) which uses a simple `div` element instead of an image icon. I used CSS `border-radius` to style the div as a circle of the appropriate color and set CSS `line-height` to the height of the `div` to vertically centered the text. The `attending()` helper method from the original example returns the number of Yes RSVPs. 
 ``` js
 var createIcon = function(party) {
   var className = 'leaflet-div-icon ';
@@ -175,9 +159,7 @@ var createIcon = function(party) {
   background: #DA4F49; 
 }
 ```
-At this point, we can create a bunch of parties and they all show up as markers with the appropriate color and label. When we click on a marker, ```Session.selected``` is updated by the marker's click handler. Because Meteor Session variables are [reactive](http://docs.meteor.com/#reactivity), this automatically renders the details template in the sidebar. 
-
-But there's no visual indication _on the map_ as to which party is currently selected -- we just need to remember which marker we clicked on last! As it turns out, this usability issue is easy to fix and we'll see how in the next post.
+Now I can create a bunch of parties and they all show up as markers with the appropriate color and label. When I click on a marker, it's details are automatically rendered into the `details` template on the left. But there's no visual indication _on the map_ as to which party is currently selected -- I just need to remember which marker I clicked on last! As it turns out, this is easy to address.
 
 [Part Two: Updating and deleting parties, and animating the selected party indicator...]({{root_dir}}/blog/2013/12/28/realtime-maps-with-meteor-and-leaflet-part-2/)
 
