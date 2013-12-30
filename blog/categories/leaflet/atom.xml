@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Leaflet | Pallavi Anderson]]></title>
   <link href="http://asynchrotron.com/blog/categories/leaflet/atom.xml" rel="self"/>
   <link href="http://asynchrotron.com/"/>
-  <updated>2013-12-30T07:42:12-06:00</updated>
+  <updated>2013-12-30T09:31:26-06:00</updated>
   <id>http://asynchrotron.com/</id>
   <author>
     <name><![CDATA[Pallavi Anderson]]></name>
@@ -64,7 +64,7 @@ lng:  -87.63811111450194
 <code>``
 Each party contains an array of RSVP objects, which must be updated when any user adds or updates their RSVP to the party. In addition, private parties contain a set of invited users' ids; the party owner can invite additional users at any time. So</code>rsvps<code>and</code>invited` are the two mutable party attributes in our example. The owner, title, description, coordinates or public/private setting cannot be changed, but a party&rsquo;s owner can delete the party if no user is RSVPd as Yes.</p>
 
-<p>The code to update and delete parties in the server-side mongo collection is virtually unchanged from the original. The <code>invite()</code> and <code>rsvp()</code> template event handlers are hooked to <code>Meteor.methods()</code> calls that perform the necessary checks before updating the mongo collection on the server. As usual, behind the scenes, Meteor updates the client-side minimongo collection as soon as the server collection is updated.</p>
+<p>The code to update and delete parties in the server-side mongo collection is virtually unchanged from the original. The <code>invite()</code> and <code>rsvp()</code> template event handlers are hooked to <code>Meteor.methods()</code> calls that perform the necessary checks before updating the mongo collection on the server. As usual, behind the scenes, Meteor synchronizes the client-side minimongo collection with the server collection.</p>
 
 <h3>Updating and Removing Map Markers in Realtime</h3>
 
