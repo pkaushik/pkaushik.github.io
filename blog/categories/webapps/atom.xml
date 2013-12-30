@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Webapps | Pallavi Anderson]]></title>
   <link href="http://asynchrotron.com/blog/categories/webapps/atom.xml" rel="self"/>
   <link href="http://asynchrotron.com/"/>
-  <updated>2013-12-29T22:47:30-06:00</updated>
+  <updated>2013-12-29T22:49:23-06:00</updated>
   <id>http://asynchrotron.com/</id>
   <author>
     <name><![CDATA[Pallavi Anderson]]></name>
@@ -201,7 +201,7 @@ map = L.map($(&lsquo;#map_canvas&rsquo;), {
 
 <p>L.tileLayer(&lsquo;<a href="http://">http://</a>{s}.tile.stamen.com/toner/{z}/{x}/{y}.png&rsquo;, {opacity: .5}).addTo(map);
 <code>``
-The next significant change was to replace the</code>map<code>template's event handler from the original example with Leaflet's</code>&ldquo;dblclick&rdquo;<code>event handler to manage the creation of new parties. The Leaflet version conveniently returns a</code>LatLng<code>which I saved to a Session variable before triggering</code>createDialog<code>. The mechanism to trigger dialogs by setting the associated Session variables -</code>Session.showCreateDialog<code>and</code>Session.showInviteDialog` &ndash; is unchanged from the original example. It works because Meteor Session variables are <a href="http://docs.meteor.com/#reactivity">reactive</a>.</p>
+The next significant change was to replace the</code>map<code>template's event handler from the original example with Leaflet's</code>&ldquo;dblclick&rdquo;<code>event handler to manage the creation of new parties. The Leaflet version conveniently returns a</code>LatLng<code>which I saved to a Session variable before triggering</code>createDialog<code>. The mechanism to trigger dialogs by setting the associated Session variables,</code>Session.showCreateDialog<code>and</code>Session.showInviteDialog`, is unchanged from the original example, and it works because Meteor Session variables are <a href="http://docs.meteor.com/#reactivity">reactive</a>.</p>
 
 <p>``` js
 map.on(&ldquo;dblclick&rdquo;, function(e) {
@@ -230,7 +230,7 @@ map.on(&ldquo;dblclick&rdquo;, function(e) {
 <h3>Creating and Saving a Party to the Database</h3>
 
 
-<p>This part of the application is more or less unchanged from the original example except that I pass the party&rsquo;s <code>LatLng</code> (instead of click coordinates) along with other details from the <code>createDialog</code> template to the <code>Meteor.methods()</code> call to <code>createParty</code>. If the callback is successful, the new party&rsquo;s <code>_id</code> is saved to another reactive Session variable <code>selected</code>, which drives the <code>details</code> template on the left.
+<p>This part of the application is more or less unchanged from the original example except that I pass the party&rsquo;s <code>LatLng</code> (instead of click coordinates) along with other details from the <code>createDialog</code> template to the <code>Meteor.methods()</code> call to <code>createParty</code>. If the callback is successful, the new party&rsquo;s <code>_id</code> is saved to another reactive Session variable <code>Session.selected</code>, which drives the <code>details</code> template on the left.
 ``` js
 var title = template.find(&ldquo;.title&rdquo;).value;
 var description = template.find(&ldquo;.description&rdquo;).value;
