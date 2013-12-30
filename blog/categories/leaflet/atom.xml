@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Leaflet | Pallavi Anderson]]></title>
   <link href="http://asynchrotron.com/blog/categories/leaflet/atom.xml" rel="self"/>
   <link href="http://asynchrotron.com/"/>
-  <updated>2013-12-29T22:49:23-06:00</updated>
+  <updated>2013-12-29T22:57:34-06:00</updated>
   <id>http://asynchrotron.com/</id>
   <author>
     <name><![CDATA[Pallavi Anderson]]></name>
@@ -201,7 +201,7 @@ map = L.map($(&lsquo;#map_canvas&rsquo;), {
 
 <p>L.tileLayer(&lsquo;<a href="http://">http://</a>{s}.tile.stamen.com/toner/{z}/{x}/{y}.png&rsquo;, {opacity: .5}).addTo(map);
 <code>``
-The next significant change was to replace the</code>map<code>template's event handler from the original example with Leaflet's</code>&ldquo;dblclick&rdquo;<code>event handler to manage the creation of new parties. The Leaflet version conveniently returns a</code>LatLng<code>which I saved to a Session variable before triggering</code>createDialog<code>. The mechanism to trigger dialogs by setting the associated Session variables,</code>Session.showCreateDialog<code>and</code>Session.showInviteDialog`, is unchanged from the original example, and it works because Meteor Session variables are <a href="http://docs.meteor.com/#reactivity">reactive</a>.</p>
+The next significant change was to replace the</code>map<code>template's event handler from the original example with Leaflet's</code>&ldquo;dblclick&rdquo;<code>event handler to manage the creation of new parties. The Leaflet version conveniently returns a</code>LatLng<code>which I saved to a Session variable before triggering</code>createDialog<code>. The mechanism to trigger dialogs by setting the associated Session variables (</code>Session.showCreateDialog<code>and</code>Session.showInviteDialog`) is unchanged from the original example, and it works because Meteor Session variables are <a href="http://docs.meteor.com/#reactivity">reactive</a>.</p>
 
 <p>``` js
 map.on(&ldquo;dblclick&rdquo;, function(e) {
@@ -230,7 +230,7 @@ map.on(&ldquo;dblclick&rdquo;, function(e) {
 <h3>Creating and Saving a Party to the Database</h3>
 
 
-<p>This part of the application is more or less unchanged from the original example except that I pass the party&rsquo;s <code>LatLng</code> (instead of click coordinates) along with other details from the <code>createDialog</code> template to the <code>Meteor.methods()</code> call to <code>createParty</code>. If the callback is successful, the new party&rsquo;s <code>_id</code> is saved to another reactive Session variable <code>Session.selected</code>, which drives the <code>details</code> template on the left.
+<p>This part of the application is also more or less unchanged from the original example except that I pass the party&rsquo;s <code>LatLng</code> (instead of click coordinates) along with other details from the <code>createDialog</code> template to the <code>Meteor.methods()</code> call to <code>createParty</code>. If the callback is successful, the new party&rsquo;s <code>_id</code> is saved to another reactive Session variable <code>Session.selected</code>, which drives the <code>details</code> template on the left.
 ``` js
 var title = template.find(&ldquo;.title&rdquo;).value;
 var description = template.find(&ldquo;.description&rdquo;).value;
@@ -256,9 +256,9 @@ var latlng = Session.get(&ldquo;createCoords&rdquo;);</p>
 <h3>Adding Markers to the Map in Realtime</h3>
 
 
-<p>As soon as a new party is added to the Parties mongo collection on the server, behind the scenes, Meteor transmits it back to a client-side minimongo collection with the same name. This can be verified by typing <code>Parties.findOne()</code> into the JavaScript console. This is well and good, but the next task is to replace the code to draw D3 circles from the original example with code to add Leaflet markers to the map.</p>
+<p>As soon as a new party is added to the Parties mongo collection on the server, behind the scenes, Meteor transmits it back to a client-side minimongo collection with the same name. This can be verified by typing <code>Parties.findOne()</code> into the JavaScript console. This is well and good, but the next task is to replace the <a href="http://d3js.org">D3</a> code to draw circles from the original example with code to add Leaflet markers to the map.</p>
 
-<p>To do that, I hooked up a <code>cursor.observe()</code> <code>added()</code> callback to create the map marker and add a click handler to update the <code>Session.selected</code> variable with the party <code>_id</code>. As users click on different parties, this reactively triggers the context for the <code>details</code> template on the left. I also saved a reference to the marker in a local <code>markers</code> hash, to efficiently access the marker for future changes. Since we only need to set this up once, I put this code <code>cursor-observe()</code> into the <code>map</code> template&rsquo;s <code>created()</code> callback.
+<p>To do that, I hooked up a <code>cursor.observe()</code> <code>added()</code> callback to create the map marker and I added a click handler to the marker to update the <code>Session.selected</code> variable with the party&rsquo;s <code>_id</code>. As users click on different parties, this reactively triggers the context for the <code>details</code> template on the left. I also saved a reference to the marker in a local <code>markers</code> hash to efficiently access the marker for future changes. Since we only need to set this up once, I put this code into the <code>map</code> template&rsquo;s <code>created()</code> callback.
 ``` js
 var map, markers = {};</p>
 
@@ -282,7 +282,7 @@ var map, markers = {};</p>
 <p>  });
 }
 <code>
-I wrote the `createIcon` helper function to create a lightweight `DivIcon` ([ref](http://leafletjs.com/reference.html#divicon)) which uses a simple `div` element instead of an image icon. I used CSS `border-radius` to style the div as a circle of the appropriate color and set CSS `line-height` to the height of the `div` to vertically centered the text. The `attending()` helper method from the original example returns the number of Yes RSVPs.
+The final bit of fanciness here is my `createIcon()` helper function to create a lightweight `DivIcon` that uses a simple `div` element instead of an image icon. I used CSS `border-radius` to style the `div` as a circle of the appropriate color and set CSS `line-height` to the height of the `div` to vertically centered the text. The `attending()` helper method from the original example returns the number of Yes RSVPs.
 </code> js
 var createIcon = function(party) {
   var className = &lsquo;leaflet-div-icon &rsquo;;
@@ -317,7 +317,7 @@ className: className
   background: #DA4F49;
 }
 <code>``
-Now I can create a bunch of parties and they all show up as markers with the appropriate color and label. When I click on a marker, it's details are automatically rendered into the</code>details` template on the left. But there&rsquo;s no visual indication <em>on the map</em> as to which party is currently selected &mdash; I just need to remember which marker I clicked on last! As it turns out, this is easy to address.</p>
+Now I can log in and create a few parties, and they all show up as markers with the appropriate color and label. When I click on a marker, its details are automatically rendered into the</code>details` template on the left. But there&rsquo;s no visual indication <em>on the map</em> as to which party is currently selected &mdash; I just need to remember which marker I clicked on last! As it turns out, this usability quirk is easy to address.</p>
 
 <p><a href="/blog/2013/12/28/realtime-maps-with-meteor-and-leaflet-part-2/">Part Two: Updating and deleting parties, and animating the selected party indicator&hellip;</a></p>
 ]]></content>
