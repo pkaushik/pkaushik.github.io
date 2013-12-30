@@ -108,7 +108,7 @@
 <h3>Updating Party Details in the Database</h3>
 
 
-<p>A party document saved to mongo looks something like this:</p>
+<p>A party document looks something like this:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -157,7 +157,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Each party contains an array of RSVP objects, which must be updated when any user updates their RSVP to the party. In addition, private parties contain a set of invited userIds. So <code>rsvps</code> and <code>invited</code> are the two mutable party attributes in our example. The owner, title, description, coordinates or public/private setting cannot be changed, but a party&rsquo;s owner can delete the party if no user is RSVPd as Yes (Maybes don&rsquo;t count).</p>
+<p>Each party contains an array of RSVP objects, which must be updated when any user adds or updates their RSVP to the party. In addition, private parties contain a set of invited users&#8217; ids; the party owner can invite additional users at any time. So <code>rsvps</code> and <code>invited</code> are the two mutable party attributes in our example. The owner, title, description, coordinates or public/private setting cannot be changed, but a party&rsquo;s owner can delete the party if no user is RSVPd as Yes.</p>
 
 <p>The code to update and delete parties in the server-side mongo collection is virtually unchanged from the original. The <code>invite()</code> and <code>rsvp()</code> template event handlers are hooked to <code>Meteor.methods()</code> calls that perform the necessary checks before updating the mongo collection on the server. As usual, behind the scenes, Meteor updates the client-side minimongo collection as soon as the server collection is updated.</p>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Leaflet | Pallavi Anderson]]></title>
   <link href="http://asynchrotron.com/blog/categories/leaflet/atom.xml" rel="self"/>
   <link href="http://asynchrotron.com/"/>
-  <updated>2013-12-29T23:01:21-06:00</updated>
+  <updated>2013-12-30T07:42:12-06:00</updated>
   <id>http://asynchrotron.com/</id>
   <author>
     <name><![CDATA[Pallavi Anderson]]></name>
@@ -31,7 +31,7 @@
 <h3>Updating Party Details in the Database</h3>
 
 
-<p>A party document saved to mongo looks something like this:
+<p>A party document looks something like this:
 ``` js
 {
   _id: &ldquo;22dQwpajD64LCv4QW&rdquo;,
@@ -62,7 +62,7 @@ lng:  -87.63811111450194
 <p>  ]
 }
 <code>``
-Each party contains an array of RSVP objects, which must be updated when any user updates their RSVP to the party. In addition, private parties contain a set of invited userIds. So</code>rsvps<code>and</code>invited` are the two mutable party attributes in our example. The owner, title, description, coordinates or public/private setting cannot be changed, but a party&rsquo;s owner can delete the party if no user is RSVPd as Yes (Maybes don&rsquo;t count).</p>
+Each party contains an array of RSVP objects, which must be updated when any user adds or updates their RSVP to the party. In addition, private parties contain a set of invited users' ids; the party owner can invite additional users at any time. So</code>rsvps<code>and</code>invited` are the two mutable party attributes in our example. The owner, title, description, coordinates or public/private setting cannot be changed, but a party&rsquo;s owner can delete the party if no user is RSVPd as Yes.</p>
 
 <p>The code to update and delete parties in the server-side mongo collection is virtually unchanged from the original. The <code>invite()</code> and <code>rsvp()</code> template event handlers are hooked to <code>Meteor.methods()</code> calls that perform the necessary checks before updating the mongo collection on the server. As usual, behind the scenes, Meteor updates the client-side minimongo collection as soon as the server collection is updated.</p>
 
@@ -201,7 +201,7 @@ map = L.map($(&lsquo;#map_canvas&rsquo;), {
 
 <p>L.tileLayer(&lsquo;<a href="http://">http://</a>{s}.tile.stamen.com/toner/{z}/{x}/{y}.png&rsquo;, {opacity: .5}).addTo(map);
 <code>``
-The next significant change was to replace the</code>map<code>template's event handler from the original example with Leaflet's</code>&ldquo;dblclick&rdquo;<code>event handler to manage the creation of new parties. The Leaflet version conveniently returns a</code>LatLng<code>which I saved to a Session variable before triggering</code>createDialog<code>. The mechanism to trigger dialogs by setting the associated Session variables (</code>Session.showCreateDialog<code>and</code>Session.showInviteDialog`) is unchanged from the original example, and it works because Meteor Session variables are <a href="http://docs.meteor.com/#reactivity">reactive</a>.</p>
+The next significant change was to replace the</code>map<code>template's event handler from the original example with Leaflet's</code>&ldquo;dblclick&rdquo;<code>event handler to manage the creation of new parties. The Leaflet version conveniently returns a</code>LatLng<code>which I saved to a Session variable before triggering</code>createDialog<code>. The mechanism to trigger dialogs by setting the associated Session variables</code>Session.showCreateDialog<code>and</code>Session.showInviteDialog` is unchanged from the original example, and it works because Meteor Session variables are <a href="http://docs.meteor.com/#reactivity">reactive</a>.</p>
 
 <p>``` js
 map.on(&ldquo;dblclick&rdquo;, function(e) {
@@ -230,7 +230,7 @@ map.on(&ldquo;dblclick&rdquo;, function(e) {
 <h3>Creating and Saving a Party to the Database</h3>
 
 
-<p>This part of the application is also more or less unchanged from the original example except that I pass the party&rsquo;s <code>LatLng</code> (instead of click coordinates) along with other details from the <code>createDialog</code> template to the <code>Meteor.methods()</code> call to <code>createParty</code>. If the callback is successful, the new party&rsquo;s <code>_id</code> is saved to another reactive Session variable <code>Session.selected</code>, which drives the <code>details</code> template on the left.
+<p>This part of the application is also more or less unchanged from the original example except that I passed the party&rsquo;s <code>LatLng</code> (instead of click position) along with other details from the <code>createDialog</code> template to the <code>Meteor.methods()</code> call to <code>createParty</code>. If the callback is successful, the new party&rsquo;s <code>_id</code> is saved to another reactive Session variable <code>Session.selected</code>, which drives the <code>details</code> template on the left.
 ``` js
 var title = template.find(&ldquo;.title&rdquo;).value;
 var description = template.find(&ldquo;.description&rdquo;).value;
@@ -256,7 +256,7 @@ var latlng = Session.get(&ldquo;createCoords&rdquo;);</p>
 <h3>Adding Markers to the Map in Realtime</h3>
 
 
-<p>As soon as a new party is added to the Parties mongo collection on the server, behind the scenes, Meteor transmits it back to a client-side minimongo collection with the same name. This can be verified by typing <code>Parties.findOne()</code> into the JavaScript console. This is well and good, but the next task is to replace the <a href="http://d3js.org">D3</a> code to draw circles from the original example with code to add Leaflet markers to the map.</p>
+<p>As soon as a new party is added to the Parties mongo collection on the server, behind the scenes, Meteor transmits it back to a client-side minimongo collection with the same name on all connected and authorized clients. This can be verified by typing <code>Parties.findOne()</code> into the JavaScript console. This is well and good, but the next task is to replace the <a href="http://d3js.org">D3</a> code to draw circles from the original example with code to add Leaflet markers to the map.</p>
 
 <p>To do that, I hooked up a <code>cursor.observe()</code> <code>added()</code> callback to create the map marker and I added a click handler to the marker to update the <code>Session.selected</code> variable with the party&rsquo;s <code>_id</code>. As users click on different parties, this reactively triggers the context for the <code>details</code> template on the left. I also saved a reference to the marker in a local <code>markers</code> hash to efficiently access the marker for future changes. Since we only need to set this up once, I put this code into the <code>map</code> template&rsquo;s <code>created()</code> callback.
 ``` js
@@ -282,7 +282,7 @@ var map, markers = {};</p>
 <p>  });
 }
 <code>
-The final bit of fanciness here is my `createIcon()` helper function to create a lightweight `DivIcon` that uses a simple `div` element instead of an image icon. I used CSS `border-radius` to style the `div` as a circle of the appropriate color and set CSS `line-height` to the height of the `div` to vertically centered the text. The `attending()` helper method from the original example returns the number of Yes RSVPs.
+The final bit of fanciness here is my `createIcon()` helper function to create a lightweight `DivIcon` that uses a simple `div` element instead of an image icon. I used CSS `border-radius` to style the `div` as a circle of the appropriate color and set CSS `line-height` to the height of the `div` to vertically center the text. The `attending()` helper function from the original example returns the number of Yes RSVPs.
 </code> js
 var createIcon = function(party) {
   var className = &lsquo;leaflet-div-icon &rsquo;;
