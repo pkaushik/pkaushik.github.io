@@ -9,8 +9,7 @@
   <meta name="author" content="Pallavi Anderson">
 
   
-  <meta name="description" content="this &lsquo;map&rsquo; is actually a static image
-The parties example bundled with Meteor is a nifty demonstration of the framework&rsquo;s core &hellip;">
+  <meta name="description" content="this &lsquo;map&rsquo; is actually a static image The parties example bundled with Meteor is a nifty demonstration of the framework&rsquo;s core &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -96,19 +95,23 @@ The parties example bundled with Meteor is a nifty demonstration of the framewor
   </header>
 
 
-<div class="entry-content"><p><span class='caption-wrapper left'><img class='caption' src='https://raw.github.com/meteor/meteor/devel/examples/parties/public/soma.png' width='350' height='350' title='this 'map' is actually a static image'><span class='caption-text'>this &lsquo;map&rsquo; is actually a static image</span></span>
-The <a href="https://www.meteor.com/examples/parties">parties example</a> bundled with <a href="http://www.meteor.com">Meteor</a> is a nifty demonstration of the framework&rsquo;s core principles, but it uses a <a href="https://github.com/meteor/meteor/blob/devel/examples/parties/public/soma.png">500 x 500 pixel image of downtown San Francisco</a> as a faux map. This means that we cannot pan or zoom the &ldquo;map&rdquo; and when we double-click the image to create new parties, the circle markers are drawn at the position of the clicks in relation to the <em>image element in the browser window</em>, and not at geospatial coordinates.</p>
+<div class="entry-content"><p><span class='caption-wrapper left'><img class='caption' src='https://raw.github.com/meteor/meteor/devel/examples/parties/public/soma.png' width='350' height='350' title='this 'map' is actually a static image'><span class='caption-text'>this &lsquo;map&rsquo; is actually a static image</span></span></p>
+
+<p>The <a href="https://www.meteor.com/examples/parties">parties example</a> bundled with <a href="http://www.meteor.com">Meteor</a> is a nifty demonstration of the framework&rsquo;s core principles, but it uses a <a href="https://github.com/meteor/meteor/blob/devel/examples/parties/public/soma.png">500 x 500 pixel image of downtown San Francisco</a> as a faux map. This means that we cannot pan or zoom the &ldquo;map,&rdquo; and when we double-click the image to create new parties, the circle markers are drawn at the position of the clicks in relation to the <em>image element in the browser window</em>, and not at geospatial coordinates.</p>
+
+<!--more-->
+
 
 <p><span class='caption-wrapper left'><img class='caption' src='/images/custom/old-parties.png' width='350' height='350' title='circles drawn over the static image'><span class='caption-text'>circles drawn over the static image</span></span></p>
 
-<p>I decided to update the example to use <a href="http://leafletjs.com/">Leaflet.js</a> to make a real map that looks and feels as close to the original example as possible. In particular, I wanted to preserve the color-coded circles (red for private, blue for public parties) labeled with the number of RSVPs, and the larger animated circle indicating which party is currently selected, with its details displayed in the sidebar. This is a useful pattern for displaying individual marker details without using a popup that occludes part of the map. Here&rsquo;s the <a href="http://chicago-parties.meteor.com">end result</a> with <a href="https://github.com/pkaushik/parties">source code</a>.</p>
+<p>I decided to update the example to use <a href="http://leafletjs.com/">Leaflet.js</a> to make a real map that looked and felt as close to the original example as possible. In particular, I wanted to preserve the color-coded circles (red for private, blue for public parties) labeled with the number of RSVPs, and the larger animated circle indicating which party is currently selected, with its details displayed outside the map, to the side. This is a useful pattern for displaying individual marker details without using a popup that occludes part of the map.</p>
 
-<p>Over the next two posts, I&rsquo;ll go over the changes I made to the original parties example. I won&rsquo;t explain how Meteor works, and it would help if you&rsquo;ve run the original example and have a rough sense of what&rsquo;s going on.</p>
+<p>Here is the <a href="http://chicago-parties.meteor.com">end result</a> with <a href="https://github.com/pkaushik/parties">source code</a>. In the next two posts, I will go over the changes I made to the original example. I won&rsquo;t be covering how Meteor works, and will assume you have some understanding of how the parties example works as well.</p>
 
 <h3>Setting the Stage</h3>
 
 
-<p>First off, we create the original example and add leaflet to the project using the <a href="http://oortcloud.github.io/meteorite/">meteorite</a> command line. Meteorite is Meteor&rsquo;s unofficial package management system.</p>
+<p>First off, I created the example and added leaflet to the project using <a href="http://oortcloud.github.io/meteorite/">Meteorite</a>.</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -116,17 +119,7 @@ The <a href="https://www.meteor.com/examples/parties">parties example</a> bundle
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>$ meteor create --example parties
-</span><span class='line'>parties: created.
-</span><span class='line'>
-</span><span class='line'>To run your new app:
-</span><span class='line'>   cd parties
-</span><span class='line'>   meteor
 </span><span class='line'>
 </span><span class='line'>$ cd parties
 </span><span class='line'>
@@ -134,7 +127,7 @@ The <a href="https://www.meteor.com/examples/parties">parties example</a> bundle
 </span><span class='line'>leaflet: Leaflet.js, mobile-friendly interactive maps....</span></code></pre></td></tr></table></div></figure>
 
 
-<p>Since we&rsquo;ll no longer be calculating relative coordinates to draw circles on a jpeg image, the base map does not need to be a fixed size. We can use Bootstrap&rsquo;s fluid classes to generate a <a href="http://getbootstrap.com/2.3.2/scaffolding.html#responsive">responsive page layout</a> and adjust the map&rsquo;s size as the browser is resized. This pattern is frequently used when creating responsive Leaflet maps, and not specific to Meteor.</p>
+<p>I then edited the <code>page</code> template to use Bootstrap&rsquo;s fluid classes to generate a <a href="http://getbootstrap.com/2.3.2/scaffolding.html#responsive">responsive page layout</a> and added a <code>window.resize()</code> handler to adjust the map&rsquo;s size as the browser is resized. I use this pattern when creating responsive Leaflet maps, and it&rsquo;s not specific to Meteor.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -169,8 +162,6 @@ The <a href="https://www.meteor.com/examples/parties">parties example</a> bundle
 </span></code></pre></td></tr></table></div></figure>
 
 
-
-
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -189,7 +180,7 @@ The <a href="https://www.meteor.com/examples/parties">parties example</a> bundle
 <h3>Map Initialization</h3>
 
 
-<p>Leaflet initialization code goes into the map template&rsquo;s <code>rendered()</code> callback. <a href="http://stamen.com/">Stamen Design</a>&rsquo;s <a href="http://maps.stamen.com/toner/#12/37.7706/-122.3782">toner themed map tiles</a> are a nice replacement for the black &amp; white map image in the original example. Disabling click and touch zoom onthe map lets us reserve those actions for users to create a new party, and increasing the map tiles&#8217; opacity improves the visibility of markers against the very dark toner theme.</p>
+<p>Leaflet initialization code goes into the <code>map</code> template&rsquo;s <code>rendered()</code> callback. <a href="http://stamen.com/">Stamen Design</a>&rsquo;s <a href="http://maps.stamen.com/toner/#12/37.7706/-122.3782">toner themed map tiles</a> make a nice replacement for the black &amp; white map image in the example. I disabled double-click and touch zoom when initializing the map since those actions are how users create new parties, and increased tile opacity to lighten the overall background and improve the visibility of markers on the map.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -206,7 +197,7 @@ The <a href="https://www.meteor.com/examples/parties">parties example</a> bundle
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Next we replace the map template&rsquo;s event handler from the original example with Leaflet&rsquo;s <code>"dblclick"</code> event handler which conveniently returns a Leaflet <code>LatLng</code> with its callback, which we promptly save as the Meteor Session variable <code>Session.createCoords</code>. Because Meteor Session variables are reactive, setting <code>Session.showCreateDialog</code> triggers the display of a dialog allowing the user to enter additional details about the new party. This mechanism is unchanged from the original example.</p>
+<p>The next significant change was to replace the <code>map</code> template&rsquo;s event handler from the original example with Leaflet&rsquo;s <code>"dblclick"</code> event handler to manage the creation of new parties. The Leaflet version conveniently returns a <code>LatLng</code> which I saved to a Session variable before triggering <code>createDialog</code>. The mechanism to trigger dialogs by setting the associated Session variables &ndash; <code>Session.showCreateDialog</code> and <code>Session.showInviteDialog</code> &ndash; is unchanged from the original example. It works because Meteor Session variables are <a href="http://docs.meteor.com/#reactivity">reactive</a>.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -242,12 +233,10 @@ The <a href="https://www.meteor.com/examples/parties">parties example</a> bundle
 </span></code></pre></td></tr></table></div></figure>
 
 
-
-
 <h3>Creating and Saving a Party to the Database</h3>
 
 
-<p>Clicking the create dialog&rsquo;s &lsquo;Save&rsquo; button makes a <code>Meteor.methods()</code> call that is virtually the same as in the original example except that the method now takes the <code>LatLng</code> that we just saved as <code>Session.createCoords</code>. When the new party has been successfully added to a server-side mongo collection called Parties, we can save the new party&rsquo;s <code>_id</code> to the <code>Session.selected</code> variable.</p>
+<p>This part of the application is more or less unchanged from the original example except that I pass the party&rsquo;s <code>LatLng</code> (instead of click coordinates) along with other details from the <code>createDialog</code> template to the <code>Meteor.methods()</code> call to <code>createParty</code>. If the callback is successful, the new party&rsquo;s <code>_id</code> is saved to another reactive Session variable <code>selected</code>, which drives the <code>details</code> template on the left.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -265,7 +254,6 @@ The <a href="https://www.meteor.com/examples/parties">parties example</a> bundle
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
-<span class='line-number'>17</span>
 </pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">title</span> <span class="o">=</span> <span class="nx">template</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s2">&quot;.title&quot;</span><span class="p">).</span><span class="nx">value</span><span class="p">;</span>
 </span><span class='line'><span class="kd">var</span> <span class="nx">description</span> <span class="o">=</span> <span class="nx">template</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s2">&quot;.description&quot;</span><span class="p">).</span><span class="nx">value</span><span class="p">;</span>
 </span><span class='line'><span class="kd">var</span> <span class="kr">public</span> <span class="o">=</span> <span class="o">!</span> <span class="nx">template</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s2">&quot;.private&quot;</span><span class="p">).</span><span class="nx">checked</span><span class="p">;</span>
@@ -280,20 +268,17 @@ The <a href="https://www.meteor.com/examples/parties">parties example</a> bundle
 </span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="o">!</span> <span class="nx">error</span><span class="p">)</span> <span class="p">{</span> <span class="c1">//party was successfully added to the server&#39;s mongo collection</span>
 </span><span class='line'>    <span class="nx">Session</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;selected&quot;</span><span class="p">,</span> <span class="nx">partyId</span><span class="p">);</span>
 </span><span class='line'>    <span class="p">...</span>
-</span><span class='line'>    <span class="p">...</span>
 </span><span class='line'>  <span class="p">}</span>
 </span><span class='line'><span class="p">});</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-
-
 <h3>Adding Markers to the Map in Realtime</h3>
 
 
-<p>So far, we&rsquo;ve saved a newly created party into a server-side mongo collection and Meteor, behind the scenes, has transmitted it back to a client-side minimongo collection with the same name (Parties). We can verify this by typing <code>Parties.findOne()</code> into the JavaScript console.</p>
+<p>As soon as a new party is added to the Parties mongo collection on the server, behind the scenes, Meteor transmits it back to a client-side minimongo collection with the same name. This can be verified by typing <code>Parties.findOne()</code> into the JavaScript console. This is well and good, but the next task is to replace the code to draw D3 circles from the original example with code to add Leaflet markers to the map.</p>
 
-<p>Let&rsquo;s now observe changes to a client-side query of the minimongo collection, and automatically draw a map marker whenever a new party is added. Since this only needs to be set up once, we can put the <code>cursor.observe()</code> code in the map template&rsquo;s <code>created()</code> callback. This replaces the D3 svg circle drawing code from the original example.</p>
+<p>To do that, I hooked up a <code>cursor.observe()</code> <code>added()</code> callback to create the map marker and add a click handler to update the <code>Session.selected</code> variable with the party <code>_id</code>. As users click on different parties, this reactively triggers the context for the <code>details</code> template on the left. I also saved a reference to the marker in a local <code>markers</code> hash, to efficiently access the marker for future changes. Since we only need to set this up once, I put this code <code>cursor-observe()</code> into the <code>map</code> template&rsquo;s <code>created()</code> callback.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -334,9 +319,7 @@ The <a href="https://www.meteor.com/examples/parties">parties example</a> bundle
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>In the <code>added()</code> callback, we create a new marker, add it to the map, and set up a click handler to store the associated party&rsquo;s <code>_id</code> in another Meteor Session variable, <code>Session.selected</code>. We also store a reference to the marker in a locally scoped hash keyed by the associated party&rsquo;s <code>_id</code> to efficiently update / delete markers when party details change.</p>
-
-<p>The <code>createIcon</code> function returns a lightweight <a href="http://leafletjs.com/reference.html#divicon"><code>DivIcon</code></a> that uses a simple <code>div</code> element instead of an image, and CSS <code>border-radius</code> to style the div as a circle of the appropriate color. The <code>attending()</code> helper method from the original example returns the number of Yes RSVPs. CSS <code>vertical-align</code> and <code>line-height</code> set to the height of the <code>div</code> when used in combination ensure the HTML text is vertically centered.</p>
+<p>I wrote the <code>createIcon</code> helper function to create a lightweight <code>DivIcon</code> (<a href="http://leafletjs.com/reference.html#divicon">ref</a>) which uses a simple <code>div</code> element instead of an image icon. I used CSS <code>border-radius</code> to style the div as a circle of the appropriate color and set CSS <code>line-height</code> to the height of the <code>div</code> to vertically centered the text. The <code>attending()</code> helper method from the original example returns the number of Yes RSVPs.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -398,9 +381,7 @@ The <a href="https://www.meteor.com/examples/parties">parties example</a> bundle
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>At this point, we can create a bunch of parties and they all show up as markers with the appropriate color and label. When we click on a marker, <code>Session.selected</code> is updated by the marker&rsquo;s click handler. Because Meteor Session variables are <a href="http://docs.meteor.com/#reactivity">reactive</a>, this automatically renders the details template in the sidebar.</p>
-
-<p>But there&rsquo;s no visual indication <em>on the map</em> as to which party is currently selected &mdash; we just need to remember which marker we clicked on last! As it turns out, this usability issue is easy to fix and we&rsquo;ll see how in the next post.</p>
+<p>Now I can create a bunch of parties and they all show up as markers with the appropriate color and label. When I click on a marker, it&rsquo;s details are automatically rendered into the <code>details</code> template on the left. But there&rsquo;s no visual indication <em>on the map</em> as to which party is currently selected &mdash; I just need to remember which marker I clicked on last! As it turns out, this is easy to address.</p>
 
 <p><a href="/blog/2013/12/28/realtime-maps-with-meteor-and-leaflet-part-2/">Part Two: Updating and deleting parties, and animating the selected party indicator&hellip;</a></p>
 </div>

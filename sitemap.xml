@@ -2,7 +2,7 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>http://asynchrotron.com/blog/2012/05/22/hello-meteor/</loc>
-        <lastmod>2013-12-27T11:29:29-06:00</lastmod>
+        <lastmod>2013-12-29T15:07:09-06:00</lastmod>
     </url>
     <url>
         <loc>
@@ -12,13 +12,13 @@
     </url>
     <url>
         <loc>http://asynchrotron.com/blog/2013/12/27/realtime-maps-with-meteor-and-leaflet/</loc>
-        <lastmod>2013-12-29T13:05:08-06:00</lastmod>
+        <lastmod>2013-12-29T21:46:03-06:00</lastmod>
     </url>
     <url>
         <loc>
             http://asynchrotron.com/blog/2013/12/28/realtime-maps-with-meteor-and-leaflet-part-2/
         </loc>
-        <lastmod>2013-12-29T12:08:02-06:00</lastmod>
+        <lastmod>2013-12-29T21:41:30-06:00</lastmod>
     </url>
     <url>
         <loc>http://asynchrotron.com/about/</loc>
@@ -26,11 +26,11 @@
     </url>
     <url>
         <loc>http://asynchrotron.com/blog/archives/</loc>
-        <lastmod>2013-12-29T13:05:08-06:00</lastmod>
+        <lastmod>2013-12-29T21:46:03-06:00</lastmod>
     </url>
     <url>
         <loc>http://asynchrotron.com/</loc>
-        <lastmod>2013-12-29T13:05:08-06:00</lastmod>
+        <lastmod>2013-12-29T21:46:03-06:00</lastmod>
     </url>
     <url>
         <loc>http://asynchrotron.com/robots.txt</loc>

@@ -9,7 +9,7 @@
   <meta name="author" content="Pallavi Anderson">
 
   
-  <meta name="description" content="this is a Leaflet map with DivIcon markers Recap In the last post, we initialized a Leaflet map to work with Stamen Design&rsquo;s toner themed map &hellip;">
+  <meta name="description" content="this is a Leaflet map with DivIcon markers Recap In the last post, I initialized a Leaflet map to work with Stamen Design&rsquo;s toner themed map &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -100,7 +100,10 @@
 <h3>Recap</h3>
 
 
-<p>In the <a href="/blog/2013/12/27/realtime-maps-with-meteor-and-leaflet/">last post</a>, we initialized a Leaflet map to work with <a href="http://stamen.com/">Stamen Design</a>&rsquo;s <a href="http://maps.stamen.com/toner/#12/37.7706/-122.3782">toner themed map tiles</a> and <a href="http://getbootstrap.com/2.3.2/scaffolding.html#responsive">Bootstrap&rsquo;s responsive layout</a>. We then set up a double-click event handler to gather additional details about the proposed new party, and we hooked up the dialog&rsquo;s save button to pass those details to a <code>Meteor.methods()</code> call to save the party into a server-side mongo collection. Finally, we hooked up a <code>cursor.observe()</code> <code>added()</code> callback to a query on the client-side minimongo collection and set up the callback to automatically add a circular <code>DivIcon</code> marker at the specified coordinates.</p>
+<p>In the <a href="/blog/2013/12/27/realtime-maps-with-meteor-and-leaflet/">last post</a>, I initialized a Leaflet map to work with <a href="http://stamen.com/">Stamen Design</a>&rsquo;s <a href="http://maps.stamen.com/toner/#12/37.7706/-122.3782">toner themed map tiles</a> and <a href="http://getbootstrap.com/2.3.2/scaffolding.html#responsive">Bootstrap&rsquo;s responsive layout</a>. I then set up a double-click event handler to gather additional details about the new party, and hooked up the dialog&rsquo;s save button to pass those details to a <code>Meteor.methods()</code> call to save the party into a server-side mongo collection. Finally, I hooked up a <code>cursor.observe()</code> <code>added()</code> callback to the client-side minimongo collection and set up the callback to automatically add a circular <code>DivIcon</code> marker at the specified coordinates.</p>
+
+<!--more-->
+
 
 <h3>Updating Party Details in the Database</h3>
 
@@ -154,16 +157,14 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Each party contains an array of RSVP objects, which must be updated when any user updates their RSVP to the party. In addition, private parties contain a set of invited userIds. So <code>rsvps</code> and <code>invited</code> are the two mutable attributes of a party; the owner, title, description, coordinates or public/private setting cannot be updated as per the original example.</p>
+<p>Each party contains an array of RSVP objects, which must be updated when any user updates their RSVP to the party. In addition, private parties contain a set of invited userIds. So <code>rsvps</code> and <code>invited</code> are the two mutable party attributes in our example. The owner, title, description, coordinates or public/private setting cannot be changed, but a party&rsquo;s owner can delete the party if no user is RSVPd as Yes (Maybes don&rsquo;t count).</p>
 
-<p>In addition, a party&rsquo;s owner can delete the party if no user is RSVPd as Yes (Maybes don&rsquo;t count).</p>
-
-<p>The code to update and delete parties in the server-side mongo collection is virtually unchanged from the original. The <code>invite()</code> and <code>rsvp()</code> template event handlers are hooked to <code>Meteor.methods()</code> calls that perform the necessary checks before updating the mongo collection on the server. As usual, Meteor, behind the scenes, updates the client-side minimongo collection as soon as the server collection is updated.</p>
+<p>The code to update and delete parties in the server-side mongo collection is virtually unchanged from the original. The <code>invite()</code> and <code>rsvp()</code> template event handlers are hooked to <code>Meteor.methods()</code> calls that perform the necessary checks before updating the mongo collection on the server. As usual, behind the scenes, Meteor updates the client-side minimongo collection as soon as the server collection is updated.</p>
 
 <h3>Updating and Removing Map Markers in Realtime</h3>
 
 
-<p>Now it&rsquo;s time to add in the <code>cursor.observe()</code> <code>changed()</code> callback to update the party&rsquo;s icon, and <code>removed()</code>  callback to delete the marker from the map and from the local <code>markers</code> hash.</p>
+<p>I hooked up the <code>cursor.observe()</code> <code>changed()</code> callback to update the party&rsquo;s icon, and <code>removed()</code> callback to delete the marker from the map and from the local <code>markers</code> hash.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -209,7 +210,7 @@
 
 <p><span class='caption-wrapper right'><img class='caption' src='/images/custom/selected-party.png' width='' height='' title='a selected party'><span class='caption-text'>a selected party</span></span></p>
 
-<p>Up to this point, there&rsquo;s been no visual indication <em>on the map</em> as to which party is currently selected. Just like in the original Parties example, we solve this by creating a 50px x 50px transparent grey circular marker and making it concentric with the currently selected party&rsquo;s marker such that it forms a light halo around the selected party. The halo marker is purely a UI artefact that does not need to be saved on the server.</p>
+<p>Up to this point, there&rsquo;s been no visual indication <em>on the map</em> as to which party is currently selected. Just like in the original Parties example, I solved this by creating a 50px x 50px transparent grey circular marker and making it concentric with the currently selected party&rsquo;s marker such that it formed a 20px halo around the selected party. The halo marker is purely a UI artefact that does not need to be saved on the server.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -242,11 +243,11 @@
 <h3>Animating the Halo Marker</h3>
 
 
-<p>For a final flourish, we use the AnimatedMarker Leaflet plugin created by <a href=""></a> from OpenPlans to animate the marker as it moves about when a user selects different parties (rather than simply making it reappear at a different location). AnimatedMarker takes a Leaflet <code>polyline</code> object as the first argument to its  initialize function, and draws the marker at the beginning of the polyline. It then animates the marker along the polyline at a speed (in meters/ms) that&rsquo;s configurable via a second options argument.</p>
+<p>For a final flourish, I used the <code>AnimatedMarker</code> Leaflet <a href="https://github.com/openplans/Leaflet.AnimatedMarker">plugin</a> from <a href="http://openplans.org/">OpenPlans</a> to animate the halo&rsquo;s movement on the map when a user selects different parties rather than simply making it reappear at a different location. <code>AnimatedMarker</code> takes a Leaflet <code>polyline</code> object as the first argument to its initialize function, and draws a marker at the beginning of the polyline, which it then animates along the <code>polyline</code> at a speed (in meters/ms) that&rsquo;s configurable via a second argument.</p>
 
-<p>We need to make a minor tweak to the plugin&rsquo;s source code to support our needs: The original AnimatedMarker does not allow setting of the animation polyline after the marker is initialized. As a result, it requires the complete animation path to be known before creating the marker. But we want to create the AnimatedMarker once and to then set the animation polyline dynamically as soon as a user selects a different marker. The next animation polyline would be a single segment from the AnimatedMarker&rsquo;s current location to the center of the next marker selected. To accomplish this, I&rsquo;ve had to reset the internal index (<code>this._i</code>) to 1 when a <code>polyline</code> is passed to the setLine method, making the method repeatedly reusable, rather than something that&rsquo;s called just once upon the marker&rsquo;s initialization. Until my pull request is merged, this modification is available at my fork on github.</p>
+<p>I needed to make a minor tweak to the plugin&rsquo;s source code to support my needs: <code>AnimatedMarker</code> does not allow setting the animation <code>polyline</code> after the marker is initialized. In other words, it requires the animation path to be known before creating the marker. I wanted to create the marker around the currently selected party without knowledge of it&rsquo;s future animation path, and to set the animation path dynamically as soon as a user selected a different marker &mdash; the path would be a segment from the current location to the center of the selected marker. To accomplish this, all I needed to do was reset the animation index (<code>this._i</code>) to 1 in the marker&rsquo;s <code>setLine</code> method. This modification is available at my fork on github.</p>
 
-<p>Ta-da!</p>
+<p>And ta-da!</p>
 
 <p>End result: <a href="http://chicago-parties.meteor.com">http://chicago-parties.meteor.com</a> and <a href="https://github.com/pkaushik/parties">source code for the complete application</a>. You need to log in with a github account to create or RSVP to parties.</p>
 </div>
