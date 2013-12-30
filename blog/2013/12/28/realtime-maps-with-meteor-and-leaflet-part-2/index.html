@@ -164,7 +164,7 @@
 <h3>Updating and Removing Map Markers in Realtime</h3>
 
 
-<p>I hooked up the <code>cursor.observe()</code> <code>changed()</code> callback to update the party&rsquo;s icon, and <code>removed()</code> callback to delete the marker from the map and from the local <code>markers</code> hash.</p>
+<p>I hooked up the <code>cursor.observe()</code> <code>changed()</code> callback to update the party&rsquo;s icon, and <code>removed()</code> callback to delete the marker from the map and the local <code>markers</code> hash.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -210,7 +210,7 @@
 
 <p><span class='caption-wrapper right'><img class='caption' src='/images/custom/selected-party.png' width='' height='' title='a selected party'><span class='caption-text'>a selected party</span></span></p>
 
-<p>Up to this point, there&rsquo;s been no visual indication <em>on the map</em> as to which party is currently selected. Just like in the original Parties example, I solved this by creating a 50px x 50px transparent grey circular marker and making it concentric with the currently selected party&rsquo;s marker such that it formed a 20px halo around the selected party. The halo marker is purely a UI artefact that does not need to be saved on the server.</p>
+<p>Up to this point, there&rsquo;s been no visual indication <em>on the map</em> as to which party is currently selected. Like in the original Parties example, I solved this by creating a 50px x 50px transparent grey circular marker and making it concentric with the currently selected party&rsquo;s marker such that it formed a 20px halo around the selected party. The halo marker is purely a UI artefact that does not need to be saved on the server.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
