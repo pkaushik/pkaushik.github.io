@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Webapps | Pallavi Anderson]]></title>
   <link href="http://asynchrotron.com/blog/categories/webapps/atom.xml" rel="self"/>
   <link href="http://asynchrotron.com/"/>
-  <updated>2013-12-29T22:32:52-06:00</updated>
+  <updated>2013-12-29T22:40:09-06:00</updated>
   <id>http://asynchrotron.com/</id>
   <author>
     <name><![CDATA[Pallavi Anderson]]></name>
@@ -142,7 +142,7 @@ L.divIcon({
 
 <p><span class='caption-wrapper left'><img class='caption' src='/images/custom/old-parties.png' width='350' height='350' title='circles drawn over the static image'><span class='caption-text'>circles drawn over the static image</span></span></p>
 
-<p>I decided to update the example to use <a href="http://leafletjs.com/">Leaflet.js</a> to make a real map that looked and felt as close to the original example as possible. In particular, I wanted to preserve the color-coded circles (red for private, blue for public parties) labeled with the number of RSVPs, and the larger animated circle indicating which party is currently selected, with its details displayed outside the map, to the side. This is a useful pattern for displaying individual marker details without using a popup that occludes part of the map.</p>
+<p>I decided to update the example to use <a href="http://leafletjs.com/">Leaflet.js</a> to make a real map that looked and felt as close to the original example as possible. In particular, I wanted to preserve the color-coded circles (red for private, blue for public parties) labeled with the number of RSVPs, and the larger animated circle indicating which party is currently selected, with its details displayed on the side outside the map. This is a useful pattern for displaying individual marker details without using a popup that occludes part of the map.</p>
 
 <p>Here is the <a href="http://chicago-parties.meteor.com">end result</a> with <a href="https://github.com/pkaushik/parties">source code</a>. In the next two posts, I will go over the changes I made to the original example. I won&rsquo;t be covering how Meteor works, and will assume you have some understanding of how the parties example works as well.</p>
 
