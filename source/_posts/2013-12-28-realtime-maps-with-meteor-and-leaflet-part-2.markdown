@@ -10,7 +10,7 @@ categories: [meteor, webapps, leaflet]
 In the [last post]({{root_dir}}/blog/2013/12/27/realtime-maps-with-meteor-and-leaflet/), I initialized a Leaflet map to work with [Stamen Design](http://stamen.com/)'s [toner themed map tiles](http://maps.stamen.com/toner/#12/37.7706/-122.3782) and [Bootstrap's responsive layout](http://getbootstrap.com/2.3.2/scaffolding.html#responsive). I then set up a double-click event handler to gather additional details about the new party, and hooked up the dialog's save button to pass those details to a `Meteor.methods()` call to save the party into a server-side mongo collection. Finally, I hooked up a `cursor.observe()` `added()` callback to the client-side minimongo collection and set up the callback to automatically add a circular `DivIcon` marker at the specified coordinates. 
 <!--more-->
 <h3>Updating Party Details in the Database</h3>
-A party document saved to mongo looks something like this:
+A party document looks something like this:
 ``` js
 {
   _id: "22dQwpajD64LCv4QW",
@@ -35,12 +35,12 @@ A party document saved to mongo looks something like this:
   ]
 }
 ```
-Each party contains an array of RSVP objects, which must be updated when any user updates their RSVP to the party. In addition, private parties contain a set of invited userIds. So `rsvps` and `invited` are the two mutable party attributes in our example. The owner, title, description, coordinates or public/private setting cannot be changed, but a party's owner can delete the party if no user is RSVPd as Yes (Maybes don't count).
+Each party contains an array of RSVP objects, which must be updated when any user adds or updates their RSVP to the party. In addition, private parties contain a set of invited users' ids; the party owner can invite additional users at any time. So `rsvps` and `invited` are the two mutable party attributes in our example. The owner, title, description, coordinates or public/private setting cannot be changed, but a party's owner can delete the party if no user is RSVPd as Yes.
 
-The code to update and delete parties in the server-side mongo collection is virtually unchanged from the original. The `invite()` and `rsvp()` template event handlers are hooked to `Meteor.methods()` calls that perform the necessary checks before updating the mongo collection on the server. As usual, behind the scenes, Meteor updates the client-side minimongo collection as soon as the server collection is updated.
+The code to update and delete parties in the server-side mongo collection is virtually unchanged from the original. The `invite()` and `rsvp()` template event handlers are hooked to `Meteor.methods()` calls that perform the necessary checks before updating the mongo collection on the server. As usual, behind the scenes, Meteor synchronizes the client-side minimongo collection with the server collection.
 
 <h3>Updating and Removing Map Markers in Realtime</h3>
-I hooked up the `cursor.observe()` `changed()` callback to update the party's icon, and `removed()``` callback to delete the marker from the map and from the local `markers` hash.
+I hooked up the `cursor.observe()` `changed()` callback to update the party's icon, and `removed()` callback to delete the marker from the map and the local `markers` hash.
 
 ``` js
 var map, markers = {};
@@ -65,7 +65,7 @@ Template.map.created = function() {
 <h3>Using a Halo Marker to Indicate Which Party Is Selected</h3>
 {% imgcap right /images/custom/selected-party.png a selected party %} 
 
-Up to this point, there's been no visual indication _on the map_ as to which party is currently selected. Just like in the original Parties example, I solved this by creating a 50px x 50px transparent grey circular marker and making it concentric with the currently selected party's marker such that it formed a 20px halo around the selected party. The halo marker is purely a UI artefact that does not need to be saved on the server.
+Up to this point, there's been no visual indication _on the map_ as to which party is currently selected. Like in the original Parties example, I solved this by creating a 50px x 50px transparent grey circular marker and making it concentric with the currently selected party's marker such that it formed a 20px halo around the selected party. The halo marker is purely a UI artefact that does not need to be saved on the server.
 
 ``` js
 L.divIcon({
