@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Leaflet | Pallavi Anderson]]></title>
   <link href="http://asynchrotron.com/blog/categories/leaflet/atom.xml" rel="self"/>
   <link href="http://asynchrotron.com/"/>
-  <updated>2013-12-29T22:41:02-06:00</updated>
+  <updated>2013-12-29T22:42:38-06:00</updated>
   <id>http://asynchrotron.com/</id>
   <author>
     <name><![CDATA[Pallavi Anderson]]></name>
@@ -191,7 +191,7 @@ $(window).resize(function () {
 <h3>Map Initialization</h3>
 
 
-<p>Leaflet initialization code goes into the <code>map</code> template&rsquo;s <code>rendered()</code> callback. <a href="http://stamen.com/">Stamen Design</a>&rsquo;s <a href="http://maps.stamen.com/toner/#12/37.7706/-122.3782">toner themed map tiles</a> make a nice replacement for the black &amp; white map image in the example. I disabled double-click and touch zoom when initializing the map since those actions are how users create new parties, and increased tile opacity to lighten the overall background and improve the visibility of markers on the map.</p>
+<p><a href="http://stamen.com/">Stamen Design</a>&rsquo;s <a href="http://maps.stamen.com/toner/#12/37.7706/-122.3782">toner themed map tiles</a> make a nice replacement for the black &amp; white map image in the example. Leaflet initialization code goes into the <code>map</code> template&rsquo;s <code>rendered()</code> callback. I disabled double-click and touch zoom when initializing the map since those actions are how users create new parties, and increased tile opacity to lighten the overall background and improve the visibility of markers on the map.</p>
 
 <p>``` js
 map = L.map($(&lsquo;#map_canvas&rsquo;), {
