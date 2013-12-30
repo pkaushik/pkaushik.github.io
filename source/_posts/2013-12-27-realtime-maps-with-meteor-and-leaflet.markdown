@@ -139,7 +139,7 @@ var createIcon = function(party) {
   });
 }
 ```
-``` css
+``` js
 .leaflet-div-icon {
   border-radius: 50%;
   border: none;

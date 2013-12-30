@@ -40,7 +40,7 @@ Each party contains an array of RSVP objects, which must be updated when any use
 The code to update and delete parties in the server-side mongo collection is virtually unchanged from the original. The `invite()` and `rsvp()` template event handlers are hooked to `Meteor.methods()` calls that perform the necessary checks before updating the mongo collection on the server. As usual, behind the scenes, Meteor updates the client-side minimongo collection as soon as the server collection is updated.
 
 <h3>Updating and Removing Map Markers in Realtime</h3>
-I hooked up the `cursor.observe()` `changed()` callback to update the party's icon, and `removed()` callback to delete the marker from the map and from the local `markers` hash.
+I hooked up the `cursor.observe()` `changed()` callback to update the party's icon, and `removed()``` callback to delete the marker from the map and from the local `markers` hash.
 
 ``` js
 var map, markers = {};
@@ -73,7 +73,7 @@ L.divIcon({
   className: 'leaflet-animated-div-icon'
 }
 ```
-``` css
+``` js
 .leaflet-animated-div-icon {
   border-radius: 50%;
   border: none;
@@ -85,8 +85,6 @@ L.divIcon({
 <h3>Animating the Halo Marker</h3>
 For a final flourish, I used the `AnimatedMarker` Leaflet [plugin](https://github.com/openplans/Leaflet.AnimatedMarker) from [OpenPlans](http://openplans.org/) to animate the halo's movement on the map when a user selects different parties rather than simply making it reappear at a different location. `AnimatedMarker` takes a Leaflet `polyline` object as the first argument to its initialize function, and draws a marker at the beginning of the polyline, which it then animates along the `polyline` at a speed (in meters/ms) that's configurable via a second argument. 
 
-I needed to make a minor tweak to the plugin's source code to support my needs: `AnimatedMarker` does not allow setting the animation `polyline` after the marker is initialized. In other words, it requires the animation path to be known before creating the marker. I wanted to create the marker around the currently selected party without knowledge of it's future animation path, and to set the animation path dynamically as soon as a user selected a different marker -- the path would be a segment from the current location to the center of the selected marker. To accomplish this, all I needed to do was reset the animation index (`this._i`) to 1 in the marker's `setLine` method. This modification is available at [my fork](https://github.com/pkaushik/Leaflet.AnimatedMarker) on github.
+I needed to make a minor tweak to the plugin's source code to support my needs: `AnimatedMarker` does not allow setting the animation `polyline` after the marker is initialized. In other words, it requires the animation path to be known before creating the marker. I wanted to create the marker around the currently selected party without knowledge of it's future animation path, and to set the animation path dynamically as soon as a user selected a different marker -- the path would be a segment from the current location to the center of the selected marker. To accomplish this, all I needed to do was reset the animation index in the marker's `setLine` method. This modification is available at [my fork](https://github.com/pkaushik/Leaflet.AnimatedMarker) on github.
 
-And ta-da! 
-
-End result: http://chicago-parties.meteor.com and [source code for the complete application](https://github.com/pkaushik/parties). You need to log in with a github account to create or RSVP to parties.
+And ta-da! This is the end result: http://chicago-parties.meteor.com with [source code for the complete application](https://github.com/pkaushik/parties). You need to log in with a github account to create or RSVP to parties.
