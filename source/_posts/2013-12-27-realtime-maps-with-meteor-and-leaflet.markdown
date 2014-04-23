@@ -13,7 +13,7 @@ The [parties example](https://www.meteor.com/examples/parties) bundled with [Met
 
 I decided to update the example to use [Leaflet.js](http://leafletjs.com/) to make a real map that looked and felt as close to the original example as possible. In particular, I wanted to preserve the color-coded circles (red for private, blue for public parties) labeled with the number of RSVPs, and the larger animated circle indicating which party is currently selected, with its details displayed in a section outside the map. This is a useful pattern for displaying individual marker details without using a popup that occludes part of the map. 
 
-Here is the [end result](http://chicago-parties.meteor.com) with [source code](https://github.com/pkaushik/parties). In the next two posts, I will go over the changes I made to the original example. I won't be covering how Meteor works, and will assume you have some understanding of how the parties example works as well.
+Here is the [end result](http://www.chicago-parties.meteor.com) with [source code](https://github.com/pkaushik/parties). In the next two posts, I will go over the changes I made to the original example. I won't be covering how Meteor works, and will assume you have some understanding of how the parties example works as well.
 
 <h3>Setting the Stage</h3>
 First off, I created the example and added leaflet to the project using [Meteorite](http://oortcloud.github.io/meteorite/). 
