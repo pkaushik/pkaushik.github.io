@@ -15,3 +15,28 @@ body {
 }
 $main-bg: #ffffff !default;
 $page-bg: #ffffff !default;
+
+#map { height: 500px; }
+
+.leaflet-div-icon {
+    border-radius: 50%;
+    border: none !important;
+    opacity: .8;
+    background: #FF0066 !important
+}
+
+.leaflet-popup-content-wrapper {
+  background: none !important;
+}
+
+.leaflet-popup-content-wrapper .leaflet-popup-content {
+  background: none !important;
+}
+
+.leaflet-popup-tip-container {
+  background: none !important;
+}
+
+.leaflet-popup-tip {
+  background: none !important;
+}
