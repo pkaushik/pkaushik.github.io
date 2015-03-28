@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Pallavi Anderson]]></title>
+  <link href="http://asynchrotron.com/atom.xml" rel="self"/>
+  <link href="http://asynchrotron.com/"/>
+  <updated>2014-04-23T16:32:05-05:00</updated>
+  <id>http://asynchrotron.com/</id>
+  <author>
+    <name><![CDATA[Pallavi Anderson]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Realtime Maps With Meteor and Leaflet - Part Two]]></title>
+    <link href="http://asynchrotron.com/blog/2013/12/28/realtime-maps-with-meteor-and-leaflet-part-2/"/>
+    <updated>2013-12-28T17:53:06-06:00</updated>
+    <id>http://asynchrotron.com/blog/2013/12/28/realtime-maps-with-meteor-and-leaflet-part-2</id>
+    <content type="html"><![CDATA[<p><span class='caption-wrapper left'><img class='caption' src='http://asynchrotron.com/images/custom/updated-parties.png' width='' height='' title='this is a Leaflet map with DivIcon markers'><span class='caption-text'>this is a Leaflet map with DivIcon markers</span></span></p>
+
+<h3>Recap</h3>
+
+
+<p>In the <a href="http://asynchrotron.com/blog/2013/12/27/realtime-maps-with-meteor-and-leaflet/">last post</a>, I initialized a Leaflet map to work with <a href="http://stamen.com/">Stamen Design</a>&rsquo;s <a href="http://maps.stamen.com/toner/#12/37.7706/-122.3782">toner themed map tiles</a> and <a href="http://getbootstrap.com/2.3.2/scaffolding.html#responsive">Bootstrap&rsquo;s responsive layout</a>. I then set up a double-click event handler to gather additional details about the new party, and hooked up the dialog&rsquo;s save button to pass those details to a <code>Meteor.methods()</code> call to save the party into a server-side mongo collection. Finally, I hooked up a <code>cursor.observe()</code> <code>added()</code> callback to the client-side minimongo collection and set up the callback to automatically add a circular <code>DivIcon</code> marker at the specified coordinates.</p>
+
+<!--more-->
+
+
+<h3>Updating Party Details in the Database</h3>
+
+
+<p>A party document looks something like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="nx">_id</span><span class="o">:</span> <span class="s2">&quot;22dQwpajD64LCv4QW&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">title</span><span class="o">:</span> <span class="s2">&quot;1871&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">description</span><span class="o">:</span> <span class="s2">&quot;Party like it&#39;s 1871!&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">latlng</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">lat</span><span class="o">:</span> <span class="mf">41.88298161317542</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">lng</span><span class="o">:</span>  <span class="o">-</span><span class="mf">87.63811111450194</span>
+</span><span class='line'>  <span class="p">},</span>
+</span><span class='line'>  <span class="kr">public</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">owner</span><span class="o">:</span> <span class="s2">&quot;52xdsNjprquesL2tQ&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">invited</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;52xdsNjprquesL2tQ&quot;</span><span class="p">,</span> <span class="s2">&quot;ci7bzkJCpH9R7HCZK&quot;</span><span class="p">,</span> <span class="s2">&quot;5qhRdKFcsmPnxZKBr&quot;</span><span class="p">]</span>
+</span><span class='line'>  <span class="nx">rsvps</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>      <span class="nx">rsvp</span><span class="o">:</span> <span class="s2">&quot;yes&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">user</span><span class="o">:</span> <span class="s2">&quot;52xdsNjprquesL2tQ&quot;</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>      <span class="nx">rsvp</span><span class="o">:</span> <span class="s2">&quot;maybe&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">user</span><span class="o">:</span> <span class="s2">&quot;ci7bzkJCpH9R7HCZK&quot;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">]</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Each party contains an array of RSVP objects, which must be updated when any user adds or updates their RSVP to the party. In addition, private parties contain a set of invited users&#8217; ids; the party owner can invite additional users at any time. So <code>rsvps</code> and <code>invited</code> are the two mutable party attributes in our example. The owner, title, description, coordinates or public/private setting cannot be changed, but a party&rsquo;s owner can delete the party if no user is RSVPd as Yes.</p>
+
+<p>The code to update and delete parties in the server-side mongo collection is virtually unchanged from the original. The <code>invite()</code> and <code>rsvp()</code> template event handlers are hooked to <code>Meteor.methods()</code> calls that perform the necessary checks before updating the mongo collection on the server. As usual, behind the scenes, Meteor synchronizes the client-side minimongo collection with the server collection.</p>
+
+<h3>Updating and Removing Map Markers in Realtime</h3>
+
+
+<p>I hooked up the <code>cursor.observe()</code> <code>changed()</code> callback to update the party&rsquo;s icon, and <code>removed()</code> callback to delete the marker from the map and the local <code>markers</code> hash.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">map</span><span class="p">,</span> <span class="nx">markers</span> <span class="o">=</span> <span class="p">{};</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">Template</span><span class="p">.</span><span class="nx">map</span><span class="p">.</span><span class="nx">created</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">Parties</span><span class="p">.</span><span class="nx">find</span><span class="p">({}).</span><span class="nx">observe</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">added</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">party</span><span class="p">)</span> <span class="p">{</span><span class="cm">/* see previous post */</span><span class="p">},</span>
+</span><span class='line'>    <span class="nx">changed</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">party</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">marker</span> <span class="o">=</span> <span class="nx">markers</span><span class="p">[</span><span class="nx">party</span><span class="p">.</span><span class="nx">_id</span><span class="p">];</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="nx">marker</span><span class="p">)</span> <span class="nx">marker</span><span class="p">.</span><span class="nx">setIcon</span><span class="p">(</span><span class="nx">createIcon</span><span class="p">(</span><span class="nx">party</span><span class="p">));</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nx">removed</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">party</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">marker</span> <span class="o">=</span> <span class="nx">markers</span><span class="p">[</span><span class="nx">party</span><span class="p">.</span><span class="nx">_id</span><span class="p">];</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="nx">map</span><span class="p">.</span><span class="nx">hasLayer</span><span class="p">(</span><span class="nx">marker</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">map</span><span class="p">.</span><span class="nx">removeLayer</span><span class="p">(</span><span class="nx">marker</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">delete</span> <span class="nx">markers</span><span class="p">[</span><span class="nx">party</span><span class="p">.</span><span class="nx">_id</span><span class="p">];</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Using a Halo Marker to Indicate Which Party Is Selected</h3>
+
+
+<p><span class='caption-wrapper right'><img class='caption' src='http://asynchrotron.com/images/custom/selected-party.png' width='' height='' title='a selected party'><span class='caption-text'>a selected party</span></span></p>
+
+<p>Up to this point, there&rsquo;s been no visual indication <em>on the map</em> as to which party is currently selected. Like in the original Parties example, I solved this by creating a 50px x 50px transparent grey circular marker and making it concentric with the currently selected party&rsquo;s marker such that it formed a 20px halo around the selected party. The halo marker is purely a UI artefact that does not need to be saved on the server.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">L</span><span class="p">.</span><span class="nx">divIcon</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">iconSize</span><span class="o">:</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span> <span class="c1">// set to 50px x 50px</span>
+</span><span class='line'>  <span class="nx">className</span><span class="o">:</span> <span class="s1">&#39;leaflet-animated-div-icon&#39;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="p">.</span><span class="nx">leaflet</span><span class="o">-</span><span class="nx">animated</span><span class="o">-</span><span class="nx">div</span><span class="o">-</span><span class="nx">icon</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">border</span><span class="o">-</span><span class="nx">radius</span><span class="o">:</span> <span class="mi">50</span><span class="o">%</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">border</span><span class="o">:</span> <span class="nx">none</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">opacity</span><span class="o">:</span> <span class="p">.</span><span class="mi">2</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">background</span><span class="o">:</span> <span class="nx">black</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<h3>Animating the Halo Marker</h3>
+
+
+<p>For a final flourish, I used the <code>AnimatedMarker</code> Leaflet <a href="https://github.com/openplans/Leaflet.AnimatedMarker">plugin</a> from <a href="http://openplans.org/">OpenPlans</a> to animate the halo&rsquo;s movement on the map when a user selects different parties rather than simply making it reappear at a different location. <code>AnimatedMarker</code> takes a Leaflet <code>polyline</code> object as the first argument to its initialize function, and draws a marker at the beginning of the polyline, which it then animates along the <code>polyline</code> at a speed (in meters/ms) that&rsquo;s configurable via a second argument.</p>
+
+<p>I needed to make a minor tweak to the plugin&rsquo;s source code to support my needs: <code>AnimatedMarker</code> does not allow setting the animation <code>polyline</code> after the marker is initialized. In other words, it requires the animation path to be known before creating the marker. I wanted to create the marker around the currently selected party without knowledge of it&rsquo;s future animation path, and to set the animation path dynamically as soon as a user selected a different marker &mdash; the path would be a segment from the current location to the center of the selected marker. To accomplish this, all I needed to do was reset the animation index in the marker&rsquo;s <code>setLine</code> method. This modification is available at <a href="https://github.com/pkaushik/Leaflet.AnimatedMarker">my fork</a> on github.</p>
+
+<p>And ta-da! This is the end result: <a href="http://www.chicago-parties.meteor.com">http://www.chicago-parties.meteor.com</a> with <a href="https://github.com/pkaushik/parties">source code for the complete application</a>. You need to log in with a github account to create or RSVP to parties.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Realtime Maps With Meteor and Leaflet - Part One]]></title>
+    <link href="http://asynchrotron.com/blog/2013/12/27/realtime-maps-with-meteor-and-leaflet/"/>
+    <updated>2013-12-27T20:51:10-06:00</updated>
+    <id>http://asynchrotron.com/blog/2013/12/27/realtime-maps-with-meteor-and-leaflet</id>
+    <content type="html"><![CDATA[<p><span class='caption-wrapper left'><img class='caption' src='https://raw.github.com/meteor/meteor/devel/examples/parties/public/soma.png' width='350' height='350' title='this 'map' is actually a static image'><span class='caption-text'>this &lsquo;map&rsquo; is actually a static image</span></span></p>
+
+<p>The <a href="https://www.meteor.com/examples/parties">parties example</a> bundled with <a href="http://www.meteor.com">Meteor</a> is a nifty demonstration of the framework&rsquo;s core principles, but it uses a <a href="https://github.com/meteor/meteor/blob/devel/examples/parties/public/soma.png">500 x 500 pixel image of downtown San Francisco</a> as a faux map. This means that we cannot pan or zoom the &ldquo;map,&rdquo; and when we double-click the image to create new parties, the circle markers are drawn at the position of the clicks in relation to the <em>image element in the browser window</em>, and not at geospatial coordinates.</p>
+
+<!--more-->
+
+
+<p><span class='caption-wrapper left'><img class='caption' src='http://asynchrotron.com/images/custom/old-parties.png' width='350' height='350' title='circles drawn over the static image'><span class='caption-text'>circles drawn over the static image</span></span></p>
+
+<p>I decided to update the example to use <a href="http://leafletjs.com/">Leaflet.js</a> to make a real map that looked and felt as close to the original example as possible. In particular, I wanted to preserve the color-coded circles (red for private, blue for public parties) labeled with the number of RSVPs, and the larger animated circle indicating which party is currently selected, with its details displayed in a section outside the map. This is a useful pattern for displaying individual marker details without using a popup that occludes part of the map.</p>
+
+<p>Here is the <a href="http://www.chicago-parties.meteor.com">end result</a> with <a href="https://github.com/pkaushik/parties">source code</a>. In the next two posts, I will go over the changes I made to the original example. I won&rsquo;t be covering how Meteor works, and will assume you have some understanding of how the parties example works as well.</p>
+
+<h3>Setting the Stage</h3>
+
+
+<p>First off, I created the example and added leaflet to the project using <a href="http://oortcloud.github.io/meteorite/">Meteorite</a>.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ meteor create --example parties
+</span><span class='line'>
+</span><span class='line'>$ cd parties
+</span><span class='line'>
+</span><span class='line'>$ mrt add leaflet
+</span><span class='line'>leaflet: Leaflet.js, mobile-friendly interactive maps....</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I then edited the <code>page</code> template to use Bootstrap&rsquo;s fluid classes to generate a <a href="http://getbootstrap.com/2.3.2/scaffolding.html#responsive">responsive page layout</a> and added a <code>window.resize()</code> handler to adjust the map&rsquo;s size as the browser is resized. I use this pattern when creating responsive Leaflet maps, and it&rsquo;s not specific to Meteor.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;container-fluid&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;row-fluid&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;span4&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      {{&gt; details}}
+</span><span class='line'>      {{#if currentUser}}
+</span><span class='line'>      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;pagination-centered&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;em&gt;&lt;small&gt;</span>Double click the map to post a party!<span class="nt">&lt;/small&gt;&lt;/em&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>      {{/if}}
+</span><span class='line'>    <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;span8&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        {{&gt; map}}
+</span><span class='line'>    <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">resize</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">h</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">height</span><span class="p">(),</span> <span class="nx">offsetTop</span> <span class="o">=</span> <span class="mi">90</span><span class="p">;</span> <span class="c1">// Calculate the top offset</span>
+</span><span class='line'>  <span class="nx">$mc</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#map_canvas&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">$mc</span><span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;height&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">h</span> <span class="o">-</span> <span class="nx">offsetTop</span><span class="p">));</span>
+</span><span class='line'><span class="p">}).</span><span class="nx">resize</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<h3>Map Initialization</h3>
+
+
+<p><a href="http://stamen.com/">Stamen Design</a>&rsquo;s <a href="http://maps.stamen.com/toner/#12/37.7706/-122.3782">toner themed map tiles</a> make a nice replacement for the black &amp; white map image in the example. I disabled double-click and touch zoom when initializing the map since those actions are how users create new parties, and I increased tile opacity to lighten the overall background and improve the visibility of markers on the map. Leaflet initialization code goes into the <code>map</code> template&rsquo;s <code>rendered()</code> callback.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">map</span> <span class="o">=</span> <span class="nx">L</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#map_canvas&#39;</span><span class="p">),</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">doubleClickZoom</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">touchZoom</span><span class="o">:</span> <span class="kc">false</span>
+</span><span class='line'><span class="p">}).</span><span class="nx">setView</span><span class="p">(</span><span class="k">new</span> <span class="nx">L</span><span class="p">.</span><span class="nx">LatLng</span><span class="p">(</span><span class="mf">41.8781136</span><span class="p">,</span> <span class="o">-</span><span class="mf">87.66677956445312</span><span class="p">),</span> <span class="mi">13</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">L</span><span class="p">.</span><span class="nx">tileLayer</span><span class="p">(</span><span class="s1">&#39;http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">opacity</span><span class="o">:</span> <span class="p">.</span><span class="mi">5</span><span class="p">}).</span><span class="nx">addTo</span><span class="p">(</span><span class="nx">map</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The next significant change was to replace the <code>map</code> template&rsquo;s event handler from the original example with Leaflet&rsquo;s <code>"dblclick"</code> event handler to manage the creation of new parties. The Leaflet version conveniently returns a <code>LatLng</code> which I saved to a Session variable before triggering <code>createDialog</code>. The mechanism to trigger dialogs by setting the associated Session variables <code>Session.showCreateDialog</code> and <code>Session.showInviteDialog</code> is unchanged from the original example, and it works because Meteor Session variables are <a href="http://docs.meteor.com/#reactivity">reactive</a>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">map</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;dblclick&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="o">!</span> <span class="nx">Meteor</span><span class="p">.</span><span class="nx">userId</span><span class="p">())</span> <span class="c1">// must be logged in to create parties</span>
+</span><span class='line'>    <span class="k">return</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">Session</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;createCoords&quot;</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">latlng</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">Session</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;showCreateDialog&quot;</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;template</span> <span class="na">name=</span><span class="s">&quot;page&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  {{#if showCreateDialog}}
+</span><span class='line'>    {{&gt; createDialog}}
+</span><span class='line'>  {{/if}}
+</span><span class='line'>  ...
+</span><span class='line'>  ...
+</span><span class='line'><span class="nt">&lt;/template&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Creating and Saving a Party to the Database</h3>
+
+
+<p>This part of the application is also more or less unchanged from the original example except that I passed the party&rsquo;s <code>LatLng</code> (instead of click position) along with other details from the <code>createDialog</code> template to the <code>Meteor.methods()</code> call to <code>createParty</code>. If the callback is successful, the new party&rsquo;s <code>_id</code> is saved to another reactive Session variable <code>Session.selected</code>, which drives the <code>details</code> template on the left.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">title</span> <span class="o">=</span> <span class="nx">template</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s2">&quot;.title&quot;</span><span class="p">).</span><span class="nx">value</span><span class="p">;</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">description</span> <span class="o">=</span> <span class="nx">template</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s2">&quot;.description&quot;</span><span class="p">).</span><span class="nx">value</span><span class="p">;</span>
+</span><span class='line'><span class="kd">var</span> <span class="kr">public</span> <span class="o">=</span> <span class="o">!</span> <span class="nx">template</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s2">&quot;.private&quot;</span><span class="p">).</span><span class="nx">checked</span><span class="p">;</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">latlng</span> <span class="o">=</span> <span class="nx">Session</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;createCoords&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">Meteor</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="s1">&#39;createParty&#39;</span><span class="p">,</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">title</span><span class="o">:</span> <span class="nx">title</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">description</span><span class="o">:</span> <span class="nx">description</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">latlng</span><span class="o">:</span> <span class="nx">latlng</span><span class="p">,</span>
+</span><span class='line'>  <span class="kr">public</span><span class="o">:</span> <span class="kr">public</span>
+</span><span class='line'><span class="p">},</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">partyId</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="o">!</span> <span class="nx">error</span><span class="p">)</span> <span class="p">{</span> <span class="c1">//party was successfully added to the server&#39;s mongo collection</span>
+</span><span class='line'>    <span class="nx">Session</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;selected&quot;</span><span class="p">,</span> <span class="nx">partyId</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">...</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Adding Markers to the Map in Realtime</h3>
+
+
+<p>As soon as a new party is added to the Parties mongo collection on the server, behind the scenes, Meteor transmits it back to a client-side minimongo collection with the same name on all connected and authorized clients. This can be verified by typing <code>Parties.findOne()</code> into the JavaScript console. This is well and good, but the next task is to replace the <a href="http://d3js.org">D3</a> code to draw circles from the original example with code to add Leaflet markers to the map.</p>
+
+<p>To do that, I hooked up a <code>cursor.observe()</code> <code>added()</code> callback to create the map marker and I added a click handler to the marker to update the <code>Session.selected</code> variable with the party&rsquo;s <code>_id</code>. As users click on different parties, this reactively triggers the context for the <code>details</code> template on the left. I also saved a reference to the marker in a local <code>markers</code> hash to efficiently access the marker for future changes. Since we only need to set this up once, I put this code into the <code>map</code> template&rsquo;s <code>created()</code> callback.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">map</span><span class="p">,</span> <span class="nx">markers</span> <span class="o">=</span> <span class="p">{};</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">Template</span><span class="p">.</span><span class="nx">map</span><span class="p">.</span><span class="nx">created</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">Parties</span><span class="p">.</span><span class="nx">find</span><span class="p">({}).</span><span class="nx">observe</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">added</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">party</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">marker</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">L</span><span class="p">.</span><span class="nx">Marker</span><span class="p">(</span><span class="nx">party</span><span class="p">.</span><span class="nx">latlng</span><span class="p">,</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">_id</span><span class="o">:</span> <span class="nx">party</span><span class="p">.</span><span class="nx">_id</span><span class="p">,</span>
+</span><span class='line'>        <span class="nx">icon</span><span class="o">:</span> <span class="nx">createIcon</span><span class="p">(</span><span class="nx">party</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">}).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">Session</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;selected&quot;</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">_id</span><span class="p">);</span>
+</span><span class='line'>      <span class="p">});</span>
+</span><span class='line'>      <span class="nx">map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">marker</span><span class="p">);</span>
+</span><span class='line'>      <span class="nx">markers</span><span class="p">[</span><span class="nx">marker</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">_id</span><span class="p">]</span> <span class="o">=</span> <span class="nx">marker</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="p">...</span>
+</span><span class='line'>    <span class="p">...</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The final bit of fanciness here is my <code>createIcon()</code> helper function to create a lightweight <code>DivIcon</code> that uses a simple <code>div</code> element instead of an image icon. I used CSS <code>border-radius</code> to style the <code>div</code> as a circle of the appropriate color and set CSS <code>line-height</code> to the height of the <code>div</code> to vertically center the text. The <code>attending()</code> helper function from the original example returns the number of Yes RSVPs.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">createIcon</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">party</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;leaflet-div-icon &#39;</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">className</span> <span class="o">+=</span> <span class="nx">party</span><span class="p">.</span><span class="kr">public</span> <span class="o">?</span> <span class="s1">&#39;public&#39;</span> <span class="o">:</span> <span class="s1">&#39;private&#39;</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">L</span><span class="p">.</span><span class="nx">divIcon</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">iconSize</span><span class="o">:</span> <span class="p">[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span> <span class="c1">// set size to 30px x 30px</span>
+</span><span class='line'>    <span class="nx">html</span><span class="o">:</span> <span class="s1">&#39;&lt;b&gt;&#39;</span> <span class="o">+</span> <span class="nx">attending</span><span class="p">(</span><span class="nx">party</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&lt;/b&gt;&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">className</span><span class="o">:</span> <span class="nx">className</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="p">.</span><span class="nx">leaflet</span><span class="o">-</span><span class="nx">div</span><span class="o">-</span><span class="nx">icon</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">border</span><span class="o">-</span><span class="nx">radius</span><span class="o">:</span> <span class="mi">50</span><span class="o">%</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">border</span><span class="o">:</span> <span class="nx">none</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">line</span><span class="o">-</span><span class="nx">height</span><span class="o">:</span> <span class="mi">30</span><span class="nx">px</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">font</span><span class="o">-</span><span class="nx">family</span><span class="o">:</span> <span class="nx">verdana</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">text</span><span class="o">-</span><span class="nx">align</span><span class="o">:</span> <span class="nx">center</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">color</span><span class="o">:</span> <span class="nx">white</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">opacity</span><span class="o">:</span> <span class="p">.</span><span class="mi">8</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">vertical</span><span class="o">-</span><span class="nx">align</span><span class="o">:</span> <span class="nx">middle</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">.</span><span class="nx">leaflet</span><span class="o">-</span><span class="nx">div</span><span class="o">-</span><span class="nx">icon</span><span class="p">.</span><span class="kr">public</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">background</span><span class="o">:</span> <span class="err">#</span><span class="mi">49</span><span class="nx">AFCD</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">.</span><span class="nx">leaflet</span><span class="o">-</span><span class="nx">div</span><span class="o">-</span><span class="nx">icon</span><span class="p">.</span><span class="kr">private</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">background</span><span class="o">:</span> <span class="err">#</span><span class="nx">DA4F49</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now I can log in and create a few parties, and they all show up as markers with the appropriate color and label. When I click on a marker, its details are automatically rendered into the <code>details</code> template on the left. But there&rsquo;s no visual indication <em>on the map</em> as to which party is currently selected &mdash; I just need to remember which marker I clicked on last! As it turns out, this usability quirk is easy to address.</p>
+
+<p><a href="http://asynchrotron.com/blog/2013/12/28/realtime-maps-with-meteor-and-leaflet-part-2/">Part Two: Updating and deleting parties, and animating the selected party indicator&hellip;</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[The Connection Between Google Glasses and Self-driving Humanoids]]></title>
+    <link href="http://asynchrotron.com/blog/2012/06/07/the-connection-between-google-glasses-and-self-driving-humanoids/"/>
+    <updated>2012-06-07T09:17:00-05:00</updated>
+    <id>http://asynchrotron.com/blog/2012/06/07/the-connection-between-google-glasses-and-self-driving-humanoids</id>
+    <content type="html"><![CDATA[<p><a href="http://www.holovaty.com/">Adrian Holovaty</a> recently wrote about <a href="http://www.holovaty.com/writing/streetview/">the connection between Google Street View and driverless cars</a>. Towards the end, he wondered whether the decision to record all sensor / locational metadata along with pictures came before the idea of using it to train machine learning algorithms (or vice versa). I&rsquo;d apply <a href="http://en.wikipedia.org/wiki/Occam's_razor">Occam&rsquo;s razor</a> here &mdash; i.e., I&rsquo;m pretty certain the idea of capturing the data came first.</p>
+
+<p>But what&rsquo;s more interesting is that it presents a whole new angle on what <a href="https://plus.google.com/111626127367496192147">Project Glass</a> enables: Widespread lifelogging by humans (and not just cars) to cloud-based storage. Add offline speech to text, face recognition, OCR, etc. and you have prosthetic memory.</p>
+
+<p>A tiny step towards &ldquo;self-driving&rdquo; humanoids.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Hello Meteor!]]></title>
+    <link href="http://asynchrotron.com/blog/2012/05/22/hello-meteor/"/>
+    <updated>2012-05-22T15:22:00-05:00</updated>
+    <id>http://asynchrotron.com/blog/2012/05/22/hello-meteor</id>
+    <content type="html"><![CDATA[<p>Here are the <a href="https://speakerdeck.com/u/pkaushik/p/meteor">slides</a> from my <a href="http://www.meetup.com/js-chi/events/59833642">JS.Chi() talk on Meteor</a>. I will follow up with posts expanding on most of the slides in the presentation. This post, however, is for the benefit of all those who are feeling like they might be missing a step with frameworks like Backbone, Ember, (and now Meteor), et. al. It is an overview of the types of problems they&rsquo;re solving and includes recommendations for further reading.</p>
+
+<!--more-->
+
+
+<p></p>
+
+<script async class="speakerdeck-embed" data-id="4fbbc61f15a68f001f027e5a" data-ratio="1.2945638432364097" src="http://asynchrotron.com//speakerdeck.com/assets/embed.js"></script>
+
+
+
+
+<br/>
+
+
+<br/>
+
+
+
+
+<h3>First a brief note about MVC</h3>
+
+
+<p></p>
+
+<p>The Model-View-Controller application architecture (MVC) is used in most modern applications to separate an application’s data from its business rules and user interface. Briefly, Models represent an application’s data and functions to access it. Views represent information presented to the user. Controllers represent intermediary resources required to generate Views. The MVC pattern isn&rsquo;t new (it can be traced back to Smalltalk), but it was popularized , along with the REST style of client-server API design, by server-side web frameworks such as Rails and Django.</p>
+
+<h3>So what&#8217;s all the fuss about JavaScript MVC frameworks (Backbone, Ember, et. al.)?</h3>
+
+
+<p>If you think of the screens &ndash; or pages &ndash; in your application as different &ldquo;states&rdquo; in your application, server-side frameworks require a round trip back to the server when the user goes from one application state to another. This is fine for content-heavy apps or websites. Or if you&rsquo;re accessing the pages via an ethernet cable or 802.11. But when you move to high latency connections and along the continuum &mdash; and I believe it really is a continuum &mdash; from a web site to a web app, you can deliver a much better user experience if you avoid the server round trip for each state change, and instead switch from state to state on the client, within a single browser page load cycle.</p>
+
+<p>This saves you all of the overhead of destroying and recreating the DOM tree, flushing browser context (JavaScript, CSS, etc.) on each new page load. You also are transmitting less data on the wire (or ether) since HTML is generated on the client, and only JSON passed over the network. Both of these factors (page refresh time and network traffic optimization) are significant when you consider the fact that more and more internet usage is taking place via mobiles and tablets.</p>
+
+<p>You would still need a server to authenticate users and perform other privileged operations, and to store the &ldquo;official&rdquo; version of the data that different clients synchronize with, but instead of sending dynamically created HTML to the client (a la aforementioned server-side frameworks) the server would send as much data as needed (typically as JSON) to the client, and the client would create all of the different application states dynamically. The problem with this approach &mdash; and I&rsquo;ve been writing apps this way since 2008, without the benefit of any client side frameworks &mdash; is that they quickly turn into a mass of spaghetti code.</p>
+
+<p>This is where the likes of Backbone, Ember, etc. come in. They are a re-imagination of the MVC application architecture for JavaScript application development in the client, where all (or nearly all) application states are handled in the client, in JavaScript. They provide a way to structure your JavaScript applications in a more organized MVC style.</p>
+
+<p><a href="http://addyosmani.com/largescalejavascript/">Addy Osmani&rsquo;s articles</a>, and especially his <a href="http://addyosmani.github.com/backbone-fundamentals/">Backbone Fundamentals book</a> are a great place to start reading more about this. Although it&rsquo;s focused on one specific framework (Backbone), it has a good overview of MVC and how the pattern has moved from server side frameworks (like Rails, Django) to the client side (Backbone, et. al.).</p>
+
+<p>I also wholeheartedly recommend his <a href="http://addyosmani.com/scalable-javascript-videos/">recent talks on providing structure to JavaScript apps</a>.</p>
+
+<p>And this is a useful <a href="http://codebrief.com/2012/01/the-top-10-javascript-mvc-frameworks-reviewed/">comparison of various front-end frameworks</a>, although the conclusions should be taken with a grain of salt (it&rsquo;s one persons&rsquo;s perspective, and things are not quite as quantifiable as the article suggests).</p>
+
+<p>So, all of these are client side frameworks, which solve the problems of a) separating client side code into MVC, and b) optionally, allowing views to &ldquo;observe&rdquo; client side models, so that views get updated automatically as the data in the models is updated or as new data arrives from the server.</p>
+
+<p>This gets you pretty far, but all of these applications have something else in common which the previously mentioned MVC frameworks don&rsquo;t address: They need to send data back to the server and know if data has changed on the server. In other words, they need to synchronize client side models with the server side models.</p>
+
+<h3>Enter Meteor.</h3>
+
+
+<p></p>
+
+<p><a href="http://meteor.com">Meteor</a> is a full stack framework for end-to-end JavaScript applications. The beauty of coding it all in JavaScript is that you can easily implement the observer pattern (views watching for changes to the models) all the way to the server side. Meteor apps can subscribe to models (or subsets of models) on the server, and meteor takes care of all of the plumbing. This really is the bleeding edge of JS today.</p>
+
+<p>For more on the problems Meteor solves, read the <a href="http://docs.meteor.com/">meteor docs</a> from the intro section through to as many of the detailed concepts you&rsquo;re interested in. Or come to <a href="http://www.meetup.com/js-chi/events/59833642">my talk at JS.Chi()</a> and we will work through it together.</p>
+
+<p>Have fun!</p>
+]]></content>
+  </entry>
+  
+</feed>

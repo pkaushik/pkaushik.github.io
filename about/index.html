@@ -1,0 +1,331 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Pallavi Anderson</title>
+  <meta name="author" content="Pallavi Anderson">
+
+  
+  <meta name="description" content="Pallavi Anderson lives in Chicago&rsquo;s West Loop with her husband, having previously resided in Boston, Bangalore, Bombay, Riyadh and Dammam. She &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://asynchrotron.com/about">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Pallavi Anderson" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-46755130-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Pallavi Anderson</a></h1>
+  
+    <h2>data-driven and context-aware</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:asynchrotron.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <p>Pallavi Anderson lives in Chicago&rsquo;s West Loop with her husband, having previously resided in Boston, Bangalore, Bombay, Riyadh and Dammam. She enjoys global travel, international cuisine, and the occasional Thinkgeek puzzle.</p>
+
+<p>An alumnus of the <a href="http://www.media.mit.edu/research/groups/changing-places">MIT Media Lab</a> with a prior degree in Architecture, she has conducted research on urban redevelopment &amp; transportation infrastructure in Bombay, <a href="http://architecture.mit.edu/house_n/placelab.html">aging-in-place &amp; assistive (“smart”) home technologies</a>, developed a bilingual mobile application to support monitoring TB patients in rural India, and has previously been featured on <a href="http://architecture.mit.edu/house_n/videos/PlaceLabDiscoveryChannel04.asf">Discovery Channel Canada</a> (asf movie clip) &amp; <a href="http://science.slashdot.org/science/08/02/09/1825201.shtml">Slashdot</a>. One of her primary interests is figuring out how to broaden the reach of technology to all members of society, particularly those who are part of under-served communities. She recently led a team of Chicago students to build an English-Spanish web and smartphone application to help the residents of Chicago&rsquo;s Little Village participate in the planning, design and use of their new park.</p>
+
+<p>Statements and opinions on this site are her own, and do not necessarily represent positions, strategies, or opinions of her present or past employers.</p>
+
+<p><link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.css" /></p>
+
+<script type="text/javascript" src="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.js"></script>
+
+
+<p><link rel="stylesheet" href="/javascripts/custom/leaflet-label.css" /></p>
+
+<script type="text/javascript" src="/javascripts/custom/leaflet-label.js"></script>
+
+
+
+
+<div id="map"></div>
+
+
+
+
+<script type="text/javascript">
+  var map = L.map('map').setView([30.8, 0], 2);
+  L.tileLayer('http://{s}.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg', {
+      maxZoom: 18,
+      minZoom: 2
+  }).addTo(map);
+  
+  map.attributionControl.setPrefix(''); 
+    var attribution = new L.Control.Attribution();
+  attribution.addAttribution("Geocoding data &copy; 2013 <a href='http://open.mapquestapi.com'>MapQuest, Inc.</a>");
+  attribution.addAttribution("Map tiles by <a href='http://stamen.com'>Stamen Design</a> under <a href='http://creativecommons.org/licenses/by/3.0'>CC BY 3.0</a>.");
+  attribution.addAttribution("Data by <a href='http://openstreetmap.org'>OpenStreetMap</a> under <a href='http://creativecommons.org/licenses/by-sa/3.0'>CC BY SA</a>.");
+  map.addControl(attribution);
+  
+  var livedIn = [{
+      city: "Bombay", population: "20.5M", livedin: "all the rest", 
+      coords: [18.9750, 72.8258], labelDir: "left", labelAnchor: [-6, 10]
+    }, {
+      city: "Riyadh", population: "5.2M", livedin: "1981-1985", 
+      coords: [24.6333, 46.7167], labelDir: "left", labelAnchor: [-6, -10]
+    }, {
+      city: "Dammam", population: "2M", livedin: "1987-1990", 
+      coords: [26.2833, 50.2000], labelDir: "right", labelAnchor: [-6, -10]
+    }, {
+      city: "Bangalore", population: "8.5M", livedin: "1998-2003", 
+      coords: [12.9667, 77.5667], labelDir: "right", labelAnchor: [-6, 10]
+    }, {
+      city: "Boston", population: "2.5M", livedin: "2003-2005", 
+      coords: [42.3581, -71.0636], labelDir: "right", labelAnchor: [-6, 10]
+    }, {
+      city: "Chicago", population: "8.7M", livedin: "2005-now", 
+      coords: [41.8819, -87.6278], labelDir: "left", labelAnchor: [-6, 10]
+    }
+  ]
+  
+  for (var i = 0; i < livedIn.length; i++) {
+    var l = livedIn[i];
+    var marker = L.marker(l.coords, {
+      icon: L.divIcon({
+        iconSize: [10, 10],
+        className: "leaflet-div-icon",
+        labelAnchor: l.labelAnchor
+      })
+    }).addTo(map);
+    
+    marker.bindLabel(/*l.city + "<br>" + l.population + "<br>" + */l.livedin, {
+      direction: l.labelDir,
+      noHide: true
+    }).showLabel();
+  }
+  
+  
+</script>
+
+
+  
+    <footer>
+      <p class="meta">
+        
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-22T14:25:00-05:00" pubdate data-updated="true">May 22<span>nd</span>, 2012</time>
+        
+      </p>
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://asynchrotron.com/about/index.html" data-via="pkaushik" data-counturl="http://asynchrotron.com/about/index.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/12/28/realtime-maps-with-meteor-and-leaflet-part-2/">Realtime Maps With Meteor and Leaflet - Part Two</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/12/27/realtime-maps-with-meteor-and-leaflet/">Realtime Maps With Meteor and Leaflet - Part One</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/07/the-connection-between-google-glasses-and-self-driving-humanoids/">The Connection Between Google Glasses and Self-driving Humanoids</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/05/22/hello-meteor/">Hello Meteor!</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/pkaushik">@pkaushik</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'pkaushik',
+            count: 4,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <a class="twitter-timeline" href="https://twitter.com/pkaushik" data-widget-id="416085902973095936" data-chrome="noborders noheader nofooter noscrollbar transparent" data-tweet-limit="5">Tweets by @pkaushik</a>
+  
+   <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+   
+   <script type="text/javascript">
+   window.setTimeout(function(){
+     $(".twitter-timeline").contents()
+            .find(".e-entry-title")
+            .css("font-family","'PT Sans', 'Helvetica Neue', Arial, sans-serif");
+     $(".twitter-timeline").contents()
+           .find(".tweet")
+           .css("font-family","'PT Sans', 'Helvetica Neue', Arial, sans-serif");
+   }, 1000);
+   </script>
+   <br/><br/>
+  
+   
+     <p>Follow <a href="http://twitter.com/pkaushik">@pkaushik</a></p>
+   
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Pallavi Anderson -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a> and <a href="http://github.com">Github</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'asynchrotron';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://asynchrotron.com/about/index.html';
+        var disqus_url = 'http://asynchrotron.com/about/index.html';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
