@@ -11,6 +11,7 @@ In the [last post]({{root_dir}}/blog/2013/12/27/realtime-maps-with-meteor-and-le
 <!--more-->
 <h3>Updating Party Details in the Database</h3>
 A party document looks something like this:
+
 ``` js
 {
   _id: "22dQwpajD64LCv4QW",
@@ -35,6 +36,7 @@ A party document looks something like this:
   ]
 }
 ```
+
 Each party contains an array of RSVP objects, which must be updated when any user adds or updates their RSVP to the party. In addition, private parties contain a set of invited users' ids; the party owner can invite additional users at any time. So `rsvps` and `invited` are the two mutable party attributes in our example. The owner, title, description, coordinates or public/private setting cannot be changed, but a party's owner can delete the party if no user is RSVPd as Yes.
 
 The code to update and delete parties in the server-side mongo collection is virtually unchanged from the original. The `invite()` and `rsvp()` template event handlers are hooked to `Meteor.methods()` calls that perform the necessary checks before updating the mongo collection on the server. As usual, behind the scenes, Meteor synchronizes the client-side minimongo collection with the server collection.
@@ -62,6 +64,7 @@ Template.map.created = function() {
   });
 }
 ```
+
 <h3>Using a Halo Marker to Indicate Which Party Is Selected</h3>
 {% imgcap right /images/custom/selected-party.png a selected party %} 
 
