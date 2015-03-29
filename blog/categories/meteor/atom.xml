@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Meteor | Pallavi Anderson]]></title>
   <link href="http://asynchrotron.com/blog/categories/meteor/atom.xml" rel="self"/>
   <link href="http://asynchrotron.com/"/>
-  <updated>2014-04-23T16:32:05-05:00</updated>
+  <updated>2015-03-28T23:18:11-05:00</updated>
   <id>http://asynchrotron.com/</id>
   <author>
     <name><![CDATA[Pallavi Anderson]]></name>
@@ -31,38 +31,33 @@
 <h3>Updating Party Details in the Database</h3>
 
 
-<p>A party document looks something like this:
-``` js
-{
-  _id: &ldquo;22dQwpajD64LCv4QW&rdquo;,
-  title: &ldquo;1871&rdquo;,
-  description: &ldquo;Party like it&rsquo;s 1871!&rdquo;,
-  latlng: {</p>
+<p>A party document looks something like this:</p>
 
-<pre><code>lat: 41.88298161317542,
-lng:  -87.63811111450194
-</code></pre>
-
-<p>  },
+<pre><code class="js">{
+  _id: "22dQwpajD64LCv4QW",
+  title: "1871",
+  description: "Party like it's 1871!",
+  latlng: {
+    lat: 41.88298161317542,
+    lng:  -87.63811111450194
+  },
   public: false,
-  owner: &ldquo;52xdsNjprquesL2tQ&rdquo;,
-  invited: [&ldquo;52xdsNjprquesL2tQ&rdquo;, &ldquo;ci7bzkJCpH9R7HCZK&rdquo;, &ldquo;5qhRdKFcsmPnxZKBr&rdquo;]
-  rsvps: [</p>
-
-<pre><code>{
-  rsvp: "yes",
-  user: "52xdsNjprquesL2tQ"
-},
-{
-  rsvp: "maybe",
-  user: "ci7bzkJCpH9R7HCZK"
+  owner: "52xdsNjprquesL2tQ",
+  invited: ["52xdsNjprquesL2tQ", "ci7bzkJCpH9R7HCZK", "5qhRdKFcsmPnxZKBr"]
+  rsvps: [
+    {
+      rsvp: "yes",
+      user: "52xdsNjprquesL2tQ"
+    },
+    {
+      rsvp: "maybe",
+      user: "ci7bzkJCpH9R7HCZK"
+    }
+  ]
 }
 </code></pre>
 
-<p>  ]
-}
-<code>``
-Each party contains an array of RSVP objects, which must be updated when any user adds or updates their RSVP to the party. In addition, private parties contain a set of invited users' ids; the party owner can invite additional users at any time. So</code>rsvps<code>and</code>invited` are the two mutable party attributes in our example. The owner, title, description, coordinates or public/private setting cannot be changed, but a party&rsquo;s owner can delete the party if no user is RSVPd as Yes.</p>
+<p>Each party contains an array of RSVP objects, which must be updated when any user adds or updates their RSVP to the party. In addition, private parties contain a set of invited users&#8217; ids; the party owner can invite additional users at any time. So <code>rsvps</code> and <code>invited</code> are the two mutable party attributes in our example. The owner, title, description, coordinates or public/private setting cannot be changed, but a party&rsquo;s owner can delete the party if no user is RSVPd as Yes.</p>
 
 <p>The code to update and delete parties in the server-side mongo collection is virtually unchanged from the original. The <code>invite()</code> and <code>rsvp()</code> template event handlers are hooked to <code>Meteor.methods()</code> calls that perform the necessary checks before updating the mongo collection on the server. As usual, behind the scenes, Meteor synchronizes the client-side minimongo collection with the server collection.</p>
 
@@ -71,29 +66,25 @@ Each party contains an array of RSVP objects, which must be updated when any use
 
 <p>I hooked up the <code>cursor.observe()</code> <code>changed()</code> callback to update the party&rsquo;s icon, and <code>removed()</code> callback to delete the marker from the map and the local <code>markers</code> hash.</p>
 
-<p>``` js
-var map, markers = {};</p>
+<pre><code class="js">var map, markers = {};
 
-<p>Template.map.created = function() {
-  Parties.find({}).observe({</p>
-
-<pre><code>added: function(party) {/* see previous post */},
-changed: function(party) {
-  var marker = markers[party._id];
-  if (marker) marker.setIcon(createIcon(party));
-},
-removed: function(party) {
-  var marker = markers[party._id];
-  if (map.hasLayer(marker)) {
-    map.removeLayer(marker);
-    delete markers[party._id];
-  }
+Template.map.created = function() {
+  Parties.find({}).observe({
+    added: function(party) {/* see previous post */},
+    changed: function(party) {
+      var marker = markers[party._id];
+      if (marker) marker.setIcon(createIcon(party));
+    },
+    removed: function(party) {
+      var marker = markers[party._id];
+      if (map.hasLayer(marker)) {
+        map.removeLayer(marker);
+        delete markers[party._id];
+      }
+    }
+  });
 }
 </code></pre>
-
-<p>  });
-}
-```</p>
 
 <h3>Using a Halo Marker to Indicate Which Party Is Selected</h3>
 
@@ -102,27 +93,26 @@ removed: function(party) {
 
 <p>Up to this point, there&rsquo;s been no visual indication <em>on the map</em> as to which party is currently selected. Like in the original Parties example, I solved this by creating a 50px x 50px transparent grey circular marker and making it concentric with the currently selected party&rsquo;s marker such that it formed a 20px halo around the selected party. The halo marker is purely a UI artefact that does not need to be saved on the server.</p>
 
-<p><code>js
-L.divIcon({
+<pre><code class="js">L.divIcon({
   iconSize: [50, 50], // set to 50px x 50px
   className: 'leaflet-animated-div-icon'
 }
-</code>
-<code>js
-.leaflet-animated-div-icon {
+</code></pre>
+
+<pre><code class="js">.leaflet-animated-div-icon {
   border-radius: 50%;
   border: none;
   opacity: .2;
   background: black;
 }
-</code></p>
+</code></pre>
 
 <h3>Animating the Halo Marker</h3>
 
 
 <p>For a final flourish, I used the <code>AnimatedMarker</code> Leaflet <a href="https://github.com/openplans/Leaflet.AnimatedMarker">plugin</a> from <a href="http://openplans.org/">OpenPlans</a> to animate the halo&rsquo;s movement on the map when a user selects different parties rather than simply making it reappear at a different location. <code>AnimatedMarker</code> takes a Leaflet <code>polyline</code> object as the first argument to its initialize function, and draws a marker at the beginning of the polyline, which it then animates along the <code>polyline</code> at a speed (in meters/ms) that&rsquo;s configurable via a second argument.</p>
 
-<p>I needed to make a minor tweak to the plugin&rsquo;s source code to support my needs: <code>AnimatedMarker</code> does not allow setting the animation <code>polyline</code> after the marker is initialized. In other words, it requires the animation path to be known before creating the marker. I wanted to create the marker around the currently selected party without knowledge of it&rsquo;s future animation path, and to set the animation path dynamically as soon as a user selected a different marker &mdash; the path would be a segment from the current location to the center of the selected marker. To accomplish this, all I needed to do was reset the animation index in the marker&rsquo;s <code>setLine</code> method. This modification is available at <a href="https://github.com/pkaushik/Leaflet.AnimatedMarker">my fork</a> on github.</p>
+<p>I needed to make a minor tweak to the plugin&rsquo;s source code to support my needs: <code>AnimatedMarker</code> does not allow setting the animation <code>polyline</code> after the marker is initialized. In other words, it requires the animation path to be known before creating the marker. I wanted to create the marker around the currently selected party without knowledge of it&rsquo;s future animation path, and to set the animation path dynamically as soon as a user selected a different marker &ndash; the path would be a segment from the current location to the center of the selected marker. To accomplish this, all I needed to do was reset the animation index in the marker&rsquo;s <code>setLine</code> method. This modification is available at <a href="https://github.com/pkaushik/Leaflet.AnimatedMarker">my fork</a> on github.</p>
 
 <p>And ta-da! This is the end result: <a href="http://www.chicago-parties.meteor.com">http://www.chicago-parties.meteor.com</a> with <a href="https://github.com/pkaushik/parties">source code for the complete application</a>. You need to log in with a github account to create or RSVP to parties.</p>
 ]]></content>
@@ -133,9 +123,9 @@ L.divIcon({
     <link href="http://asynchrotron.com/blog/2013/12/27/realtime-maps-with-meteor-and-leaflet/"/>
     <updated>2013-12-27T20:51:10-06:00</updated>
     <id>http://asynchrotron.com/blog/2013/12/27/realtime-maps-with-meteor-and-leaflet</id>
-    <content type="html"><![CDATA[<p><span class='caption-wrapper'><img class='caption' src='https://raw.github.com/meteor/meteor/devel/examples/parties/public/soma.png">https://raw.github.com/meteor/meteor/devel/examples/parties/public/soma.png</a>' width='350' height='350' title='this &lsquo;map&rsquo; is actually a static image'><span class='caption-text'>this &lsquo;map&rsquo; is actually a static image</span></span></p>
+    <content type="html"><![CDATA[<p><span class='caption-wrapper'><img class='caption' src='https://raw.github.com/meteor/meteor/devel/examples/parties/public/soma.png">https://raw.github.com/meteor/meteor/devel/examples/parties/public/soma.png</a>&#8217; width=&#8217;350&#8217; height=&#8217;350&#8217; title=&#8217;this &lsquo;map&rsquo; is actually a static image&#8217;><span class='caption-text'>this &lsquo;map&rsquo; is actually a static image</span></span></p>
 
-<p>The <a href="https://www.meteor.com/examples/parties">parties example</a> bundled with <a href="http://www.meteor.com">Meteor</a> is a nifty demonstration of the framework&rsquo;s core principles, but it uses a <a href="https://github.com/meteor/meteor/blob/devel/examples/parties/public/soma.png">500 x 500 pixel image of downtown San Francisco</a> as a faux map. This means that we cannot pan or zoom the &ldquo;map,&rdquo; and when we double-click the image to create new parties, the circle markers are drawn at the position of the clicks in relation to the <em>image element in the browser window</em>, and not at geospatial coordinates.</p>
+<p>The <a href="https://github.com/meteor/meteor/tree/devel/examples/other/parties">parties example</a> bundled with <a href="http://www.meteor.com">Meteor</a> is a nifty demonstration of the framework&rsquo;s core principles, but it uses a <a href="https://raw.githubusercontent.com/meteor/meteor/devel/examples/other/parties/public/soma.png">500 x 500 pixel image of downtown San Francisco</a> as a faux map. This means that we cannot pan or zoom the &ldquo;map,&rdquo; and when we double-click the image to create new parties, the circle markers are drawn at the position of the clicks in relation to the <em>image element in the browser window</em>, and not at geospatial coordinates.</p>
 
 <!--more-->
 
@@ -149,175 +139,159 @@ L.divIcon({
 <h3>Setting the Stage</h3>
 
 
-<p>First off, I created the example and added leaflet to the project using <a href="http://oortcloud.github.io/meteorite/">Meteorite</a>.
-```
-$ meteor create &mdash;example parties</p>
+<p>First off, I created the example and added leaflet to the project using <a href="http://oortcloud.github.io/meteorite/">Meteorite</a>.</p>
 
-<p>$ cd parties</p>
+<pre><code>$ meteor create --example parties
 
-<p>$ mrt add leaflet
-leaflet: Leaflet.js, mobile-friendly interactive maps&hellip;.
-<code>``
-I then edited the</code>page<code>template to use Bootstrap's fluid classes to generate a [responsive page layout](http://getbootstrap.com/2.3.2/scaffolding.html#responsive) and added a</code>window.resize()` handler to adjust the map&rsquo;s size as the browser is resized. I use this pattern when creating responsive Leaflet maps, and it&rsquo;s not specific to Meteor.</p>
+$ cd parties
 
-<p>``` html
-<div class="container-fluid">
-  <div class="row-fluid"></p>
+$ mrt add leaflet
+leaflet: Leaflet.js, mobile-friendly interactive maps....
+</code></pre>
 
-<pre><code>&lt;div class="span4"&gt;
-  {{&gt; details}}
-  {{#if currentUser}}
-  &lt;div class="pagination-centered"&gt;
-    &lt;em&gt;&lt;small&gt;Double click the map to post a party!&lt;/small&gt;&lt;/em&gt;
+<p>I then edited the <code>page</code> template to use Bootstrap&rsquo;s fluid classes to generate a <a href="http://getbootstrap.com/2.3.2/scaffolding.html#responsive">responsive page layout</a> and added a <code>window.resize()</code> handler to adjust the map&rsquo;s size as the browser is resized. I use this pattern when creating responsive Leaflet maps, and it&rsquo;s not specific to Meteor.</p>
+
+<pre><code class="html">&lt;div class="container-fluid"&gt;
+  &lt;div class="row-fluid"&gt;
+    &lt;div class="span4"&gt;
+      {{&gt; details}}
+      {{#if currentUser}}
+      &lt;div class="pagination-centered"&gt;
+        &lt;em&gt;&lt;small&gt;Double click the map to post a party!&lt;/small&gt;&lt;/em&gt;
+      &lt;/div&gt;
+      {{/if}}
+    &lt;/div&gt;
+    &lt;div class="span8"&gt;
+        {{&gt; map}}
+    &lt;/div&gt;
   &lt;/div&gt;
-  {{/if}}
-&lt;/div&gt;
-&lt;div class="span8"&gt;
-    {{&gt; map}}
 &lt;/div&gt;
 </code></pre>
 
-<p>  </div>
-</div>
-<code>
-</code> js
-$(window).resize(function () {
+<pre><code class="js">$(window).resize(function () {
   var h = $(window).height(), offsetTop = 90; // Calculate the top offset
-  $mc = $(&lsquo;#map_canvas&rsquo;);
-  $mc.css(&lsquo;height&rsquo;, (h &ndash; offsetTop));
+  $mc = $('#map_canvas');
+  $mc.css('height', (h - offsetTop));
 }).resize();
-```</p>
+</code></pre>
 
 <h3>Map Initialization</h3>
 
 
 <p><a href="http://stamen.com/">Stamen Design</a>&rsquo;s <a href="http://maps.stamen.com/toner/#12/37.7706/-122.3782">toner themed map tiles</a> make a nice replacement for the black &amp; white map image in the example. I disabled double-click and touch zoom when initializing the map since those actions are how users create new parties, and I increased tile opacity to lighten the overall background and improve the visibility of markers on the map. Leaflet initialization code goes into the <code>map</code> template&rsquo;s <code>rendered()</code> callback.</p>
 
-<p>``` js
-map = L.map($(&lsquo;#map_canvas&rsquo;), {
+<pre><code class="js">map = L.map($('#map_canvas'), {
   doubleClickZoom: false,
   touchZoom: false
-}).setView(new L.LatLng(41.8781136, -87.66677956445312), 13);</p>
+}).setView(new L.LatLng(41.8781136, -87.66677956445312), 13);
 
-<p>L.tileLayer(&lsquo;<a href="http://">http://</a>{s}.tile.stamen.com/toner/{z}/{x}/{y}.png&rsquo;, {opacity: .5}).addTo(map);
-<code>``
-The next significant change was to replace the</code>map<code>template's event handler from the original example with Leaflet's</code>&ldquo;dblclick&rdquo;<code>event handler to manage the creation of new parties. The Leaflet version conveniently returns a</code>LatLng<code>which I saved to a Session variable before triggering</code>createDialog<code>. The mechanism to trigger dialogs by setting the associated Session variables</code>Session.showCreateDialog<code>and</code>Session.showInviteDialog` is unchanged from the original example, and it works because Meteor Session variables are <a href="http://docs.meteor.com/#reactivity">reactive</a>.</p>
-
-<p>``` js
-map.on(&ldquo;dblclick&rdquo;, function(e) {
-  if (! Meteor.userId()) // must be logged in to create parties</p>
-
-<pre><code>return;
+L.tileLayer('http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png', {opacity: .5}).addTo(map);
 </code></pre>
 
-<p>  Session.set(&ldquo;createCoords&rdquo;, e.latlng);
-  Session.set(&ldquo;showCreateDialog&rdquo;, true);
+<p>The next significant change was to replace the <code>map</code> template&rsquo;s event handler from the original example with Leaflet&rsquo;s <code>"dblclick"</code> event handler to manage the creation of new parties. The Leaflet version conveniently returns a <code>LatLng</code> which I saved to a Session variable before triggering <code>createDialog</code>. The mechanism to trigger dialogs by setting the associated Session variables <code>Session.showCreateDialog</code> and <code>Session.showInviteDialog</code> is unchanged from the original example, and it works because Meteor Session variables are <a href="http://docs.meteor.com/#reactivity">reactive</a>.</p>
+
+<pre><code class="js">map.on("dblclick", function(e) {
+  if (! Meteor.userId()) // must be logged in to create parties
+    return;
+
+  Session.set("createCoords", e.latlng);
+  Session.set("showCreateDialog", true);
 });
-<code>
-</code> html
-<template name="page">
-  {{#if showCreateDialog}}</p>
-
-<pre><code>{{&gt; createDialog}}
 </code></pre>
 
-<p>  {{/if}}
-  &hellip;
-  &hellip;
-</template>
-```</p>
+<pre><code class="html ">&lt;template name="page"&gt;
+  {{#if showCreateDialog}}
+    {{&gt; createDialog}}
+  {{/if}}
+  ...
+  ...
+&lt;/template&gt;
+</code></pre>
 
 <h3>Creating and Saving a Party to the Database</h3>
 
 
-<p>This part of the application is also more or less unchanged from the original example except that I passed the party&rsquo;s <code>LatLng</code> (instead of click position) along with other details from the <code>createDialog</code> template to the <code>Meteor.methods()</code> call to <code>createParty</code>. If the callback is successful, the new party&rsquo;s <code>_id</code> is saved to another reactive Session variable <code>Session.selected</code>, which drives the <code>details</code> template on the left.
-``` js
-var title = template.find(&ldquo;.title&rdquo;).value;
-var description = template.find(&ldquo;.description&rdquo;).value;
-var public = ! template.find(&ldquo;.private&rdquo;).checked;
-var latlng = Session.get(&ldquo;createCoords&rdquo;);</p>
+<p>This part of the application is also more or less unchanged from the original example except that I passed the party&rsquo;s <code>LatLng</code> (instead of click position) along with other details from the <code>createDialog</code> template to the <code>Meteor.methods()</code> call to <code>createParty</code>. If the callback is successful, the new party&rsquo;s <code>_id</code> is saved to another reactive Session variable <code>Session.selected</code>, which drives the <code>details</code> template on the left.</p>
 
-<p>Meteor.call(&lsquo;createParty&rsquo;, {
+<pre><code class="js">var title = template.find(".title").value;
+var description = template.find(".description").value;
+var public = ! template.find(".private").checked;
+var latlng = Session.get("createCoords");
+
+Meteor.call('createParty', {
   title: title,
   description: description,
   latlng: latlng,
   public: public
 }, function (error, partyId) {
-  if (! error) { //party was successfully added to the server&rsquo;s mongo collection</p>
-
-<pre><code>Session.set("selected", partyId);
-...
-</code></pre>
-
-<p>  }
+  if (! error) { //party was successfully added to the server's mongo collection
+    Session.set("selected", partyId);
+    ...
+  }
 });
-```</p>
+</code></pre>
 
 <h3>Adding Markers to the Map in Realtime</h3>
 
 
 <p>As soon as a new party is added to the Parties mongo collection on the server, behind the scenes, Meteor transmits it back to a client-side minimongo collection with the same name on all connected and authorized clients. This can be verified by typing <code>Parties.findOne()</code> into the JavaScript console. This is well and good, but the next task is to replace the <a href="http://d3js.org">D3</a> code to draw circles from the original example with code to add Leaflet markers to the map.</p>
 
-<p>To do that, I hooked up a <code>cursor.observe()</code> <code>added()</code> callback to create the map marker and I added a click handler to the marker to update the <code>Session.selected</code> variable with the party&rsquo;s <code>_id</code>. As users click on different parties, this reactively triggers the context for the <code>details</code> template on the left. I also saved a reference to the marker in a local <code>markers</code> hash to efficiently access the marker for future changes. Since we only need to set this up once, I put this code into the <code>map</code> template&rsquo;s <code>created()</code> callback.
-``` js
-var map, markers = {};</p>
+<p>To do that, I hooked up a <code>cursor.observe()</code> <code>added()</code> callback to create the map marker and I added a click handler to the marker to update the <code>Session.selected</code> variable with the party&rsquo;s <code>_id</code>. As users click on different parties, this reactively triggers the context for the <code>details</code> template on the left. I also saved a reference to the marker in a local <code>markers</code> hash to efficiently access the marker for future changes. Since we only need to set this up once, I put this code into the <code>map</code> template&rsquo;s <code>created()</code> callback.</p>
 
-<p>Template.map.created = function() {
-  Parties.find({}).observe({</p>
+<pre><code class="js">var map, markers = {};
 
-<pre><code>added: function(party) {
-  var marker = new L.Marker(party.latlng, {
-    _id: party._id,
-    icon: createIcon(party)
-  }).on('click', function(e) {
-    Session.set("selected", e.target.options._id);
-  });      
-  map.addLayer(marker);
-  markers[marker.options._id] = marker;
-},
-...
-...
+Template.map.created = function() {
+  Parties.find({}).observe({
+    added: function(party) {
+      var marker = new L.Marker(party.latlng, {
+        _id: party._id,
+        icon: createIcon(party)
+      }).on('click', function(e) {
+        Session.set("selected", e.target.options._id);
+      });      
+      map.addLayer(marker);
+      markers[marker.options._id] = marker;
+    },
+    ...
+    ...
+  });
+}
 </code></pre>
 
-<p>  });
-}
-<code>
-The final bit of fanciness here is my `createIcon()` helper function to create a lightweight `DivIcon` that uses a simple `div` element instead of an image icon. I used CSS `border-radius` to style the `div` as a circle of the appropriate color and set CSS `line-height` to the height of the `div` to vertically center the text. The `attending()` helper function from the original example returns the number of Yes RSVPs.
-</code> js
-var createIcon = function(party) {
-  var className = &lsquo;leaflet-div-icon &rsquo;;
-  className += party.public ? &lsquo;public&rsquo; : &lsquo;private&rsquo;;
-  return L.divIcon({</p>
+<p>The final bit of fanciness here is my <code>createIcon()</code> helper function to create a lightweight <code>DivIcon</code> that uses a simple <code>div</code> element instead of an image icon. I used CSS <code>border-radius</code> to style the <code>div</code> as a circle of the appropriate color and set CSS <code>line-height</code> to the height of the <code>div</code> to vertically center the text. The <code>attending()</code> helper function from the original example returns the number of Yes RSVPs.</p>
 
-<pre><code>iconSize: [30, 30], // set size to 30px x 30px
-html: '&lt;b&gt;' + attending(party) + '&lt;/b&gt;',
-className: className  
+<pre><code class="js">var createIcon = function(party) {
+  var className = 'leaflet-div-icon ';
+  className += party.public ? 'public' : 'private';
+  return L.divIcon({
+    iconSize: [30, 30], // set size to 30px x 30px
+    html: '&lt;b&gt;' + attending(party) + '&lt;/b&gt;',
+    className: className  
+  });
+}
 </code></pre>
 
-<p>  });
-}
-<code>
-</code> js
-.leaflet-div-icon {
+<pre><code class="js">.leaflet-div-icon {
   border-radius: 50%;
   border: none;
-  line-height: 30px;
+  line-height: 30px; 
   font-family: verdana;
   text-align: center;
   color: white;
   opacity: .8;
   vertical-align: middle;
-}</p>
-
-<p>.leaflet-div-icon.public {
-  background: #49AFCD;
-}</p>
-
-<p>.leaflet-div-icon.private {
-  background: #DA4F49;
 }
-<code>``
-Now I can log in and create a few parties, and they all show up as markers with the appropriate color and label. When I click on a marker, its details are automatically rendered into the</code>details` template on the left. But there&rsquo;s no visual indication <em>on the map</em> as to which party is currently selected &mdash; I just need to remember which marker I clicked on last! As it turns out, this usability quirk is easy to address.</p>
+
+.leaflet-div-icon.public { 
+  background: #49AFCD; 
+}
+
+.leaflet-div-icon.private { 
+  background: #DA4F49; 
+}
+</code></pre>
+
+<p>Now I can log in and create a few parties, and they all show up as markers with the appropriate color and label. When I click on a marker, its details are automatically rendered into the <code>details</code> template on the left. But there&rsquo;s no visual indication <em>on the map</em> as to which party is currently selected &ndash; I just need to remember which marker I clicked on last! As it turns out, this usability quirk is easy to address.</p>
 
 <p><a href="/blog/2013/12/28/realtime-maps-with-meteor-and-leaflet-part-2/">Part Two: Updating and deleting parties, and animating the selected party indicator&hellip;</a></p>
 ]]></content>
@@ -335,18 +309,11 @@ Now I can log in and create a few parties, and they all show up as markers with 
 
 <p></p>
 
-<script async class="speakerdeck-embed" data-id="4fbbc61f15a68f001f027e5a" data-ratio="1.2945638432364097" src="http://asynchrotron.com//speakerdeck.com/assets/embed.js"></script>
+<script async class="speakerdeck-embed" data-id="4fbbc61f15a68f001f027e5a" data-ratio="1.2945638432364097" src="//speakerdeck.com/assets/embed.js"></script>
 
 
-
-
-<br/>
-
-
-<br/>
-
-
-
+<p><br/>
+<br/></p>
 
 <h3>First a brief note about MVC</h3>
 
@@ -355,14 +322,14 @@ Now I can log in and create a few parties, and they all show up as markers with 
 
 <p>The Model-View-Controller application architecture (MVC) is used in most modern applications to separate an application’s data from its business rules and user interface. Briefly, Models represent an application’s data and functions to access it. Views represent information presented to the user. Controllers represent intermediary resources required to generate Views. The MVC pattern isn&rsquo;t new (it can be traced back to Smalltalk), but it was popularized , along with the REST style of client-server API design, by server-side web frameworks such as Rails and Django.</p>
 
-<h3>So what's all the fuss about JavaScript MVC frameworks (Backbone, Ember, et. al.)?</h3>
+<h3>So what&#8217;s all the fuss about JavaScript MVC frameworks (Backbone, Ember, et. al.)?</h3>
 
 
-<p>If you think of the screens &ndash; or pages &ndash; in your application as different &ldquo;states&rdquo; in your application, server-side frameworks require a round trip back to the server when the user goes from one application state to another. This is fine for content-heavy apps or websites. Or if you&rsquo;re accessing the pages via an ethernet cable or 802.11. But when you move to high latency connections and along the continuum &mdash; and I believe it really is a continuum &mdash; from a web site to a web app, you can deliver a much better user experience if you avoid the server round trip for each state change, and instead switch from state to state on the client, within a single browser page load cycle.</p>
+<p>If you think of the screens - or pages - in your application as different &ldquo;states&rdquo; in your application, server-side frameworks require a round trip back to the server when the user goes from one application state to another. This is fine for content-heavy apps or websites. Or if you&rsquo;re accessing the pages via an ethernet cable or 802.11. But when you move to high latency connections and along the continuum &ndash; and I believe it really is a continuum &ndash; from a web site to a web app, you can deliver a much better user experience if you avoid the server round trip for each state change, and instead switch from state to state on the client, within a single browser page load cycle.</p>
 
 <p>This saves you all of the overhead of destroying and recreating the DOM tree, flushing browser context (JavaScript, CSS, etc.) on each new page load. You also are transmitting less data on the wire (or ether) since HTML is generated on the client, and only JSON passed over the network. Both of these factors (page refresh time and network traffic optimization) are significant when you consider the fact that more and more internet usage is taking place via mobiles and tablets.</p>
 
-<p>You would still need a server to authenticate users and perform other privileged operations, and to store the &ldquo;official&rdquo; version of the data that different clients synchronize with, but instead of sending dynamically created HTML to the client (a la aforementioned server-side frameworks) the server would send as much data as needed (typically as JSON) to the client, and the client would create all of the different application states dynamically. The problem with this approach &mdash; and I&rsquo;ve been writing apps this way since 2008, without the benefit of any client side frameworks &mdash; is that they quickly turn into a mass of spaghetti code.</p>
+<p>You would still need a server to authenticate users and perform other privileged operations, and to store the &ldquo;official&rdquo; version of the data that different clients synchronize with, but instead of sending dynamically created HTML to the client (a la aforementioned server-side frameworks) the server would send as much data as needed (typically as JSON) to the client, and the client would create all of the different application states dynamically. The problem with this approach &ndash; and I&rsquo;ve been writing apps this way since 2008, without the benefit of any client side frameworks &ndash; is that they quickly turn into a mass of spaghetti code.</p>
 
 <p>This is where the likes of Backbone, Ember, etc. come in. They are a re-imagination of the MVC application architecture for JavaScript application development in the client, where all (or nearly all) application states are handled in the client, in JavaScript. They provide a way to structure your JavaScript applications in a more organized MVC style.</p>
 

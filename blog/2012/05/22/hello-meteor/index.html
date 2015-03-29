@@ -97,7 +97,7 @@
   
 
 
-<time datetime="2012-05-22T15:22:00-05:00" pubdate data-updated="true">May 22<span>nd</span>, 2012</time>
+<time datetime="2012-05-22T15:22:00-05:00" pubdate data-updated="true"></time>
         
            | <a href="#disqus_thread"
              data-disqus-identifier="http://asynchrotron.com">Comments</a>
@@ -117,15 +117,8 @@
 <script async class="speakerdeck-embed" data-id="4fbbc61f15a68f001f027e5a" data-ratio="1.2945638432364097" src="//speakerdeck.com/assets/embed.js"></script>
 
 
-
-
-<br/>
-
-
-<br/>
-
-
-
+<p><br/>
+<br/></p>
 
 <h3>First a brief note about MVC</h3>
 
@@ -137,11 +130,11 @@
 <h3>So what&#8217;s all the fuss about JavaScript MVC frameworks (Backbone, Ember, et. al.)?</h3>
 
 
-<p>If you think of the screens &ndash; or pages &ndash; in your application as different &ldquo;states&rdquo; in your application, server-side frameworks require a round trip back to the server when the user goes from one application state to another. This is fine for content-heavy apps or websites. Or if you&rsquo;re accessing the pages via an ethernet cable or 802.11. But when you move to high latency connections and along the continuum &mdash; and I believe it really is a continuum &mdash; from a web site to a web app, you can deliver a much better user experience if you avoid the server round trip for each state change, and instead switch from state to state on the client, within a single browser page load cycle.</p>
+<p>If you think of the screens - or pages - in your application as different &ldquo;states&rdquo; in your application, server-side frameworks require a round trip back to the server when the user goes from one application state to another. This is fine for content-heavy apps or websites. Or if you&rsquo;re accessing the pages via an ethernet cable or 802.11. But when you move to high latency connections and along the continuum &ndash; and I believe it really is a continuum &ndash; from a web site to a web app, you can deliver a much better user experience if you avoid the server round trip for each state change, and instead switch from state to state on the client, within a single browser page load cycle.</p>
 
 <p>This saves you all of the overhead of destroying and recreating the DOM tree, flushing browser context (JavaScript, CSS, etc.) on each new page load. You also are transmitting less data on the wire (or ether) since HTML is generated on the client, and only JSON passed over the network. Both of these factors (page refresh time and network traffic optimization) are significant when you consider the fact that more and more internet usage is taking place via mobiles and tablets.</p>
 
-<p>You would still need a server to authenticate users and perform other privileged operations, and to store the &ldquo;official&rdquo; version of the data that different clients synchronize with, but instead of sending dynamically created HTML to the client (a la aforementioned server-side frameworks) the server would send as much data as needed (typically as JSON) to the client, and the client would create all of the different application states dynamically. The problem with this approach &mdash; and I&rsquo;ve been writing apps this way since 2008, without the benefit of any client side frameworks &mdash; is that they quickly turn into a mass of spaghetti code.</p>
+<p>You would still need a server to authenticate users and perform other privileged operations, and to store the &ldquo;official&rdquo; version of the data that different clients synchronize with, but instead of sending dynamically created HTML to the client (a la aforementioned server-side frameworks) the server would send as much data as needed (typically as JSON) to the client, and the client would create all of the different application states dynamically. The problem with this approach &ndash; and I&rsquo;ve been writing apps this way since 2008, without the benefit of any client side frameworks &ndash; is that they quickly turn into a mass of spaghetti code.</p>
 
 <p>This is where the likes of Backbone, Ember, etc. come in. They are a re-imagination of the MVC application architecture for JavaScript application development in the client, where all (or nearly all) application states are handled in the client, in JavaScript. They provide a way to structure your JavaScript applications in a more organized MVC style.</p>
 
@@ -187,7 +180,7 @@
   
 
 
-<time datetime="2012-05-22T15:22:00-05:00" pubdate data-updated="true">May 22<span>nd</span>, 2012</time>
+<time datetime="2012-05-22T15:22:00-05:00" pubdate data-updated="true"></time>
       
 
 <span class="categories">
@@ -253,7 +246,7 @@
 <section>
   <h1>GitHub Repos</h1>
   <ul id="gh_repos">
-    <li class="loading">Status updating...</li>
+    <li class="loading">Status updating&#8230;</li>
   </ul>
   
   <a href="https://github.com/pkaushik">@pkaushik</a> on GitHub
@@ -311,7 +304,7 @@
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - Pallavi Anderson -
+  Copyright &copy; 2015 - Pallavi Anderson -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a> and <a href="http://github.com">Github</a></span>
 </p>
 

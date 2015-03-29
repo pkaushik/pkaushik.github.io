@@ -4,7 +4,7 @@
   <title><![CDATA[Pallavi Anderson]]></title>
   <link href="http://asynchrotron.com/atom.xml" rel="self"/>
   <link href="http://asynchrotron.com/"/>
-  <updated>2014-04-23T16:32:05-05:00</updated>
+  <updated>2015-03-28T23:18:11-05:00</updated>
   <id>http://asynchrotron.com/</id>
   <author>
     <name><![CDATA[Pallavi Anderson]]></name>
@@ -128,6 +128,8 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
+
+
 <h3>Using a Halo Marker to Indicate Which Party Is Selected</h3>
 
 
@@ -168,7 +170,7 @@
 
 <p>For a final flourish, I used the <code>AnimatedMarker</code> Leaflet <a href="https://github.com/openplans/Leaflet.AnimatedMarker">plugin</a> from <a href="http://openplans.org/">OpenPlans</a> to animate the halo&rsquo;s movement on the map when a user selects different parties rather than simply making it reappear at a different location. <code>AnimatedMarker</code> takes a Leaflet <code>polyline</code> object as the first argument to its initialize function, and draws a marker at the beginning of the polyline, which it then animates along the <code>polyline</code> at a speed (in meters/ms) that&rsquo;s configurable via a second argument.</p>
 
-<p>I needed to make a minor tweak to the plugin&rsquo;s source code to support my needs: <code>AnimatedMarker</code> does not allow setting the animation <code>polyline</code> after the marker is initialized. In other words, it requires the animation path to be known before creating the marker. I wanted to create the marker around the currently selected party without knowledge of it&rsquo;s future animation path, and to set the animation path dynamically as soon as a user selected a different marker &mdash; the path would be a segment from the current location to the center of the selected marker. To accomplish this, all I needed to do was reset the animation index in the marker&rsquo;s <code>setLine</code> method. This modification is available at <a href="https://github.com/pkaushik/Leaflet.AnimatedMarker">my fork</a> on github.</p>
+<p>I needed to make a minor tweak to the plugin&rsquo;s source code to support my needs: <code>AnimatedMarker</code> does not allow setting the animation <code>polyline</code> after the marker is initialized. In other words, it requires the animation path to be known before creating the marker. I wanted to create the marker around the currently selected party without knowledge of it&rsquo;s future animation path, and to set the animation path dynamically as soon as a user selected a different marker &ndash; the path would be a segment from the current location to the center of the selected marker. To accomplish this, all I needed to do was reset the animation index in the marker&rsquo;s <code>setLine</code> method. This modification is available at <a href="https://github.com/pkaushik/Leaflet.AnimatedMarker">my fork</a> on github.</p>
 
 <p>And ta-da! This is the end result: <a href="http://www.chicago-parties.meteor.com">http://www.chicago-parties.meteor.com</a> with <a href="https://github.com/pkaushik/parties">source code for the complete application</a>. You need to log in with a github account to create or RSVP to parties.</p>
 ]]></content>
@@ -181,7 +183,7 @@
     <id>http://asynchrotron.com/blog/2013/12/27/realtime-maps-with-meteor-and-leaflet</id>
     <content type="html"><![CDATA[<p><span class='caption-wrapper left'><img class='caption' src='https://raw.github.com/meteor/meteor/devel/examples/parties/public/soma.png' width='350' height='350' title='this 'map' is actually a static image'><span class='caption-text'>this &lsquo;map&rsquo; is actually a static image</span></span></p>
 
-<p>The <a href="https://www.meteor.com/examples/parties">parties example</a> bundled with <a href="http://www.meteor.com">Meteor</a> is a nifty demonstration of the framework&rsquo;s core principles, but it uses a <a href="https://github.com/meteor/meteor/blob/devel/examples/parties/public/soma.png">500 x 500 pixel image of downtown San Francisco</a> as a faux map. This means that we cannot pan or zoom the &ldquo;map,&rdquo; and when we double-click the image to create new parties, the circle markers are drawn at the position of the clicks in relation to the <em>image element in the browser window</em>, and not at geospatial coordinates.</p>
+<p>The <a href="https://github.com/meteor/meteor/tree/devel/examples/other/parties">parties example</a> bundled with <a href="http://www.meteor.com">Meteor</a> is a nifty demonstration of the framework&rsquo;s core principles, but it uses a <a href="https://raw.githubusercontent.com/meteor/meteor/devel/examples/other/parties/public/soma.png">500 x 500 pixel image of downtown San Francisco</a> as a faux map. This means that we cannot pan or zoom the &ldquo;map,&rdquo; and when we double-click the image to create new parties, the circle markers are drawn at the position of the clicks in relation to the <em>image element in the browser window</em>, and not at geospatial coordinates.</p>
 
 <!--more-->
 
@@ -317,6 +319,8 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
+
+
 <h3>Creating and Saving a Party to the Database</h3>
 
 
@@ -355,6 +359,8 @@
 </span><span class='line'>  <span class="p">}</span>
 </span><span class='line'><span class="p">});</span>
 </span></code></pre></td></tr></table></div></figure>
+
+
 
 
 <h3>Adding Markers to the Map in Realtime</h3>
@@ -465,7 +471,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Now I can log in and create a few parties, and they all show up as markers with the appropriate color and label. When I click on a marker, its details are automatically rendered into the <code>details</code> template on the left. But there&rsquo;s no visual indication <em>on the map</em> as to which party is currently selected &mdash; I just need to remember which marker I clicked on last! As it turns out, this usability quirk is easy to address.</p>
+<p>Now I can log in and create a few parties, and they all show up as markers with the appropriate color and label. When I click on a marker, its details are automatically rendered into the <code>details</code> template on the left. But there&rsquo;s no visual indication <em>on the map</em> as to which party is currently selected &ndash; I just need to remember which marker I clicked on last! As it turns out, this usability quirk is easy to address.</p>
 
 <p><a href="http://asynchrotron.com/blog/2013/12/28/realtime-maps-with-meteor-and-leaflet-part-2/">Part Two: Updating and deleting parties, and animating the selected party indicator&hellip;</a></p>
 ]]></content>
@@ -476,7 +482,7 @@
     <link href="http://asynchrotron.com/blog/2012/06/07/the-connection-between-google-glasses-and-self-driving-humanoids/"/>
     <updated>2012-06-07T09:17:00-05:00</updated>
     <id>http://asynchrotron.com/blog/2012/06/07/the-connection-between-google-glasses-and-self-driving-humanoids</id>
-    <content type="html"><![CDATA[<p><a href="http://www.holovaty.com/">Adrian Holovaty</a> recently wrote about <a href="http://www.holovaty.com/writing/streetview/">the connection between Google Street View and driverless cars</a>. Towards the end, he wondered whether the decision to record all sensor / locational metadata along with pictures came before the idea of using it to train machine learning algorithms (or vice versa). I&rsquo;d apply <a href="http://en.wikipedia.org/wiki/Occam's_razor">Occam&rsquo;s razor</a> here &mdash; i.e., I&rsquo;m pretty certain the idea of capturing the data came first.</p>
+    <content type="html"><![CDATA[<p><a href="http://www.holovaty.com/">Adrian Holovaty</a> recently wrote about <a href="http://www.holovaty.com/writing/streetview/">the connection between Google Street View and driverless cars</a>. Towards the end, he wondered whether the decision to record all sensor / locational metadata along with pictures came before the idea of using it to train machine learning algorithms (or vice versa). I&rsquo;d apply <a href="http://en.wikipedia.org/wiki/Occam's_razor">Occam&rsquo;s razor</a> here &ndash; i.e., I&rsquo;m pretty certain the idea of capturing the data came first.</p>
 
 <p>But what&rsquo;s more interesting is that it presents a whole new angle on what <a href="https://plus.google.com/111626127367496192147">Project Glass</a> enables: Widespread lifelogging by humans (and not just cars) to cloud-based storage. Add offline speech to text, face recognition, OCR, etc. and you have prosthetic memory.</p>
 
@@ -496,18 +502,11 @@
 
 <p></p>
 
-<script async class="speakerdeck-embed" data-id="4fbbc61f15a68f001f027e5a" data-ratio="1.2945638432364097" src="http://asynchrotron.com//speakerdeck.com/assets/embed.js"></script>
+<script async class="speakerdeck-embed" data-id="4fbbc61f15a68f001f027e5a" data-ratio="1.2945638432364097" src="//speakerdeck.com/assets/embed.js"></script>
 
 
-
-
-<br/>
-
-
-<br/>
-
-
-
+<p><br/>
+<br/></p>
 
 <h3>First a brief note about MVC</h3>
 
@@ -519,11 +518,11 @@
 <h3>So what&#8217;s all the fuss about JavaScript MVC frameworks (Backbone, Ember, et. al.)?</h3>
 
 
-<p>If you think of the screens &ndash; or pages &ndash; in your application as different &ldquo;states&rdquo; in your application, server-side frameworks require a round trip back to the server when the user goes from one application state to another. This is fine for content-heavy apps or websites. Or if you&rsquo;re accessing the pages via an ethernet cable or 802.11. But when you move to high latency connections and along the continuum &mdash; and I believe it really is a continuum &mdash; from a web site to a web app, you can deliver a much better user experience if you avoid the server round trip for each state change, and instead switch from state to state on the client, within a single browser page load cycle.</p>
+<p>If you think of the screens - or pages - in your application as different &ldquo;states&rdquo; in your application, server-side frameworks require a round trip back to the server when the user goes from one application state to another. This is fine for content-heavy apps or websites. Or if you&rsquo;re accessing the pages via an ethernet cable or 802.11. But when you move to high latency connections and along the continuum &ndash; and I believe it really is a continuum &ndash; from a web site to a web app, you can deliver a much better user experience if you avoid the server round trip for each state change, and instead switch from state to state on the client, within a single browser page load cycle.</p>
 
 <p>This saves you all of the overhead of destroying and recreating the DOM tree, flushing browser context (JavaScript, CSS, etc.) on each new page load. You also are transmitting less data on the wire (or ether) since HTML is generated on the client, and only JSON passed over the network. Both of these factors (page refresh time and network traffic optimization) are significant when you consider the fact that more and more internet usage is taking place via mobiles and tablets.</p>
 
-<p>You would still need a server to authenticate users and perform other privileged operations, and to store the &ldquo;official&rdquo; version of the data that different clients synchronize with, but instead of sending dynamically created HTML to the client (a la aforementioned server-side frameworks) the server would send as much data as needed (typically as JSON) to the client, and the client would create all of the different application states dynamically. The problem with this approach &mdash; and I&rsquo;ve been writing apps this way since 2008, without the benefit of any client side frameworks &mdash; is that they quickly turn into a mass of spaghetti code.</p>
+<p>You would still need a server to authenticate users and perform other privileged operations, and to store the &ldquo;official&rdquo; version of the data that different clients synchronize with, but instead of sending dynamically created HTML to the client (a la aforementioned server-side frameworks) the server would send as much data as needed (typically as JSON) to the client, and the client would create all of the different application states dynamically. The problem with this approach &ndash; and I&rsquo;ve been writing apps this way since 2008, without the benefit of any client side frameworks &ndash; is that they quickly turn into a mass of spaghetti code.</p>
 
 <p>This is where the likes of Backbone, Ember, etc. come in. They are a re-imagination of the MVC application architecture for JavaScript application development in the client, where all (or nearly all) application states are handled in the client, in JavaScript. They provide a way to structure your JavaScript applications in a more organized MVC style.</p>
 

@@ -97,7 +97,7 @@
   
 
 
-<time datetime="2013-12-28T17:53:06-06:00" pubdate data-updated="true">Dec 28<span>th</span>, 2013</time>
+<time datetime="2013-12-28T17:53:06-06:00" pubdate data-updated="true"></time>
         
            | <a href="#disqus_thread"
              data-disqus-identifier="http://asynchrotron.com">Comments</a>
@@ -217,6 +217,8 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
+
+
 <h3>Using a Halo Marker to Indicate Which Party Is Selected</h3>
 
 
@@ -257,7 +259,7 @@
 
 <p>For a final flourish, I used the <code>AnimatedMarker</code> Leaflet <a href="https://github.com/openplans/Leaflet.AnimatedMarker">plugin</a> from <a href="http://openplans.org/">OpenPlans</a> to animate the halo&rsquo;s movement on the map when a user selects different parties rather than simply making it reappear at a different location. <code>AnimatedMarker</code> takes a Leaflet <code>polyline</code> object as the first argument to its initialize function, and draws a marker at the beginning of the polyline, which it then animates along the <code>polyline</code> at a speed (in meters/ms) that&rsquo;s configurable via a second argument.</p>
 
-<p>I needed to make a minor tweak to the plugin&rsquo;s source code to support my needs: <code>AnimatedMarker</code> does not allow setting the animation <code>polyline</code> after the marker is initialized. In other words, it requires the animation path to be known before creating the marker. I wanted to create the marker around the currently selected party without knowledge of it&rsquo;s future animation path, and to set the animation path dynamically as soon as a user selected a different marker &mdash; the path would be a segment from the current location to the center of the selected marker. To accomplish this, all I needed to do was reset the animation index in the marker&rsquo;s <code>setLine</code> method. This modification is available at <a href="https://github.com/pkaushik/Leaflet.AnimatedMarker">my fork</a> on github.</p>
+<p>I needed to make a minor tweak to the plugin&rsquo;s source code to support my needs: <code>AnimatedMarker</code> does not allow setting the animation <code>polyline</code> after the marker is initialized. In other words, it requires the animation path to be known before creating the marker. I wanted to create the marker around the currently selected party without knowledge of it&rsquo;s future animation path, and to set the animation path dynamically as soon as a user selected a different marker &ndash; the path would be a segment from the current location to the center of the selected marker. To accomplish this, all I needed to do was reset the animation index in the marker&rsquo;s <code>setLine</code> method. This modification is available at <a href="https://github.com/pkaushik/Leaflet.AnimatedMarker">my fork</a> on github.</p>
 
 <p>And ta-da! This is the end result: <a href="http://www.chicago-parties.meteor.com">http://www.chicago-parties.meteor.com</a> with <a href="https://github.com/pkaushik/parties">source code for the complete application</a>. You need to log in with a github account to create or RSVP to parties.</p>
 </div>
@@ -282,7 +284,7 @@
   
 
 
-<time datetime="2013-12-28T17:53:06-06:00" pubdate data-updated="true">Dec 28<span>th</span>, 2013</time>
+<time datetime="2013-12-28T17:53:06-06:00" pubdate data-updated="true"></time>
       
 
 <span class="categories">
@@ -348,7 +350,7 @@
 <section>
   <h1>GitHub Repos</h1>
   <ul id="gh_repos">
-    <li class="loading">Status updating...</li>
+    <li class="loading">Status updating&#8230;</li>
   </ul>
   
   <a href="https://github.com/pkaushik">@pkaushik</a> on GitHub
@@ -406,7 +408,7 @@
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - Pallavi Anderson -
+  Copyright &copy; 2015 - Pallavi Anderson -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a> and <a href="http://github.com">Github</a></span>
 </p>
 
