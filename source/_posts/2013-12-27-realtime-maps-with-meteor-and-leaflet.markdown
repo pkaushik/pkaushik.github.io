@@ -7,7 +7,7 @@ categories: [meteor, webapps, leaflet]
 ---
 {% imgcap left https://raw.github.com/meteor/meteor/devel/examples/parties/public/soma.png 350 350 this 'map' is actually a static image %} 
 
-The [parties example](https://www.meteor.com/examples/parties) bundled with [Meteor](http://www.meteor.com) is a nifty demonstration of the framework's core principles, but it uses a [500 x 500 pixel image of downtown San Francisco](https://github.com/meteor/meteor/blob/devel/examples/parties/public/soma.png) as a faux map. This means that we cannot pan or zoom the "map," and when we double-click the image to create new parties, the circle markers are drawn at the position of the clicks in relation to the _image element in the browser window_, and not at geospatial coordinates. 
+The [parties example](https://github.com/meteor/meteor/tree/devel/examples/other/parties) bundled with [Meteor](http://www.meteor.com) is a nifty demonstration of the framework's core principles, but it uses a [500 x 500 pixel image of downtown San Francisco](https://raw.githubusercontent.com/meteor/meteor/devel/examples/other/parties/public/soma.png) as a faux map. This means that we cannot pan or zoom the "map," and when we double-click the image to create new parties, the circle markers are drawn at the position of the clicks in relation to the _image element in the browser window_, and not at geospatial coordinates. 
 <!--more-->
 {% imgcap left /images/custom/old-parties.png 350 350 circles drawn over the static image %} 
 
