@@ -4,7 +4,7 @@
   <title><![CDATA[Pallavi Anderson]]></title>
   <link href="http://asynchrotron.com/atom.xml" rel="self"/>
   <link href="http://asynchrotron.com/"/>
-  <updated>2015-03-28T23:22:06-05:00</updated>
+  <updated>2015-03-28T23:28:01-05:00</updated>
   <id>http://asynchrotron.com/</id>
   <author>
     <name><![CDATA[Pallavi Anderson]]></name>
@@ -181,7 +181,7 @@
     <link href="http://asynchrotron.com/blog/2013/12/27/realtime-maps-with-meteor-and-leaflet/"/>
     <updated>2013-12-27T20:51:10-06:00</updated>
     <id>http://asynchrotron.com/blog/2013/12/27/realtime-maps-with-meteor-and-leaflet</id>
-    <content type="html"><![CDATA[<p><span class='caption-wrapper left'><img class='caption' src='https://raw.github.com/meteor/meteor/devel/examples/parties/public/soma.png' width='350' height='350' title='this 'map' is actually a static image'><span class='caption-text'>this &lsquo;map&rsquo; is actually a static image</span></span></p>
+    <content type="html"><![CDATA[<p><span class='caption-wrapper left'><img class='caption' src='https://raw.githubusercontent.com/meteor/meteor/devel/examples/other/parties/public/soma.png' width='350' height='350' title='this 'map' is actually a static image'><span class='caption-text'>this &lsquo;map&rsquo; is actually a static image</span></span></p>
 
 <p>The <a href="https://github.com/meteor/meteor/tree/devel/examples/other/parties">parties example</a> bundled with <a href="http://www.meteor.com">Meteor</a> is a nifty demonstration of the framework&rsquo;s core principles, but it uses a <a href="https://raw.githubusercontent.com/meteor/meteor/devel/examples/other/parties/public/soma.png">500 x 500 pixel image of downtown San Francisco</a> as a faux map. This means that we cannot pan or zoom the &ldquo;map,&rdquo; and when we double-click the image to create new parties, the circle markers are drawn at the position of the clicks in relation to the <em>image element in the browser window</em>, and not at geospatial coordinates.</p>
 
