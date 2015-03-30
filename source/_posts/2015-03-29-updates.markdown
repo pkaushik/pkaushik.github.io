@@ -5,7 +5,7 @@ date: 2015-03-29 22:27:33 -0500
 comments: true
 categories: [meteor, google, life]
 ---
-{% imgcap center /images/custom/googoo.png this happened %} 
+{% imgcap center /images/custom/googoo.jpg this happened %} 
 
 This picture sums up why I haven't been blogging for a while -- I'm now part of Google's search infrastructure engineering team, and I'm a mother!
 
