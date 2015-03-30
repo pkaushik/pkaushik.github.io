@@ -4,7 +4,7 @@
   <title><![CDATA[Pallavi Anderson]]></title>
   <link href="http://asynchrotron.com/atom.xml" rel="self"/>
   <link href="http://asynchrotron.com/"/>
-  <updated>2015-03-29T23:12:27-05:00</updated>
+  <updated>2015-03-29T23:13:21-05:00</updated>
   <id>http://asynchrotron.com/</id>
   <author>
     <name><![CDATA[Pallavi Anderson]]></name>
@@ -26,7 +26,7 @@
 
 <ol>
 <li><code>meteor update</code></li>
-<li>Replace the template helper methods in each view with a call to <code>Template.helpers()</code> - here&rsquo;s an <a href="https://github.com/pkaushik/parties/commit/42295a2896237d953a5d5ff2a846ab474103aec2">example</a>.</li>
+<li>Replace the template helper methods with a call to <code>Template.helpers()</code> - here&rsquo;s an <a href="https://github.com/pkaushik/parties/commit/42295a2896237d953a5d5ff2a846ab474103aec2">example</a>.</li>
 <li><a href="https://github.com/meteor/meteor/wiki/Using-Blaze#no-more-constant-isolate-or-preserve">Remove</a> the <code>#constant</code> guard around the map canvas div</li>
 </ol>
 
