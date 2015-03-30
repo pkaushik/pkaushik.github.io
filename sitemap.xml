@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://asynchrotron.com/blog/2015/03/29/updates/</loc>
+    <lastmod>2015-03-29T22:27:33-05:00</lastmod>
+  </url>
+  <url>
     <loc>http://asynchrotron.com/blog/2013/12/28/realtime-maps-with-meteor-and-leaflet-part-2/</loc>
     <lastmod>2013-12-28T17:53:06-06:00</lastmod>
   </url>
@@ -42,5 +46,11 @@
   </url>
   <url>
     <loc>http://asynchrotron.com/blog/categories/leaflet/</loc>
+  </url>
+  <url>
+    <loc>http://asynchrotron.com/blog/categories/google/</loc>
+  </url>
+  <url>
+    <loc>http://asynchrotron.com/blog/categories/life/</loc>
   </url>
 </urlset>

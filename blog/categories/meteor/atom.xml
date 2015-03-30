@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Meteor | Pallavi Anderson]]></title>
   <link href="http://asynchrotron.com/blog/categories/meteor/atom.xml" rel="self"/>
   <link href="http://asynchrotron.com/"/>
-  <updated>2015-03-28T23:28:01-05:00</updated>
+  <updated>2015-03-29T23:12:27-05:00</updated>
   <id>http://asynchrotron.com/</id>
   <author>
     <name><![CDATA[Pallavi Anderson]]></name>
@@ -12,6 +12,26 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Updates]]></title>
+    <link href="http://asynchrotron.com/blog/2015/03/29/updates/"/>
+    <updated>2015-03-29T22:27:33-05:00</updated>
+    <id>http://asynchrotron.com/blog/2015/03/29/updates</id>
+    <content type="html"><![CDATA[<p><span class='caption-wrapper center'><img class='caption' src='/images/custom/googoo.png' width='' height='' title='this happened'><span class='caption-text'>this happened</span></span></p>
+
+<p>This picture sums up why I haven&rsquo;t been blogging for a while &ndash; I&rsquo;m now part of Google&rsquo;s search infrastructure engineering team, and I&rsquo;m a mother!</p>
+
+<p>In other news, I&rsquo;ve updated my Meteor realtime maps example to work with 1.0.5. The changes were as simple as:</p>
+
+<ol>
+<li><code>meteor update</code></li>
+<li>Replace the template helper methods in each view with a call to <code>Template.helpers()</code> - here&rsquo;s an <a href="https://github.com/pkaushik/parties/commit/42295a2896237d953a5d5ff2a846ab474103aec2">example</a>.</li>
+<li><a href="https://github.com/meteor/meteor/wiki/Using-Blaze#no-more-constant-isolate-or-preserve">Remove</a> the <code>#constant</code> guard around the map canvas div</li>
+</ol>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Realtime Maps With Meteor and Leaflet - Part Two]]></title>
