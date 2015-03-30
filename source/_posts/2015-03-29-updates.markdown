@@ -12,5 +12,5 @@ This picture sums up why I haven't been blogging for a while -- I'm now part of 
 In other news, I've updated my Meteor realtime maps example to work with 1.0.5. The changes were as simple as:
 
 1. `meteor update`
-2. Replace the template helper methods in each view with a call to `Template.helpers()` - here's an [example](https://github.com/pkaushik/parties/commit/42295a2896237d953a5d5ff2a846ab474103aec2).
+2. Replace template helper methods with a call to `Template.helpers()` - here's an [example](https://github.com/pkaushik/parties/commit/42295a2896237d953a5d5ff2a846ab474103aec2).
 3. [Remove](https://github.com/meteor/meteor/wiki/Using-Blaze#no-more-constant-isolate-or-preserve) the `#constant` guard around the map canvas div  
