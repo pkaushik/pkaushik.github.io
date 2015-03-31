@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Meteor | Pallavi Anderson]]></title>
   <link href="http://asynchrotron.com/blog/categories/meteor/atom.xml" rel="self"/>
   <link href="http://asynchrotron.com/"/>
-  <updated>2015-03-30T19:52:26-05:00</updated>
+  <updated>2015-03-30T19:54:02-05:00</updated>
   <id>http://asynchrotron.com/</id>
   <author>
     <name><![CDATA[Pallavi Anderson]]></name>
@@ -22,7 +22,7 @@
 
 <p>This picture sums up why I haven&rsquo;t been blogging for a while &ndash; I joined Google as a software engineer on the Search team in Chicago (more on this later) and I made a baby!</p>
 
-<p>In other news, my Meteor realtime maps example has been updated to Meteor 1.0.5. The changes were as simple as:</p>
+<p>In other news, my Meteor realtime maps example has been updated to Meteor 1.0.5, which was super simple:</p>
 
 <ol>
 <li><code>meteor update</code></li>
