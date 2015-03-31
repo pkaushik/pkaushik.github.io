@@ -4,7 +4,7 @@
   <title><![CDATA[Pallavi Anderson]]></title>
   <link href="http://asynchrotron.com/atom.xml" rel="self"/>
   <link href="http://asynchrotron.com/"/>
-  <updated>2015-03-30T21:35:06-05:00</updated>
+  <updated>2015-03-30T23:08:29-05:00</updated>
   <id>http://asynchrotron.com/</id>
   <author>
     <name><![CDATA[Pallavi Anderson]]></name>
@@ -12,6 +12,45 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[CORS on Meteor]]></title>
+    <link href="http://asynchrotron.com/blog/2015/03/30/cors-on-meteor/"/>
+    <updated>2015-03-30T21:46:59-05:00</updated>
+    <id>http://asynchrotron.com/blog/2015/03/30/cors-on-meteor</id>
+    <content type="html"><![CDATA[<p>Meteor&rsquo;s <a href="http://docs.meteor.com/#/full/webapp">webapp</a> package exposes the underlying <a href="https://github.com/senchalabs/connect">connect</a> API through <code>WebApp.connectHandlers</code> which can be used (among other things) to customize HTTP headers and enable <a href="http://enable-cors.org/">CORS</a> in a Meteor application.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="c1">// Listen to incoming HTTP requests, can only be used on the server</span>
+</span><span class='line'><span class="nx">WebApp</span><span class="p">.</span><span class="nx">connectHandlers</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">res</span><span class="p">.</span><span class="nx">setHeader</span><span class="p">(</span><span class="s2">&quot;Access-Control-Allow-Origin&quot;</span><span class="p">,</span> <span class="s2">&quot;*&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">next</span><span class="p">();</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Use the optional <code>path</code> argument to call the handler only for paths that match a specified string.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="c1">// Listen to incoming HTTP requests, can only be used on the server</span>
+</span><span class='line'><span class="nx">WebApp</span><span class="p">.</span><span class="nx">connectHandlers</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s2">&quot;/public&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">res</span><span class="p">.</span><span class="nx">setHeader</span><span class="p">(</span><span class="s2">&quot;Access-Control-Allow-Origin&quot;</span><span class="p">,</span> <span class="s2">&quot;*&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">next</span><span class="p">();</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Meteor Update]]></title>

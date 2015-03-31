@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Meteor | Pallavi Anderson]]></title>
   <link href="http://asynchrotron.com/blog/categories/meteor/atom.xml" rel="self"/>
   <link href="http://asynchrotron.com/"/>
-  <updated>2015-03-30T21:35:06-05:00</updated>
+  <updated>2015-03-30T23:08:29-05:00</updated>
   <id>http://asynchrotron.com/</id>
   <author>
     <name><![CDATA[Pallavi Anderson]]></name>
@@ -12,6 +12,31 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[CORS on Meteor]]></title>
+    <link href="http://asynchrotron.com/blog/2015/03/30/cors-on-meteor/"/>
+    <updated>2015-03-30T21:46:59-05:00</updated>
+    <id>http://asynchrotron.com/blog/2015/03/30/cors-on-meteor</id>
+    <content type="html"><![CDATA[<p>Meteor&rsquo;s <a href="http://docs.meteor.com/#/full/webapp">webapp</a> package exposes the underlying <a href="https://github.com/senchalabs/connect">connect</a> API through <code>WebApp.connectHandlers</code> which can be used (among other things) to customize HTTP headers and enable <a href="http://enable-cors.org/">CORS</a> in a Meteor application.</p>
+
+<pre><code class="js">// Listen to incoming HTTP requests, can only be used on the server
+WebApp.connectHandlers.use(function(req, res, next) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  return next();
+});
+</code></pre>
+
+<p>Use the optional <code>path</code> argument to call the handler only for paths that match a specified string.</p>
+
+<pre><code>// Listen to incoming HTTP requests, can only be used on the server
+WebApp.connectHandlers.use("/public", function(req, res, next) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  return next();
+});
+</code></pre>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Meteor Update]]></title>
