@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Google | Pallavi Anderson]]></title>
   <link href="http://asynchrotron.com/blog/categories/google/atom.xml" rel="self"/>
   <link href="http://asynchrotron.com/"/>
-  <updated>2015-03-30T20:08:28-05:00</updated>
+  <updated>2015-03-30T21:03:22-05:00</updated>
   <id>http://asynchrotron.com/</id>
   <author>
     <name><![CDATA[Pallavi Anderson]]></name>
@@ -14,10 +14,10 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Updates]]></title>
-    <link href="http://asynchrotron.com/blog/2015/03/29/updates/"/>
+    <title type="html"><![CDATA[Meteor Update]]></title>
+    <link href="http://asynchrotron.com/blog/2015/03/29/meteor-update/"/>
     <updated>2015-03-29T22:27:33-05:00</updated>
-    <id>http://asynchrotron.com/blog/2015/03/29/updates</id>
+    <id>http://asynchrotron.com/blog/2015/03/29/meteor-update</id>
     <content type="html"><![CDATA[<p><span class='caption-wrapper left'><img class='caption' src='/images/custom/googoo.jpg' width='' height='' title='this happened'><span class='caption-text'>this happened</span></span></p>
 
 <p>This picture sums up why I haven&rsquo;t been blogging for a while &ndash; I joined Google as a software engineer on the Search team (more on this later) and I made a baby!</p>
@@ -31,7 +31,7 @@
 </ol>
 
 
-<p><a href="https://github.com/pkaushik/parties">Code here</a> and <a href="http://www.chicago-parties.meteor.com/">demo here</a>.</p>
+<p><a href="https://github.com/pkaushik/parties">Code here</a> and <a href="http://chicago-parties.meteor.com/">demo here</a>.</p>
 ]]></content>
   </entry>
   
