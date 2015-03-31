@@ -3,7 +3,7 @@ layout: post
 title: "Meteor Update"
 date: 2015-03-29 22:27:33 -0500
 comments: true
-categories: [meteor, google]
+categories: [meteor, webapps, google]
 ---
 {% imgcap left /images/custom/googoo.jpg this happened %} 
 
